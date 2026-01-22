@@ -1,0 +1,59 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:22.695Z",
+  "user": {
+    "nsid": "10004558@N04",
+    "username": "Pinky_Tapang",
+    "realname": "Pinky Tapang",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/pinky_tapang/",
+    "photosUrl": "https://www.flickr.com/photos/pinky_tapang/",
+    "iconServer": "1064",
+    "iconFarm": 2,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "July 2007",
+    "photosCount": 56,
+    "photosFirstDate": "1184243838",
+    "photosFirstDateTaken": "2007-07-04 21:09:29"
+  },
+  "stats": {
+    "totalPhotos": 56,
+    "totalAlbums": 3,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157603053026616",
+      "title": "Baby shower",
+      "description": "10 November at Pacheco's residence",
+      "photos": 35,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/10004558@N04/albums/72157603053026616"
+    },
+    {
+      "id": "72157601167483644",
+      "title": "Dad's birthday",
+      "description": "We celebrated dad's birthday at D'Foreigner Italian restaurant",
+      "photos": 6,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/10004558@N04/albums/72157601167483644"
+    },
+    {
+      "id": "72157600776897120",
+      "title": "My 2nd pregnancy",
+      "description": {
+        "_content": ""
+      },
+      "photos": 13,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/10004558@N04/albums/72157600776897120"
+    }
+  ],
+  "groups": []
+}

@@ -1,0 +1,135 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:15.022Z",
+  "album": {
+    "id": "72157601167483644",
+    "url": "https://www.flickr.com/photos/pinky_tapang/albums/72157601167483644",
+    "title": "Dad's birthday",
+    "description": "We celebrated dad's birthday at D'Foreigner Italian restaurant",
+    "owner": "10004558@N04",
+    "photoCount": 6
+  },
+  "photos": [
+    {
+      "id": "984788797",
+      "title": "DSC_0366",
+      "taken": "2007-07-31 19:51:28",
+      "uploadedUnix": 1186058174,
+      "ownerName": "Pinky_Tapang",
+      "tags": [
+        "birthday",
+        "dads"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/984788797",
+      "urls": {
+        "q": "https://live.staticflickr.com/1376/984788797_321bffabee_q.jpg",
+        "s": "https://live.staticflickr.com/1376/984788797_321bffabee_m.jpg",
+        "m": "https://live.staticflickr.com/1376/984788797_321bffabee.jpg",
+        "l": "https://live.staticflickr.com/1376/984788797_321bffabee_b.jpg"
+      },
+      "localFile": "dsc_0366_984788797_l.jpg"
+    },
+    {
+      "id": "984789173",
+      "title": "DSC_0367",
+      "taken": "2007-07-31 19:51:58",
+      "uploadedUnix": 1186058176,
+      "ownerName": "Pinky_Tapang",
+      "tags": [
+        "birthday",
+        "dads"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/984789173",
+      "urls": {
+        "q": "https://live.staticflickr.com/1403/984789173_5b49ee5302_q.jpg",
+        "s": "https://live.staticflickr.com/1403/984789173_5b49ee5302_m.jpg",
+        "m": "https://live.staticflickr.com/1403/984789173_5b49ee5302.jpg",
+        "l": "https://live.staticflickr.com/1403/984789173_5b49ee5302_b.jpg"
+      },
+      "localFile": "dsc_0367_984789173_l.jpg"
+    },
+    {
+      "id": "984789527",
+      "title": "DSC_0368",
+      "taken": "2007-07-31 20:56:40",
+      "uploadedUnix": 1186058179,
+      "ownerName": "Pinky_Tapang",
+      "tags": [
+        "birthday",
+        "dads"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/984789527",
+      "urls": {
+        "q": "https://live.staticflickr.com/1067/984789527_b19187091f_q.jpg",
+        "s": "https://live.staticflickr.com/1067/984789527_b19187091f_m.jpg",
+        "m": "https://live.staticflickr.com/1067/984789527_b19187091f.jpg",
+        "l": "https://live.staticflickr.com/1067/984789527_b19187091f_b.jpg"
+      },
+      "localFile": "dsc_0368_984789527_l.jpg"
+    },
+    {
+      "id": "984789829",
+      "title": "DSC_0369",
+      "taken": "2007-07-31 20:57:29",
+      "uploadedUnix": 1186058181,
+      "ownerName": "Pinky_Tapang",
+      "tags": [
+        "birthday",
+        "dads"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/984789829",
+      "urls": {
+        "q": "https://live.staticflickr.com/1104/984789829_c6a912ee9e_q.jpg",
+        "s": "https://live.staticflickr.com/1104/984789829_c6a912ee9e_m.jpg",
+        "m": "https://live.staticflickr.com/1104/984789829_c6a912ee9e.jpg",
+        "l": "https://live.staticflickr.com/1104/984789829_c6a912ee9e_b.jpg"
+      },
+      "localFile": "dsc_0369_984789829_l.jpg"
+    },
+    {
+      "id": "984789959",
+      "title": "DSC_0371",
+      "taken": "2007-07-31 20:59:27",
+      "uploadedUnix": 1186058182,
+      "ownerName": "Pinky_Tapang",
+      "tags": [
+        "birthday",
+        "dads"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/984789959",
+      "urls": {
+        "q": "https://live.staticflickr.com/1349/984789959_5d8a3c8ff2_q.jpg",
+        "s": "https://live.staticflickr.com/1349/984789959_5d8a3c8ff2_m.jpg",
+        "m": "https://live.staticflickr.com/1349/984789959_5d8a3c8ff2.jpg",
+        "l": "https://live.staticflickr.com/1349/984789959_5d8a3c8ff2_b.jpg"
+      },
+      "localFile": "dsc_0371_984789959_l.jpg"
+    },
+    {
+      "id": "984790177",
+      "title": "DSC_0372",
+      "taken": "2007-07-31 21:08:37",
+      "uploadedUnix": 1186058183,
+      "ownerName": "Pinky_Tapang",
+      "tags": [
+        "birthday",
+        "dads"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/984790177",
+      "urls": {
+        "q": "https://live.staticflickr.com/1384/984790177_ee794ed7ae_q.jpg",
+        "s": "https://live.staticflickr.com/1384/984790177_ee794ed7ae_m.jpg",
+        "m": "https://live.staticflickr.com/1384/984790177_ee794ed7ae.jpg",
+        "l": "https://live.staticflickr.com/1384/984790177_ee794ed7ae_b.jpg"
+      },
+      "localFile": "dsc_0372_984790177_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 6,
+    "totalPhotos": 6,
+    "totalLocalFiles": 6,
+    "pairedByOrder": true,
+    "pairedAt": "2026-01-18T21:45:42.035Z"
+  }
+}

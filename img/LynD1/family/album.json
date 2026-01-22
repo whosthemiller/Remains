@@ -1,0 +1,155 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:06.695Z",
+  "album": {
+    "id": "72157594242339031",
+    "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594242339031",
+    "title": "family",
+    "description": "",
+    "owner": "95545622@N00",
+    "photoCount": 6
+  },
+  "photos": [
+    {
+      "id": "218705910",
+      "title": "Tired?",
+      "taken": "2005-12-25 23:39:28",
+      "uploadedUnix": 1155936482,
+      "ownerName": "LynD1",
+      "tags": [
+        "steve",
+        "tired"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218705910",
+      "urls": {
+        "q": "https://live.staticflickr.com/89/218705910_88ae283347_q.jpg",
+        "s": "https://live.staticflickr.com/89/218705910_88ae283347_m.jpg",
+        "m": "https://live.staticflickr.com/89/218705910_88ae283347.jpg",
+        "l": "https://live.staticflickr.com/89/218705910_88ae283347_b.jpg"
+      },
+      "localFile": "aah-my-giggy_218705906_l.jpg"
+    },
+    {
+      "id": "218705909",
+      "title": "Garden welcome",
+      "taken": "2005-08-02 19:39:37",
+      "uploadedUnix": 1155936482,
+      "ownerName": "LynD1",
+      "tags": [
+        "thames",
+        "plaque",
+        "river",
+        "garden",
+        "paint",
+        "daughter",
+        "feathers"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218705909",
+      "urls": {
+        "q": "https://live.staticflickr.com/94/218705909_e7649c664c_q.jpg",
+        "s": "https://live.staticflickr.com/94/218705909_e7649c664c_m.jpg",
+        "m": "https://live.staticflickr.com/94/218705909_e7649c664c.jpg",
+        "l": "https://live.staticflickr.com/94/218705909_e7649c664c_b.jpg"
+      },
+      "localFile": "deep-in-thought_218705905_l.jpg"
+    },
+    {
+      "id": "218705907",
+      "title": "summer at nans",
+      "taken": "2006-08-18 14:28:02",
+      "uploadedUnix": 1155936482,
+      "ownerName": "LynD1",
+      "tags": [
+        "summer",
+        "garden",
+        "pipe",
+        "son",
+        "hose",
+        "nans",
+        "bursting"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218705907",
+      "urls": {
+        "q": "https://live.staticflickr.com/98/218705907_81042348bc_q.jpg",
+        "s": "https://live.staticflickr.com/98/218705907_81042348bc_m.jpg",
+        "m": "https://live.staticflickr.com/98/218705907_81042348bc.jpg",
+        "l": "https://live.staticflickr.com/98/218705907_81042348bc_b.jpg"
+      },
+      "localFile": "garden-welcome_218705909_l.jpg"
+    },
+    {
+      "id": "218705906",
+      "title": "AAh! my giggy",
+      "taken": "2006-08-18 14:28:02",
+      "uploadedUnix": 1155936482,
+      "ownerName": "LynD1",
+      "tags": [
+        "children",
+        "blanket",
+        "comfort",
+        "giggy"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218705906",
+      "urls": {
+        "q": "https://live.staticflickr.com/68/218705906_9ef0ad1e2e_q.jpg",
+        "s": "https://live.staticflickr.com/68/218705906_9ef0ad1e2e_m.jpg",
+        "m": "https://live.staticflickr.com/68/218705906_9ef0ad1e2e.jpg",
+        "l": "https://live.staticflickr.com/68/218705906_9ef0ad1e2e_b.jpg"
+      },
+      "localFile": "summer-at-nans_218705907_l.jpg"
+    },
+    {
+      "id": "218705905",
+      "title": "deep in thought",
+      "taken": "2006-08-18 14:28:01",
+      "uploadedUnix": 1155936481,
+      "ownerName": "LynD1",
+      "tags": [
+        "home",
+        "thought",
+        "pieces",
+        "walk",
+        "son",
+        "bits",
+        "clooners"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218705905",
+      "urls": {
+        "q": "https://live.staticflickr.com/69/218705905_aab23db360_q.jpg",
+        "s": "https://live.staticflickr.com/69/218705905_aab23db360_m.jpg",
+        "m": "https://live.staticflickr.com/69/218705905_aab23db360.jpg",
+        "l": "https://live.staticflickr.com/69/218705905_aab23db360_b.jpg"
+      },
+      "localFile": "tired_218705910_l.jpg"
+    },
+    {
+      "id": "218705904",
+      "title": "Twins- Best friends-daughters",
+      "taken": "2006-08-18 14:28:01",
+      "uploadedUnix": 1155936481,
+      "ownerName": "LynD1",
+      "tags": [
+        "friends",
+        "happy",
+        "twins",
+        "close",
+        "daughters"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218705904",
+      "urls": {
+        "q": "https://live.staticflickr.com/70/218705904_bb403997f7_q.jpg",
+        "s": "https://live.staticflickr.com/70/218705904_bb403997f7_m.jpg",
+        "m": "https://live.staticflickr.com/70/218705904_bb403997f7.jpg",
+        "l": "https://live.staticflickr.com/70/218705904_bb403997f7_b.jpg"
+      },
+      "localFile": "twins--best-friends-daughters_218705904_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 6,
+    "totalPhotos": 6,
+    "totalLocalFiles": 6,
+    "pairedByOrder": true,
+    "pairedAt": "2026-01-18T21:45:42.031Z"
+  }
+}

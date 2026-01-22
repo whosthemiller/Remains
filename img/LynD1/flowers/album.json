@@ -1,0 +1,90 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:03.611Z",
+  "album": {
+    "id": "72157594241122532",
+    "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594241122532",
+    "title": "flowers",
+    "description": "",
+    "owner": "95545622@N00",
+    "photoCount": 3
+  },
+  "photos": [
+    {
+      "id": "200990544",
+      "title": "Flower Mr. Delicate",
+      "taken": "2006-06-03 15:22:30",
+      "uploadedUnix": 1154184440,
+      "ownerName": "LynD1",
+      "tags": [
+        "summer",
+        "flower",
+        "macro",
+        "garden",
+        "pretty",
+        "colourful"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/200990544",
+      "urls": {
+        "q": "https://live.staticflickr.com/58/200990544_1be5af75b3_q.jpg",
+        "s": "https://live.staticflickr.com/58/200990544_1be5af75b3_m.jpg",
+        "m": "https://live.staticflickr.com/58/200990544_1be5af75b3.jpg",
+        "l": "https://live.staticflickr.com/58/200990544_1be5af75b3_b.jpg"
+      },
+      "localFile": "flower-mr-alien_200990542_l.jpg"
+    },
+    {
+      "id": "200990543",
+      "title": "Flower Mr.Weedy",
+      "taken": "2006-06-03 15:13:53",
+      "uploadedUnix": 1154184440,
+      "ownerName": "LynD1",
+      "tags": [
+        "summer",
+        "flower",
+        "macro",
+        "garden",
+        "pretty",
+        "colourful"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/200990543",
+      "urls": {
+        "q": "https://live.staticflickr.com/59/200990543_8053aef9dd_q.jpg",
+        "s": "https://live.staticflickr.com/59/200990543_8053aef9dd_m.jpg",
+        "m": "https://live.staticflickr.com/59/200990543_8053aef9dd.jpg",
+        "l": "https://live.staticflickr.com/59/200990543_8053aef9dd_b.jpg"
+      },
+      "localFile": "flower-mr-delicate_200990544_l.jpg"
+    },
+    {
+      "id": "200990542",
+      "title": "Flower Mr. Alien",
+      "taken": "2006-06-03 15:31:12",
+      "uploadedUnix": 1154184440,
+      "ownerName": "LynD1",
+      "tags": [
+        "summer",
+        "flower",
+        "macro",
+        "garden",
+        "pretty",
+        "colourful"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/200990542",
+      "urls": {
+        "q": "https://live.staticflickr.com/77/200990542_f1c2016d32_q.jpg",
+        "s": "https://live.staticflickr.com/77/200990542_f1c2016d32_m.jpg",
+        "m": "https://live.staticflickr.com/77/200990542_f1c2016d32.jpg",
+        "l": "https://live.staticflickr.com/77/200990542_f1c2016d32_b.jpg"
+      },
+      "localFile": "flower-mrweedy_200990543_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 3,
+    "totalPhotos": 3,
+    "totalLocalFiles": 3,
+    "pairedByOrder": true,
+    "pairedAt": "2026-01-18T21:45:42.029Z"
+  }
+}

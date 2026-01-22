@@ -1,0 +1,41 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:03.667Z",
+  "user": {
+    "nsid": "53995313@N04",
+    "username": "Marixay",
+    "realname": "",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/53995313@N04/",
+    "photosUrl": "https://www.flickr.com/photos/53995313@N04/",
+    "iconServer": "0",
+    "iconFarm": 0,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "September 2010",
+    "photosCount": 32,
+    "photosFirstDate": "1284656649",
+    "photosFirstDateTaken": "2010-09-01 00:00:00"
+  },
+  "stats": {
+    "totalPhotos": 32,
+    "totalAlbums": 1,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157624924281549",
+      "title": "Marixay family album",
+      "description": "Now I present you all my San Francisco Family :)",
+      "photos": 32,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/53995313@N04/albums/72157624924281549"
+    }
+  ],
+  "groups": []
+}

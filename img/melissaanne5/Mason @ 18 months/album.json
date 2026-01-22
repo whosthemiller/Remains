@@ -1,0 +1,133 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:19.616Z",
+  "album": {
+    "id": "72157604505949772",
+    "url": "https://www.flickr.com/photos/14156125@N00/albums/72157604505949772/",
+    "title": "Mason @ 18 months",
+    "description": "",
+    "owner": "14156125@N00",
+    "photoCount": 7
+  },
+  "photos": [
+    {
+      "id": "2409402128",
+      "title": "0013b",
+      "taken": "2008-04-12 23:04:34",
+      "uploadedUnix": 1208055979,
+      "ownerName": "melissaanne5",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2409402128",
+      "urls": {
+        "q": "https://live.staticflickr.com/2375/2409402128_4182d226e5_q.jpg",
+        "s": "https://live.staticflickr.com/2375/2409402128_4182d226e5_m.jpg",
+        "m": "https://live.staticflickr.com/2375/2409402128_4182d226e5.jpg",
+        "l": null
+      },
+      "localFile": "0013b_2409402128_z.jpg"
+    },
+    {
+      "id": "2408566051",
+      "title": "0002b",
+      "taken": "2008-04-12 23:00:06",
+      "uploadedUnix": 1208055962,
+      "ownerName": "melissaanne5",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2408566051",
+      "urls": {
+        "q": "https://live.staticflickr.com/3268/2408566051_babfe3f24c_q.jpg",
+        "s": "https://live.staticflickr.com/3268/2408566051_babfe3f24c_m.jpg",
+        "m": "https://live.staticflickr.com/3268/2408566051_babfe3f24c.jpg",
+        "l": null
+      },
+      "localFile": "0002b_2408566051_z.jpg"
+    },
+    {
+      "id": "2409401674",
+      "title": "0009b",
+      "taken": "2008-04-12 23:00:38",
+      "uploadedUnix": 1208055967,
+      "ownerName": "melissaanne5",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2409401674",
+      "urls": {
+        "q": "https://live.staticflickr.com/2264/2409401674_fa61db9107_q.jpg",
+        "s": "https://live.staticflickr.com/2264/2409401674_fa61db9107_m.jpg",
+        "m": "https://live.staticflickr.com/2264/2409401674_fa61db9107.jpg",
+        "l": null
+      },
+      "localFile": "0009b_2409401674_z.jpg"
+    },
+    {
+      "id": "2409401810",
+      "title": "0010b",
+      "taken": "2008-04-12 23:00:58",
+      "uploadedUnix": 1208055970,
+      "ownerName": "melissaanne5",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2409401810",
+      "urls": {
+        "q": "https://live.staticflickr.com/2160/2409401810_9507462272_q.jpg",
+        "s": "https://live.staticflickr.com/2160/2409401810_9507462272_m.jpg",
+        "m": "https://live.staticflickr.com/2160/2409401810_9507462272.jpg",
+        "l": null
+      },
+      "localFile": "0010b_2409401810_z.jpg"
+    },
+    {
+      "id": "2409402042",
+      "title": "0070b",
+      "taken": "2008-04-12 23:03:28",
+      "uploadedUnix": 1208055977,
+      "ownerName": "melissaanne5",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2409402042",
+      "urls": {
+        "q": "https://live.staticflickr.com/3185/2409402042_7c0fa1842a_q.jpg",
+        "s": "https://live.staticflickr.com/3185/2409402042_7c0fa1842a_m.jpg",
+        "m": "https://live.staticflickr.com/3185/2409402042_7c0fa1842a.jpg",
+        "l": null
+      },
+      "localFile": "0070b_2409402042_z.jpg"
+    },
+    {
+      "id": "2409401988",
+      "title": "0048b",
+      "taken": "2008-04-12 23:02:23",
+      "uploadedUnix": 1208055975,
+      "ownerName": "melissaanne5",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2409401988",
+      "urls": {
+        "q": "https://live.staticflickr.com/2196/2409401988_3eee10cf6e_q.jpg",
+        "s": "https://live.staticflickr.com/2196/2409401988_3eee10cf6e_m.jpg",
+        "m": "https://live.staticflickr.com/2196/2409401988_3eee10cf6e.jpg",
+        "l": null
+      },
+      "localFile": "0048b_2409401988_z.jpg"
+    },
+    {
+      "id": "2409401874",
+      "title": "0028b",
+      "taken": "2008-04-12 23:01:36",
+      "uploadedUnix": 1208055972,
+      "ownerName": "melissaanne5",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2409401874",
+      "urls": {
+        "q": "https://live.staticflickr.com/2046/2409401874_d8da0acaf7_q.jpg",
+        "s": "https://live.staticflickr.com/2046/2409401874_d8da0acaf7_m.jpg",
+        "m": "https://live.staticflickr.com/2046/2409401874_d8da0acaf7.jpg",
+        "l": null
+      },
+      "localFile": "0028b_2409401874_m.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 7,
+    "totalPhotos": 7,
+    "totalLocalFiles": 7,
+    "pairedByOrder": false,
+    "pairedAt": "2026-01-18T21:45:42.037Z"
+  }
+}

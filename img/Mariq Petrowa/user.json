@@ -1,0 +1,53 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:31.377Z",
+  "user": {
+    "nsid": "16519270@N00",
+    "username": "mimoni_999",
+    "realname": "Mariq Petrowa",
+    "location": "Sofia, Bulgaria",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/16519270@N00/",
+    "photosUrl": "https://www.flickr.com/photos/16519270@N00/",
+    "iconServer": "1406",
+    "iconFarm": 2,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "July 2006",
+    "photosCount": 70,
+    "photosFirstDate": "1186495985",
+    "photosFirstDateTaken": "2006-07-16 18:38:57"
+  },
+  "stats": {
+    "totalPhotos": 70,
+    "totalAlbums": 2,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157603503425900",
+      "title": "my children",
+      "description": {
+        "_content": ""
+      },
+      "photos": 25,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/16519270@N00/albums/72157603503425900"
+    },
+    {
+      "id": "72157601301509741",
+      "title": "friends",
+      "description": {
+        "_content": ""
+      },
+      "photos": 7,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/16519270@N00/albums/72157601301509741"
+    }
+  ],
+  "groups": []
+}

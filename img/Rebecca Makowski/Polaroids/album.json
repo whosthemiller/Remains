@@ -1,0 +1,384 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:38:54.493Z",
+  "album": {
+    "id": "72157608099696355",
+    "url": "https://www.flickr.com/photos/zissoubluestar/albums/72157608099696355/",
+    "title": "Polaroids",
+    "description": "600\nSpectra\n",
+    "owner": "30891833@N06",
+    "photoCount": 17
+  },
+  "photos": [
+    {
+      "id": "3085539959",
+      "title": "Back to the Bricks 2008",
+      "taken": "2008-12-05 23:44:28",
+      "uploadedUnix": 1228538668,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "cars",
+        "modela",
+        "vintage",
+        "vintagecar",
+        "polaroidspectra",
+        "backtothebricks",
+        "flintcarshow"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3085539959",
+      "urls": {
+        "q": "https://live.staticflickr.com/3261/3085539959_bba92ba8b8_q.jpg",
+        "s": "https://live.staticflickr.com/3261/3085539959_bba92ba8b8_m.jpg",
+        "m": "https://live.staticflickr.com/3261/3085539959_bba92ba8b8.jpg",
+        "l": null
+      },
+      "localFile": "back-to-the-bricks-2008_3085539959_z.jpg"
+    },
+    {
+      "id": "2948183750",
+      "title": "Party Animals",
+      "taken": "2008-10-16 18:23:53",
+      "uploadedUnix": 1224195833,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "birthday",
+        "polaroid",
+        "spectra",
+        "balloonhat"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2948183750",
+      "urls": {
+        "q": "https://live.staticflickr.com/3225/2948183750_16f920a2e3_q.jpg",
+        "s": "https://live.staticflickr.com/3225/2948183750_16f920a2e3_m.jpg",
+        "m": "https://live.staticflickr.com/3225/2948183750_16f920a2e3.jpg",
+        "l": null
+      },
+      "localFile": "party-animals_2948183750_m.jpg"
+    },
+    {
+      "id": "2947328209",
+      "title": "Party Animals",
+      "taken": "2008-10-16 18:23:50",
+      "uploadedUnix": 1224195830,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "party",
+        "polaroid",
+        "mask",
+        "spectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2947328209",
+      "urls": {
+        "q": "https://live.staticflickr.com/3215/2947328209_75703d5e9d_q.jpg",
+        "s": "https://live.staticflickr.com/3215/2947328209_75703d5e9d_m.jpg",
+        "m": "https://live.staticflickr.com/3215/2947328209_75703d5e9d.jpg",
+        "l": null
+      },
+      "localFile": "party-animals_2947328209_m.jpg"
+    },
+    {
+      "id": "2947328467",
+      "title": "Party Animals",
+      "taken": "2008-10-16 18:23:58",
+      "uploadedUnix": 1224195838,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "mask",
+        "spectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2947328467",
+      "urls": {
+        "q": "https://live.staticflickr.com/3241/2947328467_601d1a715b_q.jpg",
+        "s": "https://live.staticflickr.com/3241/2947328467_601d1a715b_m.jpg",
+        "m": "https://live.staticflickr.com/3241/2947328467_601d1a715b.jpg",
+        "l": null
+      },
+      "localFile": "party-animals_2947328467_m.jpg"
+    },
+    {
+      "id": "2948183808",
+      "title": "Party Animals",
+      "taken": "2008-10-16 18:23:55",
+      "uploadedUnix": 1224195835,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "party",
+        "bird",
+        "polaroid",
+        "mask",
+        "spectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2948183808",
+      "urls": {
+        "q": "https://live.staticflickr.com/3207/2948183808_a5d259cd0a_q.jpg",
+        "s": "https://live.staticflickr.com/3207/2948183808_a5d259cd0a_m.jpg",
+        "m": "https://live.staticflickr.com/3207/2948183808_a5d259cd0a.jpg",
+        "l": null
+      },
+      "localFile": "party-animals_2948183808_m.jpg"
+    },
+    {
+      "id": "2948183988",
+      "title": "Party Animals",
+      "taken": "2008-10-16 18:24:01",
+      "uploadedUnix": 1224195841,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "party",
+        "cat",
+        "polaroid",
+        "mask",
+        "spectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2948183988",
+      "urls": {
+        "q": "https://live.staticflickr.com/3137/2948183988_3304971449_q.jpg",
+        "s": "https://live.staticflickr.com/3137/2948183988_3304971449_m.jpg",
+        "m": "https://live.staticflickr.com/3137/2948183988_3304971449.jpg",
+        "l": null
+      },
+      "localFile": "party-animals_2948183988_m.jpg"
+    },
+    {
+      "id": "2948184074",
+      "title": "Party Animals",
+      "taken": "2008-10-16 18:24:04",
+      "uploadedUnix": 1224195844,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "party",
+        "polaroid",
+        "mask",
+        "spectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2948184074",
+      "urls": {
+        "q": "https://live.staticflickr.com/3162/2948184074_1487216ec1_q.jpg",
+        "s": "https://live.staticflickr.com/3162/2948184074_1487216ec1_m.jpg",
+        "m": "https://live.staticflickr.com/3162/2948184074_1487216ec1.jpg",
+        "l": null
+      },
+      "localFile": "party-animals_2948184074_m.jpg"
+    },
+    {
+      "id": "2948155688",
+      "title": "Petoskey docks",
+      "taken": "2008-10-16 18:09:03",
+      "uploadedUnix": 1224194943,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "boat",
+        "petoskey"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2948155688",
+      "urls": {
+        "q": "https://live.staticflickr.com/3181/2948155688_422a191a5c_q.jpg",
+        "s": "https://live.staticflickr.com/3181/2948155688_422a191a5c_m.jpg",
+        "m": "https://live.staticflickr.com/3181/2948155688_422a191a5c.jpg",
+        "l": null
+      },
+      "localFile": "petoskey-docks_2948155688_m.jpg"
+    },
+    {
+      "id": "3085540043",
+      "title": "Barnes Lake fireworks 2008",
+      "taken": "2008-12-05 23:44:31",
+      "uploadedUnix": 1228538671,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "fireworks",
+        "barneslake"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3085540043",
+      "urls": {
+        "q": "https://live.staticflickr.com/3146/3085540043_7c33562094_q.jpg",
+        "s": "https://live.staticflickr.com/3146/3085540043_7c33562094_m.jpg",
+        "m": null,
+        "l": null
+      },
+      "localFile": "barnes-lake-fireworks-2008_3085540043_w.jpg"
+    },
+    {
+      "id": "3085540131",
+      "title": "lily pads",
+      "taken": "2008-12-05 23:44:34",
+      "uploadedUnix": 1228538674,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "lake",
+        "green",
+        "lilypads",
+        "barneslake"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3085540131",
+      "urls": {
+        "q": "https://live.staticflickr.com/3058/3085540131_7bb0bf1843_q.jpg",
+        "s": "https://live.staticflickr.com/3058/3085540131_7bb0bf1843_m.jpg",
+        "m": null,
+        "l": null
+      },
+      "localFile": "lily-pads_3085540131_w.jpg"
+    },
+    {
+      "id": "3085540201",
+      "title": "mom's troll collection",
+      "taken": "2008-12-05 23:44:36",
+      "uploadedUnix": 1228538676,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "polaroidspectra",
+        "spectra",
+        "trolls"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3085540201",
+      "urls": {
+        "q": "https://live.staticflickr.com/3042/3085540201_73ca07746d_q.jpg",
+        "s": "https://live.staticflickr.com/3042/3085540201_73ca07746d_m.jpg",
+        "m": "https://live.staticflickr.com/3042/3085540201_73ca07746d.jpg",
+        "l": null
+      },
+      "localFile": "moms-troll-collection_3085540201_m.jpg"
+    },
+    {
+      "id": "3085540323",
+      "title": "remembered",
+      "taken": "2008-12-05 23:44:41",
+      "uploadedUnix": 1228538681,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "gravestone",
+        "polaroidspectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3085540323",
+      "urls": {
+        "q": "https://live.staticflickr.com/3199/3085540323_d6a6620657_q.jpg",
+        "s": "https://live.staticflickr.com/3199/3085540323_d6a6620657_m.jpg",
+        "m": "https://live.staticflickr.com/3199/3085540323_d6a6620657.jpg",
+        "l": null
+      },
+      "localFile": "remembered_3085540323_z.jpg"
+    },
+    {
+      "id": "3605977302",
+      "title": "straight outta compton",
+      "taken": "2008-07-01 00:00:00",
+      "uploadedUnix": 1244426075,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "polaroidspectra",
+        "spectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3605977302",
+      "urls": {
+        "q": "https://live.staticflickr.com/3603/3605977302_a7e62a700f_q.jpg",
+        "s": "https://live.staticflickr.com/3603/3605977302_a7e62a700f_m.jpg",
+        "m": "https://live.staticflickr.com/3603/3605977302_a7e62a700f.jpg",
+        "l": null
+      },
+      "localFile": "straight-outta-compton_3605977302_m.jpg"
+    },
+    {
+      "id": "3605979278",
+      "title": "hazy",
+      "taken": "2008-07-01 00:00:00",
+      "uploadedUnix": 1244426110,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "doubleexposure",
+        "polaroid",
+        "spectra",
+        "polaroidspectra"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3605979278",
+      "urls": {
+        "q": "https://live.staticflickr.com/2451/3605979278_d9fed8db37_q.jpg",
+        "s": "https://live.staticflickr.com/2451/3605979278_d9fed8db37_m.jpg",
+        "m": "https://live.staticflickr.com/2451/3605979278_d9fed8db37.jpg",
+        "l": null
+      },
+      "localFile": "hazy_3605979278_z.jpg"
+    },
+    {
+      "id": "3690649147",
+      "title": "cards by the river",
+      "taken": "2009-07-05 15:40:02",
+      "uploadedUnix": 1246822802,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "fireworks",
+        "michigan",
+        "july4",
+        "independenceday",
+        "saginawriver",
+        "saginaw",
+        "artistictz"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3690649147",
+      "urls": {
+        "q": "https://live.staticflickr.com/2460/3690649147_db23dfd11c_q.jpg",
+        "s": "https://live.staticflickr.com/2460/3690649147_db23dfd11c_m.jpg",
+        "m": "https://live.staticflickr.com/2460/3690649147_db23dfd11c.jpg",
+        "l": "https://live.staticflickr.com/2460/3690649147_db23dfd11c_b.jpg"
+      },
+      "localFile": "cards-by-the-river_3690649147_l.jpg"
+    },
+    {
+      "id": "3691457354",
+      "title": "saginaw fireworks 2009",
+      "taken": "2009-07-05 15:40:05",
+      "uploadedUnix": 1246822805,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "fireworks",
+        "michigan",
+        "july4",
+        "independenceday",
+        "saginaw",
+        "artistictz"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3691457354",
+      "urls": {
+        "q": "https://live.staticflickr.com/2423/3691457354_e9785f6b41_q.jpg",
+        "s": "https://live.staticflickr.com/2423/3691457354_e9785f6b41_m.jpg",
+        "m": "https://live.staticflickr.com/2423/3691457354_e9785f6b41.jpg",
+        "l": "https://live.staticflickr.com/2423/3691457354_e9785f6b41_b.jpg"
+      },
+      "localFile": "saginaw-fireworks-2009_3691457354_l.jpg"
+    },
+    {
+      "id": "3523239769",
+      "title": "Kristen polaroid",
+      "taken": "2009-05-11 19:55:01",
+      "uploadedUnix": 1242087565,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "polaroid",
+        "sx70",
+        "spring",
+        "artistictz"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/3523239769",
+      "urls": {
+        "q": "https://live.staticflickr.com/3620/3523239769_d70be869a3_q.jpg",
+        "s": "https://live.staticflickr.com/3620/3523239769_d70be869a3_m.jpg",
+        "m": "https://live.staticflickr.com/3620/3523239769_d70be869a3.jpg",
+        "l": "https://live.staticflickr.com/3620/3523239769_d70be869a3_b.jpg"
+      },
+      "localFile": "kristen-polaroid_3523239769_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 17,
+    "totalPhotos": 17,
+    "totalLocalFiles": 17,
+    "pairedByOrder": false,
+    "pairedAt": "2026-01-18T21:45:42.024Z"
+  }
+}

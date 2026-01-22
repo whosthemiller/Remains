@@ -1,0 +1,187 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:13.946Z",
+  "user": {
+    "nsid": "30891833@N06",
+    "username": "rebeccamakowski",
+    "realname": "Rebecca Makowski",
+    "location": "Saginaw, MI, United States",
+    "description": "Chemistry student in Michigan.",
+    "profileUrl": "https://www.flickr.com/people/zissoubluestar/",
+    "photosUrl": "https://www.flickr.com/photos/zissoubluestar/",
+    "iconServer": "5050",
+    "iconFarm": 6,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "September 2008",
+    "photosCount": 705,
+    "photosFirstDate": "1222534195",
+    "photosFirstDateTaken": "2007-05-22 19:21:21"
+  },
+  "stats": {
+    "totalPhotos": 705,
+    "totalAlbums": 16,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157627954515264",
+      "title": "Saginaw",
+      "description": {
+        "_content": ""
+      },
+      "photos": 15,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157627954515264"
+    },
+    {
+      "id": "72157626311111290",
+      "title": "Nail polish swatches",
+      "description": {
+        "_content": ""
+      },
+      "photos": 17,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157626311111290"
+    },
+    {
+      "id": "72157624656774387",
+      "title": "Animals",
+      "description": {
+        "_content": ""
+      },
+      "photos": 36,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157624656774387"
+    },
+    {
+      "id": "72157624033016025",
+      "title": "Garden",
+      "description": {
+        "_content": ""
+      },
+      "photos": 52,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157624033016025"
+    },
+    {
+      "id": "72157623836164868",
+      "title": "Spring",
+      "description": {
+        "_content": ""
+      },
+      "photos": 94,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157623836164868"
+    },
+    {
+      "id": "72157622930137851",
+      "title": "Winter",
+      "description": {
+        "_content": ""
+      },
+      "photos": 33,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157622930137851"
+    },
+    {
+      "id": "72157622455524130",
+      "title": "Fall",
+      "description": {
+        "_content": ""
+      },
+      "photos": 106,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157622455524130"
+    },
+    {
+      "id": "72157621110645589",
+      "title": "Food",
+      "description": "Food I've made, eaten, grown, seen, enjoyed",
+      "photos": 24,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157621110645589"
+    },
+    {
+      "id": "72157621065566175",
+      "title": "Summer",
+      "description": {
+        "_content": ""
+      },
+      "photos": 272,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157621065566175"
+    },
+    {
+      "id": "72157608099696355",
+      "title": "Polaroids",
+      "description": "600\nSpectra\n",
+      "photos": 17,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157608099696355"
+    },
+    {
+      "id": "72157607546678989",
+      "title": "35mm",
+      "description": {
+        "_content": ""
+      },
+      "photos": 32,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157607546678989"
+    },
+    {
+      "id": "72157624657185527",
+      "title": "Marquette",
+      "description": {
+        "_content": ""
+      },
+      "photos": 17,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157624657185527"
+    },
+    {
+      "id": "72157624781790128",
+      "title": "Pictured Rocks National Lakeshore",
+      "description": {
+        "_content": ""
+      },
+      "photos": 22,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157624781790128"
+    },
+    {
+      "id": "72157621065327057",
+      "title": "St. Pete Beach, Florida",
+      "description": "March 2009, Spring Break",
+      "photos": 47,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157621065327057"
+    },
+    {
+      "id": "72157624657152839",
+      "title": "Mackinac",
+      "description": {
+        "_content": ""
+      },
+      "photos": 118,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157624657152839"
+    },
+    {
+      "id": "72157624657209557",
+      "title": "Traverse City",
+      "description": {
+        "_content": ""
+      },
+      "photos": 12,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/30891833@N06/albums/72157624657209557"
+    }
+  ],
+  "groups": []
+}

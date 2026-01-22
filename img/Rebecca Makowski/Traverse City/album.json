@@ -1,0 +1,272 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:38:50.197Z",
+  "album": {
+    "id": "72157624657209557",
+    "url": "https://www.flickr.com/photos/zissoubluestar/albums/72157624657209557/",
+    "title": "Traverse City",
+    "description": "",
+    "owner": "30891833@N06",
+    "photoCount": 12
+  },
+  "photos": [
+    {
+      "id": "4741188564",
+      "title": "Grand Traverse Bay",
+      "taken": "2010-06-26 18:47:08",
+      "uploadedUnix": 1277694741,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "lakemichigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741188564",
+      "urls": {
+        "q": "https://live.staticflickr.com/4081/4741188564_48c25936b9_q.jpg",
+        "s": "https://live.staticflickr.com/4081/4741188564_48c25936b9_m.jpg",
+        "m": "https://live.staticflickr.com/4081/4741188564_48c25936b9.jpg",
+        "l": "https://live.staticflickr.com/4081/4741188564_48c25936b9_b.jpg"
+      },
+      "localFile": "grand-traverse-bay_4741188564_l.jpg"
+    },
+    {
+      "id": "4741188060",
+      "title": "Cherry Tree Inn",
+      "taken": "2010-06-26 18:44:40",
+      "uploadedUnix": 1277694732,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "lakemichigan",
+        "tc",
+        "traversecity",
+        "cherrytreeinn"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741188060",
+      "urls": {
+        "q": "https://live.staticflickr.com/4074/4741188060_d52a8784ff_q.jpg",
+        "s": "https://live.staticflickr.com/4074/4741188060_d52a8784ff_m.jpg",
+        "m": "https://live.staticflickr.com/4074/4741188060_d52a8784ff.jpg",
+        "l": "https://live.staticflickr.com/4074/4741188060_d52a8784ff_b.jpg"
+      },
+      "localFile": "cherry-tree-inn_4741188060_l.jpg"
+    },
+    {
+      "id": "4741187548",
+      "title": "Lake Michigan",
+      "taken": "2010-06-26 18:43:57",
+      "uploadedUnix": 1277694722,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "lakemichigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741187548",
+      "urls": {
+        "q": "https://live.staticflickr.com/4116/4741187548_d3ea49ae53_q.jpg",
+        "s": "https://live.staticflickr.com/4116/4741187548_d3ea49ae53_m.jpg",
+        "m": "https://live.staticflickr.com/4116/4741187548_d3ea49ae53.jpg",
+        "l": "https://live.staticflickr.com/4116/4741187548_d3ea49ae53_b.jpg"
+      },
+      "localFile": "lake-michigan_4741187548_l.jpg"
+    },
+    {
+      "id": "4740551561",
+      "title": "Cherry Tree Inn",
+      "taken": "2010-06-26 18:42:44",
+      "uploadedUnix": 1277694712,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4740551561",
+      "urls": {
+        "q": "https://live.staticflickr.com/4075/4740551561_d6ce309b41_q.jpg",
+        "s": "https://live.staticflickr.com/4075/4740551561_d6ce309b41_m.jpg",
+        "m": "https://live.staticflickr.com/4075/4740551561_d6ce309b41.jpg",
+        "l": "https://live.staticflickr.com/4075/4740551561_d6ce309b41_b.jpg"
+      },
+      "localFile": "cherry-tree-inn_4740551561_l.jpg"
+    },
+    {
+      "id": "4741186538",
+      "title": "Cherry Tree Inn",
+      "taken": "2010-06-26 18:41:06",
+      "uploadedUnix": 1277694702,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741186538",
+      "urls": {
+        "q": "https://live.staticflickr.com/4077/4741186538_9cb349c0b7_q.jpg",
+        "s": "https://live.staticflickr.com/4077/4741186538_9cb349c0b7_m.jpg",
+        "m": "https://live.staticflickr.com/4077/4741186538_9cb349c0b7.jpg",
+        "l": "https://live.staticflickr.com/4077/4741186538_9cb349c0b7_b.jpg"
+      },
+      "localFile": "cherry-tree-inn_4741186538_l.jpg"
+    },
+    {
+      "id": "4740550525",
+      "title": "Cherry Tree Inn",
+      "taken": "2010-06-26 18:40:53",
+      "uploadedUnix": 1277694691,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4740550525",
+      "urls": {
+        "q": "https://live.staticflickr.com/4078/4740550525_5999ff0f17_q.jpg",
+        "s": "https://live.staticflickr.com/4078/4740550525_5999ff0f17_m.jpg",
+        "m": "https://live.staticflickr.com/4078/4740550525_5999ff0f17.jpg",
+        "l": "https://live.staticflickr.com/4078/4740550525_5999ff0f17_b.jpg"
+      },
+      "localFile": "cherry-tree-inn_4740550525_l.jpg"
+    },
+    {
+      "id": "4741185538",
+      "title": "Traverse City, MI",
+      "taken": "2010-06-26 18:40:41",
+      "uploadedUnix": 1277694681,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "lakemichigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741185538",
+      "urls": {
+        "q": "https://live.staticflickr.com/4073/4741185538_1a0b408bcc_q.jpg",
+        "s": "https://live.staticflickr.com/4073/4741185538_1a0b408bcc_m.jpg",
+        "m": "https://live.staticflickr.com/4073/4741185538_1a0b408bcc.jpg",
+        "l": "https://live.staticflickr.com/4073/4741185538_1a0b408bcc_b.jpg"
+      },
+      "localFile": "traverse-city-mi_4741185538_l.jpg"
+    },
+    {
+      "id": "4741184990",
+      "title": "Traverse City, MI",
+      "taken": "2010-06-26 18:39:20",
+      "uploadedUnix": 1277694671,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741184990",
+      "urls": {
+        "q": "https://live.staticflickr.com/4116/4741184990_4194556ec7_q.jpg",
+        "s": "https://live.staticflickr.com/4116/4741184990_4194556ec7_m.jpg",
+        "m": "https://live.staticflickr.com/4116/4741184990_4194556ec7.jpg",
+        "l": "https://live.staticflickr.com/4116/4741184990_4194556ec7_b.jpg"
+      },
+      "localFile": "traverse-city-mi_4741184990_l.jpg"
+    },
+    {
+      "id": "4741184494",
+      "title": "Traverse City, MI",
+      "taken": "2010-06-26 18:38:32",
+      "uploadedUnix": 1277694661,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "lakemichigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741184494",
+      "urls": {
+        "q": "https://live.staticflickr.com/4073/4741184494_2cb00b3d51_q.jpg",
+        "s": "https://live.staticflickr.com/4073/4741184494_2cb00b3d51_m.jpg",
+        "m": "https://live.staticflickr.com/4073/4741184494_2cb00b3d51.jpg",
+        "l": "https://live.staticflickr.com/4073/4741184494_2cb00b3d51_b.jpg"
+      },
+      "localFile": "traverse-city-mi_4741184494_l.jpg"
+    },
+    {
+      "id": "4740548475",
+      "title": "State Park Beach",
+      "taken": "2010-06-26 15:29:35",
+      "uploadedUnix": 1277694651,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "lakemichigan",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4740548475",
+      "urls": {
+        "q": "https://live.staticflickr.com/4094/4740548475_9dbd23489d_q.jpg",
+        "s": "https://live.staticflickr.com/4094/4740548475_9dbd23489d_m.jpg",
+        "m": "https://live.staticflickr.com/4094/4740548475_9dbd23489d.jpg",
+        "l": "https://live.staticflickr.com/4094/4740548475_9dbd23489d_b.jpg"
+      },
+      "localFile": "state-park-beach_4740548475_l.jpg"
+    },
+    {
+      "id": "4741183390",
+      "title": "Ducks",
+      "taken": "2010-06-25 20:38:38",
+      "uploadedUnix": 1277694640,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "wildlife",
+        "ducks",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4741183390",
+      "urls": {
+        "q": "https://live.staticflickr.com/4123/4741183390_982a82614f_q.jpg",
+        "s": "https://live.staticflickr.com/4123/4741183390_982a82614f_m.jpg",
+        "m": "https://live.staticflickr.com/4123/4741183390_982a82614f.jpg",
+        "l": "https://live.staticflickr.com/4123/4741183390_982a82614f_b.jpg"
+      },
+      "localFile": "ducks_4741183390_l.jpg"
+    },
+    {
+      "id": "4740547505",
+      "title": "Ducks",
+      "taken": "2010-06-25 20:36:30",
+      "uploadedUnix": 1277694631,
+      "ownerName": "rebeccamakowski",
+      "tags": [
+        "michigan",
+        "wildlife",
+        "ducks",
+        "tc",
+        "traversecity"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/4740547505",
+      "urls": {
+        "q": "https://live.staticflickr.com/4077/4740547505_4de108fc1e_q.jpg",
+        "s": "https://live.staticflickr.com/4077/4740547505_4de108fc1e_m.jpg",
+        "m": "https://live.staticflickr.com/4077/4740547505_4de108fc1e.jpg",
+        "l": "https://live.staticflickr.com/4077/4740547505_4de108fc1e_b.jpg"
+      },
+      "localFile": "ducks_4740547505_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 12,
+    "totalPhotos": 12,
+    "totalLocalFiles": 12,
+    "pairedByOrder": false,
+    "pairedAt": "2026-01-18T21:45:42.022Z"
+  }
+}

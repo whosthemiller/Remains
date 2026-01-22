@@ -1,0 +1,197 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:12.045Z",
+  "user": {
+    "nsid": "51195102@N07",
+    "username": "Chang Family Pics",
+    "realname": "Alaine & Joe Chang",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/chang_fegal_family/",
+    "photosUrl": "https://www.flickr.com/photos/chang_fegal_family/",
+    "iconServer": "4117",
+    "iconFarm": 5,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "June 2010",
+    "photosCount": 173,
+    "photosFirstDate": "1279484752",
+    "photosFirstDateTaken": "2007-02-02 22:47:10"
+  },
+  "stats": {
+    "totalPhotos": 173,
+    "totalAlbums": 17,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157651416471766",
+      "title": "Ray Fegal Sr. Funeral",
+      "description": {
+        "_content": ""
+      },
+      "photos": 10,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157651416471766"
+    },
+    {
+      "id": "72157649153033533",
+      "title": "Raymond Fegal, Sr. Funeral",
+      "description": {
+        "_content": ""
+      },
+      "photos": 10,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157649153033533"
+    },
+    {
+      "id": "72157632069309604",
+      "title": "March 2012 China Taiwan Trip",
+      "description": {
+        "_content": ""
+      },
+      "photos": 10,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157632069309604"
+    },
+    {
+      "id": "72157627789182577",
+      "title": "Sydney",
+      "description": {
+        "_content": ""
+      },
+      "photos": 1,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157627789182577"
+    },
+    {
+      "id": "72157627913778206",
+      "title": "Dusty",
+      "description": {
+        "_content": ""
+      },
+      "photos": 11,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157627913778206"
+    },
+    {
+      "id": "72157627789171955",
+      "title": "Dewey",
+      "description": {
+        "_content": ""
+      },
+      "photos": 3,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157627789171955"
+    },
+    {
+      "id": "72157627913765312",
+      "title": "Dori",
+      "description": {
+        "_content": ""
+      },
+      "photos": 5,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157627913765312"
+    },
+    {
+      "id": "72157627789157773",
+      "title": "Duncan",
+      "description": {
+        "_content": ""
+      },
+      "photos": 2,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157627789157773"
+    },
+    {
+      "id": "72157625377308830",
+      "title": "50TH REUNION",
+      "description": "Joe's elementary classmates",
+      "photos": 7,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157625377308830"
+    },
+    {
+      "id": "72157624531183630",
+      "title": "Hailey Luella Chang",
+      "description": {
+        "_content": ""
+      },
+      "photos": 15,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624531183630"
+    },
+    {
+      "id": "72157624405797087",
+      "title": "Colin Chang",
+      "description": {
+        "_content": ""
+      },
+      "photos": 55,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624405797087"
+    },
+    {
+      "id": "72157624530211928",
+      "title": "cats, cats, cats",
+      "description": {
+        "_content": ""
+      },
+      "photos": 29,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624530211928"
+    },
+    {
+      "id": "72157624530308228",
+      "title": "Florida, April 2010",
+      "description": {
+        "_content": ""
+      },
+      "photos": 16,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624530308228"
+    },
+    {
+      "id": "72157624405628149",
+      "title": "Mary Trybulski funeral",
+      "description": "October 2010",
+      "photos": 14,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624405628149"
+    },
+    {
+      "id": "72157624530322030",
+      "title": "Ye-Ye's Birthday Party",
+      "description": {
+        "_content": ""
+      },
+      "photos": 14,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624530322030"
+    },
+    {
+      "id": "72157624530305716",
+      "title": "Colorado, July 2009",
+      "description": "aka. the Asian Invasion",
+      "photos": 51,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624530305716"
+    },
+    {
+      "id": "72157624405635605",
+      "title": "Mountaintop, PA",
+      "description": {
+        "_content": ""
+      },
+      "photos": 6,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/51195102@N07/albums/72157624405635605"
+    }
+  ],
+  "groups": []
+}

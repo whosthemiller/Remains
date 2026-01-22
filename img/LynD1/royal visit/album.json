@@ -1,0 +1,160 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:06.154Z",
+  "album": {
+    "id": "72157594242310509",
+    "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594242310509",
+    "title": "royal visit",
+    "description": "",
+    "owner": "95545622@N00",
+    "photoCount": 6
+  },
+  "photos": [
+    {
+      "id": "218683891",
+      "title": "The Queen 2006",
+      "taken": "2006-02-24 12:21:03",
+      "uploadedUnix": 1155934007,
+      "ownerName": "LynD1",
+      "tags": [
+        "flowers",
+        "proud",
+        "reading",
+        "god",
+        "queen",
+        "bless"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218683891",
+      "urls": {
+        "q": "https://live.staticflickr.com/96/218683891_a0ac8963cc_q.jpg",
+        "s": "https://live.staticflickr.com/96/218683891_a0ac8963cc_m.jpg",
+        "m": "https://live.staticflickr.com/96/218683891_a0ac8963cc.jpg",
+        "l": "https://live.staticflickr.com/96/218683891_a0ac8963cc_b.jpg"
+      },
+      "localFile": "queen-elizabeth--visits-the-royal-berks-hospital-2006_218683885_l.jpg"
+    },
+    {
+      "id": "218683890",
+      "title": "The Queen",
+      "taken": "2006-02-24 12:20:40",
+      "uploadedUnix": 1155934007,
+      "ownerName": "LynD1",
+      "tags": [
+        "castle",
+        "hospital",
+        "reading",
+        "queen",
+        "berks"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218683890",
+      "urls": {
+        "q": "https://live.staticflickr.com/98/218683890_63a3baefe2_q.jpg",
+        "s": "https://live.staticflickr.com/98/218683890_63a3baefe2_m.jpg",
+        "m": "https://live.staticflickr.com/98/218683890_63a3baefe2.jpg",
+        "l": "https://live.staticflickr.com/98/218683890_63a3baefe2_b.jpg"
+      },
+      "localFile": "royal-berkshire-hospital-welcomes-queen-elizabeth_218683886_l.jpg"
+    },
+    {
+      "id": "218683888",
+      "title": "The Queen 2006",
+      "taken": "2006-02-24 12:21:23",
+      "uploadedUnix": 1155934007,
+      "ownerName": "LynD1",
+      "tags": [
+        "castle",
+        "elizabeth",
+        "royal",
+        "prince",
+        "queen",
+        "windsor",
+        "philip",
+        "berks",
+        "hospitall"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218683888",
+      "urls": {
+        "q": "https://live.staticflickr.com/69/218683888_99d45c2ddf_q.jpg",
+        "s": "https://live.staticflickr.com/69/218683888_99d45c2ddf_m.jpg",
+        "m": "https://live.staticflickr.com/69/218683888_99d45c2ddf.jpg",
+        "l": "https://live.staticflickr.com/69/218683888_99d45c2ddf_b.jpg"
+      },
+      "localFile": "the-queen_218683890_l.jpg"
+    },
+    {
+      "id": "218683887",
+      "title": "The Queen 2006",
+      "taken": "2006-02-24 12:20:49",
+      "uploadedUnix": 1155934007,
+      "ownerName": "LynD1",
+      "tags": [
+        "royal",
+        "queen",
+        "windsor",
+        "berks"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218683887",
+      "urls": {
+        "q": "https://live.staticflickr.com/64/218683887_3a02139df4_q.jpg",
+        "s": "https://live.staticflickr.com/64/218683887_3a02139df4_m.jpg",
+        "m": "https://live.staticflickr.com/64/218683887_3a02139df4.jpg",
+        "l": "https://live.staticflickr.com/64/218683887_3a02139df4_b.jpg"
+      },
+      "localFile": "the-queen-2006_218683887_l.jpg"
+    },
+    {
+      "id": "218683886",
+      "title": "Royal Berkshire Hospital welcomes Queen Elizabeth",
+      "taken": "2006-02-24 12:20:55",
+      "uploadedUnix": 1155934007,
+      "ownerName": "LynD1",
+      "tags": [
+        "elizabeth",
+        "god",
+        "royal",
+        "queen",
+        "berkshire",
+        "sheen",
+        "bless"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218683886",
+      "urls": {
+        "q": "https://live.staticflickr.com/69/218683886_f07b6bfa78_q.jpg",
+        "s": "https://live.staticflickr.com/69/218683886_f07b6bfa78_m.jpg",
+        "m": "https://live.staticflickr.com/69/218683886_f07b6bfa78.jpg",
+        "l": "https://live.staticflickr.com/69/218683886_f07b6bfa78_b.jpg"
+      },
+      "localFile": "the-queen-2006_218683888_l.jpg"
+    },
+    {
+      "id": "218683885",
+      "title": "Queen Elizabeth  visits the Royal Berks Hospital 2006",
+      "taken": "2006-02-24 12:21:03",
+      "uploadedUnix": 1155934007,
+      "ownerName": "LynD1",
+      "tags": [
+        "hospital",
+        "elizabeth",
+        "royal",
+        "2006",
+        "queen",
+        "berks"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/218683885",
+      "urls": {
+        "q": "https://live.staticflickr.com/66/218683885_f108badd37_q.jpg",
+        "s": "https://live.staticflickr.com/66/218683885_f108badd37_m.jpg",
+        "m": "https://live.staticflickr.com/66/218683885_f108badd37.jpg",
+        "l": "https://live.staticflickr.com/66/218683885_f108badd37_b.jpg"
+      },
+      "localFile": "the-queen-2006_218683891_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 6,
+    "totalPhotos": 6,
+    "totalLocalFiles": 6,
+    "pairedByOrder": true,
+    "pairedAt": "2026-01-18T21:45:42.031Z"
+  }
+}

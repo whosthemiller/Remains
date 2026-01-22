@@ -1,0 +1,103 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:15.519Z",
+  "user": {
+    "nsid": "95545622@N00",
+    "username": "LynD1",
+    "realname": "",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/95545622@N00/",
+    "photosUrl": "https://www.flickr.com/photos/95545622@N00/",
+    "iconServer": "62",
+    "iconFarm": 1,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "July 2006",
+    "photosCount": 97,
+    "photosFirstDate": "1154184440",
+    "photosFirstDateTaken": "2005-01-07 13:11:38"
+  },
+  "stats": {
+    "totalPhotos": 97,
+    "totalAlbums": 7,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157594541013148",
+      "title": "winter wonderland",
+      "description": {
+        "_content": ""
+      },
+      "photos": 6,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594541013148"
+    },
+    {
+      "id": "72157594242339031",
+      "title": "family",
+      "description": {
+        "_content": ""
+      },
+      "photos": 6,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594242339031"
+    },
+    {
+      "id": "72157594242310509",
+      "title": "royal visit",
+      "description": {
+        "_content": ""
+      },
+      "photos": 6,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594242310509"
+    },
+    {
+      "id": "72157594242170241",
+      "title": "Africa Trip 2005",
+      "description": {
+        "_content": ""
+      },
+      "photos": 12,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594242170241"
+    },
+    {
+      "id": "72157594241121785",
+      "title": "Barcelona different views",
+      "description": {
+        "_content": ""
+      },
+      "photos": 9,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594241121785"
+    },
+    {
+      "id": "72157594241119502",
+      "title": "Old Barcelona",
+      "description": {
+        "_content": ""
+      },
+      "photos": 13,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594241119502"
+    },
+    {
+      "id": "72157594241122532",
+      "title": "flowers",
+      "description": {
+        "_content": ""
+      },
+      "photos": 3,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594241122532"
+    }
+  ],
+  "groups": []
+}

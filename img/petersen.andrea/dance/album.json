@@ -1,0 +1,135 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:37.173Z",
+  "album": {
+    "id": "72157600390139893",
+    "url": "https://www.flickr.com/photos/9112857@N08/albums/72157600390139893",
+    "title": "dance",
+    "description": "",
+    "owner": "9112857@N08",
+    "photoCount": 7
+  },
+  "photos": [
+    {
+      "id": "564754443",
+      "title": "breah joelle sam",
+      "taken": "2007-05-23 09:43:31",
+      "uploadedUnix": 1182172384,
+      "ownerName": "petersen.andrea",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/564754443",
+      "urls": {
+        "q": "https://live.staticflickr.com/1342/564754443_b426793d4a_q.jpg",
+        "s": "https://live.staticflickr.com/1342/564754443_b426793d4a_m.jpg",
+        "m": "https://live.staticflickr.com/1342/564754443_b426793d4a.jpg",
+        "l": "https://live.staticflickr.com/1342/564754443_b426793d4a_b.jpg"
+      },
+      "localFile": "breah-joelle-sam_564754443_l.jpg"
+    },
+    {
+      "id": "564754571",
+      "title": "sam & sam",
+      "taken": "2007-05-23 09:44:13",
+      "uploadedUnix": 1182172387,
+      "ownerName": "petersen.andrea",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/564754571",
+      "urls": {
+        "q": "https://live.staticflickr.com/1419/564754571_429032ef76_q.jpg",
+        "s": "https://live.staticflickr.com/1419/564754571_429032ef76_m.jpg",
+        "m": "https://live.staticflickr.com/1419/564754571_429032ef76.jpg",
+        "l": "https://live.staticflickr.com/1419/564754571_429032ef76_b.jpg"
+      },
+      "localFile": "family_564754429_l.jpg"
+    },
+    {
+      "id": "564754471",
+      "title": "roomies",
+      "taken": "2007-05-23 09:44:47",
+      "uploadedUnix": 1182172385,
+      "ownerName": "petersen.andrea",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/564754471",
+      "urls": {
+        "q": "https://live.staticflickr.com/1137/564754471_697f1f35be_q.jpg",
+        "s": "https://live.staticflickr.com/1137/564754471_697f1f35be_m.jpg",
+        "m": "https://live.staticflickr.com/1137/564754471_697f1f35be.jpg",
+        "l": "https://live.staticflickr.com/1137/564754471_697f1f35be_b.jpg"
+      },
+      "localFile": "family-too_564754451_l.jpg"
+    },
+    {
+      "id": "564754457",
+      "title": "mother daughter",
+      "taken": "2007-05-23 09:44:30",
+      "uploadedUnix": 1182172384,
+      "ownerName": "petersen.andrea",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/564754457",
+      "urls": {
+        "q": "https://live.staticflickr.com/1231/564754457_550c73ee81_q.jpg",
+        "s": "https://live.staticflickr.com/1231/564754457_550c73ee81_m.jpg",
+        "m": "https://live.staticflickr.com/1231/564754457_550c73ee81.jpg",
+        "l": "https://live.staticflickr.com/1231/564754457_550c73ee81_b.jpg"
+      },
+      "localFile": "mother-daughter_564754457_l.jpg"
+    },
+    {
+      "id": "564754429",
+      "title": "family",
+      "taken": "2007-05-23 07:07:22",
+      "uploadedUnix": 1182172384,
+      "ownerName": "petersen.andrea",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/564754429",
+      "urls": {
+        "q": "https://live.staticflickr.com/1222/564754429_3728eb8a94_q.jpg",
+        "s": "https://live.staticflickr.com/1222/564754429_3728eb8a94_m.jpg",
+        "m": "https://live.staticflickr.com/1222/564754429_3728eb8a94.jpg",
+        "l": "https://live.staticflickr.com/1222/564754429_3728eb8a94_b.jpg"
+      },
+      "localFile": "my-kids_565316207_l.jpg"
+    },
+    {
+      "id": "564754451",
+      "title": "family too",
+      "taken": "2007-05-23 07:07:37",
+      "uploadedUnix": 1182172384,
+      "ownerName": "petersen.andrea",
+      "tags": [
+        "family"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/564754451",
+      "urls": {
+        "q": "https://live.staticflickr.com/1221/564754451_143d399bf8_q.jpg",
+        "s": "https://live.staticflickr.com/1221/564754451_143d399bf8_m.jpg",
+        "m": "https://live.staticflickr.com/1221/564754451_143d399bf8.jpg",
+        "l": "https://live.staticflickr.com/1221/564754451_143d399bf8_b.jpg"
+      },
+      "localFile": "roomies_564754471_l.jpg"
+    },
+    {
+      "id": "565316207",
+      "title": "my kids",
+      "taken": "2007-01-10 08:01:55",
+      "uploadedUnix": 1182181809,
+      "ownerName": "petersen.andrea",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/565316207",
+      "urls": {
+        "q": "https://live.staticflickr.com/1103/565316207_51a4ac259f_q.jpg",
+        "s": "https://live.staticflickr.com/1103/565316207_51a4ac259f_m.jpg",
+        "m": "https://live.staticflickr.com/1103/565316207_51a4ac259f.jpg",
+        "l": "https://live.staticflickr.com/1103/565316207_51a4ac259f_b.jpg"
+      },
+      "localFile": "sam--sam_564754571_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 7,
+    "totalPhotos": 7,
+    "totalLocalFiles": 7,
+    "pairedByOrder": true,
+    "pairedAt": "2026-01-18T21:45:42.045Z"
+  }
+}

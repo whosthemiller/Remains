@@ -1,0 +1,63 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:27.769Z",
+  "user": {
+    "nsid": "26484874@N07",
+    "username": "PSIAII",
+    "realname": "Max",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/psiaii/",
+    "photosUrl": "https://www.flickr.com/photos/psiaii/",
+    "iconServer": "3056",
+    "iconFarm": 4,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "May 2008",
+    "photosCount": 29,
+    "photosFirstDate": "1211137033",
+    "photosFirstDateTaken": "2008-05-18 15:58:19"
+  },
+  "stats": {
+    "totalPhotos": 29,
+    "totalAlbums": 3,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157606202272756",
+      "title": "Nature",
+      "description": {
+        "_content": ""
+      },
+      "photos": 3,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/26484874@N07/albums/72157606202272756"
+    },
+    {
+      "id": "72157606205842621",
+      "title": "Sport",
+      "description": {
+        "_content": ""
+      },
+      "photos": 4,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/26484874@N07/albums/72157606205842621"
+    },
+    {
+      "id": "72157606205826233",
+      "title": "Family",
+      "description": {
+        "_content": ""
+      },
+      "photos": 10,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/26484874@N07/albums/72157606205826233"
+    }
+  ],
+  "groups": []
+}

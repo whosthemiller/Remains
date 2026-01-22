@@ -1,0 +1,41 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:08.430Z",
+  "user": {
+    "nsid": "95366147@N00",
+    "username": "Tayler",
+    "realname": "",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/95366147@N00/",
+    "photosUrl": "https://www.flickr.com/photos/95366147@N00/",
+    "iconServer": "135",
+    "iconFarm": 1,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "December 2006",
+    "photosCount": 1442,
+    "photosFirstDate": "1165783808",
+    "photosFirstDateTaken": "2005-01-01 12:00:17"
+  },
+  "stats": {
+    "totalPhotos": 1442,
+    "totalAlbums": 1,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157611941853151",
+      "title": "Christmas in Washington (2008)",
+      "description": "Christmas in Washington. White Christmas",
+      "photos": 277,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/95366147@N00/albums/72157611941853151"
+    }
+  ],
+  "groups": []
+}

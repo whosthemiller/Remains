@@ -1,0 +1,51 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:06.790Z",
+  "user": {
+    "nsid": "44549411@N05",
+    "username": "jogusaca",
+    "realname": "",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/44549411@N05/",
+    "photosUrl": "https://www.flickr.com/photos/44549411@N05/",
+    "iconServer": "0",
+    "iconFarm": 0,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "November 2009",
+    "photosCount": 111,
+    "photosFirstDate": "1257967834",
+    "photosFirstDateTaken": "2002-01-01 00:00:56"
+  },
+  "stats": {
+    "totalPhotos": 111,
+    "totalAlbums": 2,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157622917658110",
+      "title": "amigos",
+      "description": {
+        "_content": ""
+      },
+      "photos": 100,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/44549411@N05/albums/72157622917658110"
+    },
+    {
+      "id": "72157622659350845",
+      "title": "family",
+      "description": "familia",
+      "photos": 10,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/44549411@N05/albums/72157622659350845"
+    }
+  ],
+  "groups": []
+}

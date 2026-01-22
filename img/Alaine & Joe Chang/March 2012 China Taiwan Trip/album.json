@@ -1,0 +1,181 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:38:45.369Z",
+  "album": {
+    "id": "72157632069309604",
+    "url": "https://www.flickr.com/photos/chang_fegal_family/albums/72157632069309604",
+    "title": "March 2012 China Taiwan Trip",
+    "description": "",
+    "owner": "51195102@N07",
+    "photoCount": 10
+  },
+  "photos": [
+    {
+      "id": "7001453011",
+      "title": "",
+      "taken": "2012-03-02 15:32:38",
+      "uploadedUnix": 1332287650,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/7001453011",
+      "urls": {
+        "q": "https://live.staticflickr.com/7212/7001453011_16412943d4_q.jpg",
+        "s": "https://live.staticflickr.com/7212/7001453011_16412943d4_m.jpg",
+        "m": "https://live.staticflickr.com/7212/7001453011_16412943d4.jpg",
+        "l": "https://live.staticflickr.com/7212/7001453011_16412943d4_b.jpg"
+      },
+      "localFile": "7001453011_16412943d4_b.jpg"
+    },
+    {
+      "id": "6855335920",
+      "title": "",
+      "taken": "2012-03-02 15:43:56",
+      "uploadedUnix": 1332287615,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/6855335920",
+      "urls": {
+        "q": "https://live.staticflickr.com/7037/6855335920_07e27fb738_q.jpg",
+        "s": "https://live.staticflickr.com/7037/6855335920_07e27fb738_m.jpg",
+        "m": "https://live.staticflickr.com/7037/6855335920_07e27fb738.jpg",
+        "l": "https://live.staticflickr.com/7037/6855335920_07e27fb738_b.jpg"
+      },
+      "localFile": "6855335920_07e27fb738_b.jpg"
+    },
+    {
+      "id": "6855334678",
+      "title": "",
+      "taken": "2012-03-02 15:46:41",
+      "uploadedUnix": 1332287583,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/6855334678",
+      "urls": {
+        "q": "https://live.staticflickr.com/7179/6855334678_bac7c1b534_q.jpg",
+        "s": "https://live.staticflickr.com/7179/6855334678_bac7c1b534_m.jpg",
+        "m": "https://live.staticflickr.com/7179/6855334678_bac7c1b534.jpg",
+        "l": "https://live.staticflickr.com/7179/6855334678_bac7c1b534_b.jpg"
+      },
+      "localFile": "6855334678_bac7c1b534_b.jpg"
+    },
+    {
+      "id": "6855333650",
+      "title": "",
+      "taken": "2012-03-03 11:21:52",
+      "uploadedUnix": 1332287552,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/6855333650",
+      "urls": {
+        "q": "https://live.staticflickr.com/7135/6855333650_462284a1a6_q.jpg",
+        "s": "https://live.staticflickr.com/7135/6855333650_462284a1a6_m.jpg",
+        "m": "https://live.staticflickr.com/7135/6855333650_462284a1a6.jpg",
+        "l": "https://live.staticflickr.com/7135/6855333650_462284a1a6_b.jpg"
+      },
+      "localFile": "6855333650_462284a1a6_b.jpg"
+    },
+    {
+      "id": "6855332730",
+      "title": "",
+      "taken": "2012-03-03 11:27:32",
+      "uploadedUnix": 1332287523,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/6855332730",
+      "urls": {
+        "q": "https://live.staticflickr.com/7046/6855332730_672823fe97_q.jpg",
+        "s": "https://live.staticflickr.com/7046/6855332730_672823fe97_m.jpg",
+        "m": "https://live.staticflickr.com/7046/6855332730_672823fe97.jpg",
+        "l": "https://live.staticflickr.com/7046/6855332730_672823fe97_b.jpg"
+      },
+      "localFile": "6855332730_672823fe97_b.jpg"
+    },
+    {
+      "id": "6855331814",
+      "title": "",
+      "taken": "2012-03-03 11:54:45",
+      "uploadedUnix": 1332287494,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/6855331814",
+      "urls": {
+        "q": "https://live.staticflickr.com/7258/6855331814_f4249ace6b_q.jpg",
+        "s": "https://live.staticflickr.com/7258/6855331814_f4249ace6b_m.jpg",
+        "m": "https://live.staticflickr.com/7258/6855331814_f4249ace6b.jpg",
+        "l": "https://live.staticflickr.com/7258/6855331814_f4249ace6b_b.jpg"
+      },
+      "localFile": "6855331814_f4249ace6b_b.jpg"
+    },
+    {
+      "id": "7001446687",
+      "title": "",
+      "taken": "2012-03-03 14:01:51",
+      "uploadedUnix": 1332287464,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/7001446687",
+      "urls": {
+        "q": "https://live.staticflickr.com/6032/7001446687_c45830ea03_q.jpg",
+        "s": "https://live.staticflickr.com/6032/7001446687_c45830ea03_m.jpg",
+        "m": "https://live.staticflickr.com/6032/7001446687_c45830ea03.jpg",
+        "l": "https://live.staticflickr.com/6032/7001446687_c45830ea03_b.jpg"
+      },
+      "localFile": "7001446687_c45830ea03_b.jpg"
+    },
+    {
+      "id": "6855329638",
+      "title": "",
+      "taken": "2012-03-03 14:22:24",
+      "uploadedUnix": 1332287430,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/6855329638",
+      "urls": {
+        "q": "https://live.staticflickr.com/6047/6855329638_730c61d44a_q.jpg",
+        "s": "https://live.staticflickr.com/6047/6855329638_730c61d44a_m.jpg",
+        "m": "https://live.staticflickr.com/6047/6855329638_730c61d44a.jpg",
+        "l": "https://live.staticflickr.com/6047/6855329638_730c61d44a_b.jpg"
+      },
+      "localFile": "6855329638_730c61d44a_b.jpg"
+    },
+    {
+      "id": "7001444523",
+      "title": "",
+      "taken": "2012-03-03 14:23:32",
+      "uploadedUnix": 1332287400,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/7001444523",
+      "urls": {
+        "q": "https://live.staticflickr.com/7138/7001444523_b53ddd90ec_q.jpg",
+        "s": "https://live.staticflickr.com/7138/7001444523_b53ddd90ec_m.jpg",
+        "m": "https://live.staticflickr.com/7138/7001444523_b53ddd90ec.jpg",
+        "l": "https://live.staticflickr.com/7138/7001444523_b53ddd90ec_b.jpg"
+      },
+      "localFile": "7001444523_b53ddd90ec_b.jpg"
+    },
+    {
+      "id": "6855326728",
+      "title": "",
+      "taken": "2012-03-03 14:24:41",
+      "uploadedUnix": 1332287349,
+      "ownerName": "Chang Family Pics",
+      "tags": [],
+      "flickrPage": "https://www.flickr.com/photos/undefined/6855326728",
+      "urls": {
+        "q": "https://live.staticflickr.com/7051/6855326728_84dd263d2b_q.jpg",
+        "s": "https://live.staticflickr.com/7051/6855326728_84dd263d2b_m.jpg",
+        "m": "https://live.staticflickr.com/7051/6855326728_84dd263d2b.jpg",
+        "l": "https://live.staticflickr.com/7051/6855326728_84dd263d2b_b.jpg"
+      },
+      "localFile": "6855326728_84dd263d2b_b.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 10,
+    "totalPhotos": 10,
+    "totalLocalFiles": 10,
+    "pairedByOrder": false,
+    "pairedAt": "2026-01-18T21:45:42.018Z"
+  }
+}

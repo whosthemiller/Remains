@@ -1,0 +1,63 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:01.796Z",
+  "user": {
+    "nsid": "45776543@N03",
+    "username": "loriquicke",
+    "realname": "",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/45776543@N03/",
+    "photosUrl": "https://www.flickr.com/photos/45776543@N03/",
+    "iconServer": "0",
+    "iconFarm": 0,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "December 2009",
+    "photosCount": 214,
+    "photosFirstDate": "1261370438",
+    "photosFirstDateTaken": "2003-01-19 04:15:42"
+  },
+  "stats": {
+    "totalPhotos": 214,
+    "totalAlbums": 3,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157628442614939",
+      "title": "2011 Quicke family album",
+      "description": {
+        "_content": ""
+      },
+      "photos": 86,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/45776543@N03/albums/72157628442614939"
+    },
+    {
+      "id": "72157625479548233",
+      "title": "2010 Quicke family album",
+      "description": {
+        "_content": ""
+      },
+      "photos": 59,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/45776543@N03/albums/72157625479548233"
+    },
+    {
+      "id": "72157623043385362",
+      "title": "2009 slide show",
+      "description": {
+        "_content": ""
+      },
+      "photos": 67,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/45776543@N03/albums/72157623043385362"
+    }
+  ],
+  "groups": []
+}

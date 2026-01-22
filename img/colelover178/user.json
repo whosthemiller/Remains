@@ -1,0 +1,63 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-19T07:05:17.360Z",
+  "user": {
+    "nsid": "9723402@N04",
+    "username": "colelover178",
+    "realname": "",
+    "location": "",
+    "description": "",
+    "profileUrl": "https://www.flickr.com/people/alwaysfamilyphotography/",
+    "photosUrl": "https://www.flickr.com/photos/alwaysfamilyphotography/",
+    "iconServer": "2362",
+    "iconFarm": 3,
+    "pathAlias": "",
+    "isPro": false,
+    "isDeleted": false,
+    "isIgnored": false,
+    "firstDateTaken": null,
+    "firstDatePosted": null,
+    "dateJoined": "July 2007",
+    "photosCount": 59,
+    "photosFirstDate": "1207153984",
+    "photosFirstDateTaken": "2007-08-10 09:31:06"
+  },
+  "stats": {
+    "totalPhotos": 59,
+    "totalAlbums": 3,
+    "totalGroups": 0
+  },
+  "albums": [
+    {
+      "id": "72157605175378868",
+      "title": "Nature - Flowers, Clouds, Trees ect.",
+      "description": {
+        "_content": ""
+      },
+      "photos": 24,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/9723402@N04/albums/72157605175378868"
+    },
+    {
+      "id": "72157604360083277",
+      "title": "Animals/Insects and Photography",
+      "description": {
+        "_content": ""
+      },
+      "photos": 13,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/9723402@N04/albums/72157604360083277"
+    },
+    {
+      "id": "72157604355513620",
+      "title": "Portrait shots",
+      "description": {
+        "_content": ""
+      },
+      "photos": 23,
+      "videos": 0,
+      "url": "https://www.flickr.com/photos/9723402@N04/albums/72157604355513620"
+    }
+  ],
+  "groups": []
+}

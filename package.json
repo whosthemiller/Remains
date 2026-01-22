@@ -1,0 +1,7 @@
+{
+  "name": "remains",
+  "version": "1.0.0",
+  "scripts": {
+    "build:index": "node scripts/buildIndex.js"
+  }
+}

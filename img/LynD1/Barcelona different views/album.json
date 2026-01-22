@@ -1,0 +1,231 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:04.833Z",
+  "album": {
+    "id": "72157594241121785",
+    "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594241121785/",
+    "title": "Barcelona different views",
+    "description": "",
+    "owner": "95545622@N00",
+    "photoCount": 9
+  },
+  "photos": [
+    {
+      "id": "217291554",
+      "title": "barcelona August 2006 Pulitzer Hotel",
+      "taken": "2006-08-13 21:49:12",
+      "uploadedUnix": 1155777061,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "hotel",
+        "lounge",
+        "clean",
+        "cosy",
+        "pulitzer"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217291554",
+      "urls": {
+        "q": "https://live.staticflickr.com/79/217291554_9d15a1baa8_q.jpg",
+        "s": "https://live.staticflickr.com/79/217291554_9d15a1baa8_m.jpg",
+        "m": "https://live.staticflickr.com/79/217291554_9d15a1baa8.jpg",
+        "l": "https://live.staticflickr.com/79/217291554_9d15a1baa8_b.jpg"
+      },
+      "localFile": "barcelona-august-2006--fountain_217254063_l.jpg"
+    },
+    {
+      "id": "217291552",
+      "title": "barcelona August 2006 Maremagnum",
+      "taken": "2006-08-09 14:56:37",
+      "uploadedUnix": 1155777061,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "building",
+        "de",
+        "mar",
+        "restaurants",
+        "discos",
+        "maremagnum",
+        "rambla"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217291552",
+      "urls": {
+        "q": "https://live.staticflickr.com/94/217291552_53c32af21f_q.jpg",
+        "s": "https://live.staticflickr.com/94/217291552_53c32af21f_m.jpg",
+        "m": "https://live.staticflickr.com/94/217291552_53c32af21f.jpg",
+        "l": "https://live.staticflickr.com/94/217291552_53c32af21f_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-boat_217254065_l.jpg"
+    },
+    {
+      "id": "217291548",
+      "title": "barcelona August 2006 winners cup",
+      "taken": "2006-08-11 11:15:48",
+      "uploadedUnix": 1155777061,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "football",
+        "european",
+        "arsenal",
+        "champions"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217291548",
+      "urls": {
+        "q": "https://live.staticflickr.com/84/217291548_1e13879a0f_q.jpg",
+        "s": "https://live.staticflickr.com/84/217291548_1e13879a0f_m.jpg",
+        "m": "https://live.staticflickr.com/84/217291548_1e13879a0f.jpg",
+        "l": "https://live.staticflickr.com/84/217291548_1e13879a0f_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-harbour-restaurant_217267976_l.jpg"
+    },
+    {
+      "id": "217281559",
+      "title": "barcelona August 2006 Nou Camp stadium",
+      "taken": "2006-08-11 10:38:02",
+      "uploadedUnix": 1155776187,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "camp",
+        "football",
+        "nou"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217281559",
+      "urls": {
+        "q": "https://live.staticflickr.com/79/217281559_f8df1c289f_q.jpg",
+        "s": "https://live.staticflickr.com/79/217281559_f8df1c289f_m.jpg",
+        "m": "https://live.staticflickr.com/79/217281559_f8df1c289f.jpg",
+        "l": "https://live.staticflickr.com/79/217281559_f8df1c289f_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-maremagnum_217291552_l.jpg"
+    },
+    {
+      "id": "217254063",
+      "title": "barcelona August 2006  fountain",
+      "taken": "2006-08-09 20:13:21",
+      "uploadedUnix": 1155773671,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "city",
+        "fountain",
+        "buildings",
+        "august",
+        "monuments"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217254063",
+      "urls": {
+        "q": "https://live.staticflickr.com/71/217254063_f02ad8ded8_q.jpg",
+        "s": "https://live.staticflickr.com/71/217254063_f02ad8ded8_m.jpg",
+        "m": "https://live.staticflickr.com/71/217254063_f02ad8ded8.jpg",
+        "l": "https://live.staticflickr.com/71/217254063_f02ad8ded8_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-market_217267984_l.jpg"
+    },
+    {
+      "id": "217267979",
+      "title": "barcelona August 2006 port vell",
+      "taken": "2006-08-09 14:45:19",
+      "uploadedUnix": 1155774986,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "glass",
+        "port",
+        "boats",
+        "harbour",
+        "stained",
+        "rambla"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217267979",
+      "urls": {
+        "q": "https://live.staticflickr.com/62/217267979_0266bb2310_q.jpg",
+        "s": "https://live.staticflickr.com/62/217267979_0266bb2310_m.jpg",
+        "m": "https://live.staticflickr.com/62/217267979_0266bb2310.jpg",
+        "l": "https://live.staticflickr.com/62/217267979_0266bb2310_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-nou-camp-stadium_217281559_l.jpg"
+    },
+    {
+      "id": "217254065",
+      "title": "barcelona August 2006 boat",
+      "taken": "2006-08-09 15:11:16",
+      "uploadedUnix": 1155773671,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "city",
+        "fountain",
+        "buildings",
+        "august",
+        "monuments"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217254065",
+      "urls": {
+        "q": "https://live.staticflickr.com/71/217254065_3dec1d68be_q.jpg",
+        "s": "https://live.staticflickr.com/71/217254065_3dec1d68be_m.jpg",
+        "m": "https://live.staticflickr.com/71/217254065_3dec1d68be.jpg",
+        "l": "https://live.staticflickr.com/71/217254065_3dec1d68be_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-port-vell_217267979_l.jpg"
+    },
+    {
+      "id": "217267976",
+      "title": "barcelona August 2006 Harbour restaurant",
+      "taken": "2006-08-14 17:05:44",
+      "uploadedUnix": 1155774986,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "fish",
+        "glass",
+        "boats",
+        "restaurant",
+        "harbour",
+        "stained",
+        "salamanca"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217267976",
+      "urls": {
+        "q": "https://live.staticflickr.com/70/217267976_1aa31ee594_q.jpg",
+        "s": "https://live.staticflickr.com/70/217267976_1aa31ee594_m.jpg",
+        "m": "https://live.staticflickr.com/70/217267976_1aa31ee594.jpg",
+        "l": "https://live.staticflickr.com/70/217267976_1aa31ee594_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-pulitzer-hotel_217291554_l.jpg"
+    },
+    {
+      "id": "217267984",
+      "title": "barcelona August 2006 Market",
+      "taken": "2006-08-09 13:57:58",
+      "uploadedUnix": 1155774987,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "glass",
+        "fruit",
+        "boats",
+        "market",
+        "harbour",
+        "stained"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217267984",
+      "urls": {
+        "q": "https://live.staticflickr.com/45/217267984_a4161139f2_q.jpg",
+        "s": "https://live.staticflickr.com/45/217267984_a4161139f2_m.jpg",
+        "m": "https://live.staticflickr.com/45/217267984_a4161139f2.jpg",
+        "l": "https://live.staticflickr.com/45/217267984_a4161139f2_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-winners-cup_217291548_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 9,
+    "totalPhotos": 9,
+    "totalLocalFiles": 9,
+    "pairedByOrder": true,
+    "pairedAt": "2026-01-18T21:45:42.030Z"
+  }
+}

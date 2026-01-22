@@ -1,0 +1,101 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:31.637Z",
+  "album": {
+    "id": "72157606205842621",
+    "url": "https://www.flickr.com/photos/psiaii/albums/72157606205842621",
+    "title": "Sport",
+    "description": "",
+    "owner": "26484874@N07",
+    "photoCount": 4
+  },
+  "photos": [
+    {
+      "id": "2508829749",
+      "title": "HEAD",
+      "taken": "2008-05-20 18:29:11",
+      "uploadedUnix": 1211315180,
+      "ownerName": "PSIAII",
+      "tags": [
+        "grass",
+        "ball",
+        "tennis"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2508829749",
+      "urls": {
+        "q": "https://live.staticflickr.com/3032/2508829749_06a7e4ac46_q.jpg",
+        "s": "https://live.staticflickr.com/3032/2508829749_06a7e4ac46_m.jpg",
+        "m": "https://live.staticflickr.com/3032/2508829749_06a7e4ac46.jpg",
+        "l": "https://live.staticflickr.com/3032/2508829749_06a7e4ac46_b.jpg"
+      },
+      "localFile": "head_2508829749_l.jpg"
+    },
+    {
+      "id": "2509663456",
+      "title": "Serving ball",
+      "taken": "2008-05-20 17:53:14",
+      "uploadedUnix": 1211315308,
+      "ownerName": "PSIAII",
+      "tags": [
+        "tennis",
+        "clay",
+        "serve"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2509663456",
+      "urls": {
+        "q": "https://live.staticflickr.com/2289/2509663456_53a7c516a8_q.jpg",
+        "s": "https://live.staticflickr.com/2289/2509663456_53a7c516a8_m.jpg",
+        "m": "https://live.staticflickr.com/2289/2509663456_53a7c516a8.jpg",
+        "l": "https://live.staticflickr.com/2289/2509663456_53a7c516a8_b.jpg"
+      },
+      "localFile": "serving-ball_2509663456_l.jpg"
+    },
+    {
+      "id": "2508841947",
+      "title": "Smiling",
+      "taken": "2008-05-20 17:55:52",
+      "uploadedUnix": 1211315476,
+      "ownerName": "PSIAII",
+      "tags": [
+        "playing",
+        "tennis",
+        "enjoying"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2508841947",
+      "urls": {
+        "q": "https://live.staticflickr.com/2143/2508841947_859faaee34_q.jpg",
+        "s": "https://live.staticflickr.com/2143/2508841947_859faaee34_m.jpg",
+        "m": "https://live.staticflickr.com/2143/2508841947_859faaee34.jpg",
+        "l": "https://live.staticflickr.com/2143/2508841947_859faaee34_b.jpg"
+      },
+      "localFile": "smiling_2508841947_l.jpg"
+    },
+    {
+      "id": "2509679236",
+      "title": "Waiting",
+      "taken": "2008-05-20 17:57:53",
+      "uploadedUnix": 1211315678,
+      "ownerName": "PSIAII",
+      "tags": [
+        "focus",
+        "tennis",
+        "clay"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/2509679236",
+      "urls": {
+        "q": "https://live.staticflickr.com/2192/2509679236_df4a957440_q.jpg",
+        "s": "https://live.staticflickr.com/2192/2509679236_df4a957440_m.jpg",
+        "m": "https://live.staticflickr.com/2192/2509679236_df4a957440.jpg",
+        "l": "https://live.staticflickr.com/2192/2509679236_df4a957440_b.jpg"
+      },
+      "localFile": "waiting_2509679236_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 4,
+    "totalPhotos": 4,
+    "totalLocalFiles": 4,
+    "pairedByOrder": false,
+    "pairedAt": "2026-01-18T21:45:42.043Z"
+  }
+}

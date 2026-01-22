@@ -1,0 +1,312 @@
+{
+  "source": "Flickr",
+  "generatedAt": "2026-01-18T21:39:04.241Z",
+  "album": {
+    "id": "72157594241119502",
+    "url": "https://www.flickr.com/photos/95545622@N00/albums/72157594241119502/",
+    "title": "Old Barcelona",
+    "description": "",
+    "owner": "95545622@N00",
+    "photoCount": 13
+  },
+  "photos": [
+    {
+      "id": "217291556",
+      "title": "barcelona August 2006 geese",
+      "taken": "2006-08-13 08:37:42",
+      "uploadedUnix": 1155777061,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "geese",
+        "cathedral",
+        "cloister",
+        "gotic",
+        "barri"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217291556",
+      "urls": {
+        "q": "https://live.staticflickr.com/68/217291556_6d8b77b6f6_q.jpg",
+        "s": "https://live.staticflickr.com/68/217291556_6d8b77b6f6_m.jpg",
+        "m": "https://live.staticflickr.com/68/217291556_6d8b77b6f6.jpg",
+        "l": "https://live.staticflickr.com/68/217291556_6d8b77b6f6_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-alleyway_217281552_l.jpg"
+    },
+    {
+      "id": "217291551",
+      "title": "barcelona August 2006 column",
+      "taken": "2006-08-09 14:40:20",
+      "uploadedUnix": 1155777061,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "columbus",
+        "statue",
+        "christopher",
+        "column"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217291551",
+      "urls": {
+        "q": "https://live.staticflickr.com/73/217291551_a0c928fa3b_q.jpg",
+        "s": "https://live.staticflickr.com/73/217291551_a0c928fa3b_m.jpg",
+        "m": "https://live.staticflickr.com/73/217291551_a0c928fa3b.jpg",
+        "l": "https://live.staticflickr.com/73/217291551_a0c928fa3b_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-bull-ring_217254061_l.jpg"
+    },
+    {
+      "id": "217291550",
+      "title": "barcelona August 2006 Park Guell",
+      "taken": "2006-08-11 08:35:06",
+      "uploadedUnix": 1155777061,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "park",
+        "gaudi",
+        "guell"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217291550",
+      "urls": {
+        "q": "https://live.staticflickr.com/75/217291550_bd56d736ed_q.jpg",
+        "s": "https://live.staticflickr.com/75/217291550_bd56d736ed_m.jpg",
+        "m": "https://live.staticflickr.com/75/217291550_bd56d736ed.jpg",
+        "l": "https://live.staticflickr.com/75/217291550_bd56d736ed_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-column_217291551_l.jpg"
+    },
+    {
+      "id": "217281560",
+      "title": "barcelona August 2006 Montjuic",
+      "taken": "2006-08-12 15:43:47",
+      "uploadedUnix": 1155776187,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "apartment",
+        "montjuic"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217281560",
+      "urls": {
+        "q": "https://live.staticflickr.com/93/217281560_bd78bca7cf_q.jpg",
+        "s": "https://live.staticflickr.com/93/217281560_bd78bca7cf_m.jpg",
+        "m": "https://live.staticflickr.com/93/217281560_bd78bca7cf.jpg",
+        "l": "https://live.staticflickr.com/93/217281560_bd78bca7cf_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-geese_217291556_l.jpg"
+    },
+    {
+      "id": "217281558",
+      "title": "barcelona August 2006 Music hall",
+      "taken": "2006-08-10 18:31:56",
+      "uploadedUnix": 1155776187,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "music",
+        "theatre",
+        "catalana"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217281558",
+      "urls": {
+        "q": "https://live.staticflickr.com/30/217281558_8ba9099390_q.jpg",
+        "s": "https://live.staticflickr.com/30/217281558_8ba9099390_m.jpg",
+        "m": "https://live.staticflickr.com/30/217281558_8ba9099390.jpg",
+        "l": "https://live.staticflickr.com/30/217281558_8ba9099390_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-gothic-youths_217281553_l.jpg"
+    },
+    {
+      "id": "217281556",
+      "title": "barcelona August 2006 Umbrella house",
+      "taken": "2006-08-09 16:52:07",
+      "uploadedUnix": 1155776187,
+      "ownerName": "LynD1",
+      "tags": [
+        "umbrella",
+        "dragon",
+        "modernist",
+        "rambla"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217281556",
+      "urls": {
+        "q": "https://live.staticflickr.com/74/217281556_5ee2e77b94_q.jpg",
+        "s": "https://live.staticflickr.com/74/217281556_5ee2e77b94_m.jpg",
+        "m": "https://live.staticflickr.com/74/217281556_5ee2e77b94.jpg",
+        "l": "https://live.staticflickr.com/74/217281556_5ee2e77b94_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-hostel_217254062_l.jpg"
+    },
+    {
+      "id": "217281553",
+      "title": "barcelona August 2006 Gothic Youths?",
+      "taken": "2006-08-09 16:31:48",
+      "uploadedUnix": 1155776187,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "youth",
+        "hostel",
+        "gotic",
+        "barri"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217281553",
+      "urls": {
+        "q": "https://live.staticflickr.com/29/217281553_00cd444bbe_q.jpg",
+        "s": "https://live.staticflickr.com/29/217281553_00cd444bbe_m.jpg",
+        "m": "https://live.staticflickr.com/29/217281553_00cd444bbe.jpg",
+        "l": "https://live.staticflickr.com/29/217281553_00cd444bbe_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-la-sagrada_217254058_l.jpg"
+    },
+    {
+      "id": "217281552",
+      "title": "barcelona August 2006 Alleyway",
+      "taken": "2006-08-13 09:41:08",
+      "uploadedUnix": 1155776187,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "old",
+        "alley",
+        "gotic",
+        "barri"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217281552",
+      "urls": {
+        "q": "https://live.staticflickr.com/64/217281552_4ccc47c284_q.jpg",
+        "s": "https://live.staticflickr.com/64/217281552_4ccc47c284_m.jpg",
+        "m": "https://live.staticflickr.com/64/217281552_4ccc47c284.jpg",
+        "l": "https://live.staticflickr.com/64/217281552_4ccc47c284_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-montjuic_217281560_l.jpg"
+    },
+    {
+      "id": "217267985",
+      "title": "barcelona August 2006 Sagrada Familia",
+      "taken": "2006-08-10 08:17:38",
+      "uploadedUnix": 1155774987,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "glass",
+        "familia",
+        "boats",
+        "harbour",
+        "stained",
+        "gaudi",
+        "sagrada"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217267985",
+      "urls": {
+        "q": "https://live.staticflickr.com/88/217267985_ba490cf881_q.jpg",
+        "s": "https://live.staticflickr.com/88/217267985_ba490cf881_m.jpg",
+        "m": "https://live.staticflickr.com/88/217267985_ba490cf881.jpg",
+        "l": "https://live.staticflickr.com/88/217267985_ba490cf881_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-music-hall_217281558_l.jpg"
+    },
+    {
+      "id": "217267983",
+      "title": "barcelona August 2006 port",
+      "taken": "2006-08-09 14:46:12",
+      "uploadedUnix": 1155774986,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "glass",
+        "port",
+        "boats",
+        "harbour",
+        "stained"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217267983",
+      "urls": {
+        "q": "https://live.staticflickr.com/97/217267983_5527782901_q.jpg",
+        "s": "https://live.staticflickr.com/97/217267983_5527782901_m.jpg",
+        "m": "https://live.staticflickr.com/97/217267983_5527782901.jpg",
+        "l": "https://live.staticflickr.com/97/217267983_5527782901_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-park-guell_217291550_l.jpg"
+    },
+    {
+      "id": "217254062",
+      "title": "barcelona August 2006 hostel",
+      "taken": "2006-08-09 13:54:52",
+      "uploadedUnix": 1155773671,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "city",
+        "fountain",
+        "buildings",
+        "august",
+        "monuments"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217254062",
+      "urls": {
+        "q": "https://live.staticflickr.com/45/217254062_9cabea3284_q.jpg",
+        "s": "https://live.staticflickr.com/45/217254062_9cabea3284_m.jpg",
+        "m": "https://live.staticflickr.com/45/217254062_9cabea3284.jpg",
+        "l": "https://live.staticflickr.com/45/217254062_9cabea3284_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-port_217267983_l.jpg"
+    },
+    {
+      "id": "217254061",
+      "title": "barcelona August 2006 bull ring",
+      "taken": "2006-08-10 12:14:20",
+      "uploadedUnix": 1155773671,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "city",
+        "fountain",
+        "buildings",
+        "august",
+        "bull",
+        "ring",
+        "monuments"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217254061",
+      "urls": {
+        "q": "https://live.staticflickr.com/88/217254061_f8075bb2b8_q.jpg",
+        "s": "https://live.staticflickr.com/88/217254061_f8075bb2b8_m.jpg",
+        "m": "https://live.staticflickr.com/88/217254061_f8075bb2b8.jpg",
+        "l": "https://live.staticflickr.com/88/217254061_f8075bb2b8_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-sagrada-familia_217267985_l.jpg"
+    },
+    {
+      "id": "217254058",
+      "title": "barcelona August 2006 La sagrada",
+      "taken": "2006-08-10 08:25:53",
+      "uploadedUnix": 1155773671,
+      "ownerName": "LynD1",
+      "tags": [
+        "barcelona",
+        "city",
+        "fountain",
+        "buildings",
+        "august",
+        "monuments"
+      ],
+      "flickrPage": "https://www.flickr.com/photos/undefined/217254058",
+      "urls": {
+        "q": "https://live.staticflickr.com/87/217254058_1976c972e8_q.jpg",
+        "s": "https://live.staticflickr.com/87/217254058_1976c972e8_m.jpg",
+        "m": "https://live.staticflickr.com/87/217254058_1976c972e8.jpg",
+        "l": "https://live.staticflickr.com/87/217254058_1976c972e8_b.jpg"
+      },
+      "localFile": "barcelona-august-2006-umbrella-house_217281556_l.jpg"
+    }
+  ],
+  "pairing": {
+    "matchedCount": 13,
+    "totalPhotos": 13,
+    "totalLocalFiles": 13,
+    "pairedByOrder": true,
+    "pairedAt": "2026-01-18T21:45:42.029Z"
+  }
+}

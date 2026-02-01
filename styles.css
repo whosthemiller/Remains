@@ -2046,7 +2046,7 @@ body.view-index .center-date {
   font-family: '80kb', monospace;
   font-size: clamp(13px, 1.5vw, 16px);
   color: #424242;
-  width: min(380px, 85vw);
+  width: min(370px, 85vw);
   line-height: 1.5;
   margin: 0 0 1em 0;
 }

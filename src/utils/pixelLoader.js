@@ -1,12 +1,11 @@
 /**
- * Pixel Loader - Determinate Progress Bar
+ * Pixel Loader - Progress-Based Loading Bar
  * 
  * A pixel-style loading bar with 2×2 pixel blocks.
- * UI-only: provides functions to init, update progress, and destroy.
- * Does NOT contain loading logic - call setPixelLoaderProgress() from your code.
+ * Progress is tied to ACTUAL loading progress, not a fixed animation.
  * 
  * Usage:
- *   import { initPixelLoader, setPixelLoaderProgress, destroyPixelLoader } from './utils/pixelLoader.js';
+ *   import { initPixelLoader, setPixelLoaderProgress, onPixelLoaderComplete, destroyPixelLoader } from './utils/pixelLoader.js';
  *   
  *   // Initialize when loader is visible
  *   initPixelLoader('#pixel-loader');
@@ -14,7 +13,10 @@
  *   // Update progress from your loading logic (0 to 1)
  *   setPixelLoaderProgress(0.5);
  *   
- *   // Optional: add completion class for blink effect
+ *   // Set callback for when loading completes
+ *   onPixelLoaderComplete(() => { hideLoader(); });
+ *   
+ *   // Mark complete when done
  *   setPixelLoaderProgress(1);
  *   
  *   // Cleanup when done
@@ -27,21 +29,15 @@ let pixelLoaderPixelsContainer = null;
 let columnCount = 0;
 let resizeHandler = null;
 let debounceTimer = null;
-let currentStepIndex = 0;
-let animationInterval = null;
-let animationComplete = false;
-let loadingComplete = false;
+let currentProgress = 0; // 0 to 1
 let onCompleteCallback = null;
+let isComplete = false;
 
 // Constants
 const PIXEL_SIZE = 2;   // 2px × 2px
 const PIXEL_GAP = 2;    // 2px gap between pixels/columns
 const PIXELS_PER_COLUMN = 3; // 3 stacked pixels per column (like filter nav)
 const DEBOUNCE_MS = 100;
-
-// Group-based progression constants
-const TARGET_GROUPS = 10;    // Aim for ~10 groups for smooth progression
-const MS_PER_STEP = 100;     // Milliseconds between each group step (slower for consistent pace)
 
 /**
  * Calculate how many columns fit in the available width
@@ -86,6 +82,9 @@ function createColumns(count) {
   }
   
   columnCount = count;
+  
+  // Render current progress after rebuilding columns
+  renderProgress();
 }
 
 /**
@@ -131,6 +130,28 @@ function handleResize() {
 }
 
 /**
+ * Render the progress bar based on current progress (0-1)
+ */
+function renderProgress() {
+  if (!pixelLoaderPixelsContainer || columnCount === 0) return;
+  
+  // Calculate how many columns should be filled
+  const filledColumns = Math.floor(currentProgress * columnCount);
+  
+  // Update column states
+  const columns = pixelLoaderPixelsContainer.querySelectorAll('.pixel-loader-column');
+  columns.forEach((column, index) => {
+    if (index < filledColumns) {
+      column.classList.add('pixel-loader-column--filled');
+      column.classList.remove('pixel-loader-column--empty');
+    } else {
+      column.classList.remove('pixel-loader-column--filled');
+      column.classList.add('pixel-loader-column--empty');
+    }
+  });
+}
+
+/**
  * Initialize the pixel loader
  * Creates the correct number of pixels based on available width.
  * Can be called multiple times - will rebuild pixels with current width.
@@ -159,21 +180,14 @@ export function initPixelLoader(rootSelector = '#pixel-loader') {
   // Remove completion class if present
   pixelLoaderRoot.classList.remove('pixel-loader--complete');
   
-  // Stop any running animation
-  stopAnimation();
-  
   // Reset progress state
-  currentStepIndex = 0;
-  animationComplete = false;
-  loadingComplete = false;
+  currentProgress = 0;
+  isComplete = false;
   onCompleteCallback = null;
   
   // Force rebuild columns (reset count to force recreation)
   columnCount = 0;
   rebuildPixels();
-  
-  // Start animation immediately
-  startAnimation();
   
   // Setup resize listener (only once)
   if (!resizeHandler) {
@@ -183,48 +197,34 @@ export function initPixelLoader(rootSelector = '#pixel-loader') {
 }
 
 /**
- * Calculate group size based on column count for smooth progression
- * @returns {number} Number of columns per group
+ * Update the loader progress
+ * Progress value is from 0 to 1.
+ * When progress reaches 1, the completion callback is fired.
+ * 
+ * @param {number} progress01 - Progress value from 0 to 1
  */
-function getGroupSize() {
-  if (columnCount === 0) return 1;
-  // Divide columns into TARGET_GROUPS groups (at least 1 column per group)
-  return Math.max(1, Math.ceil(columnCount / TARGET_GROUPS));
-}
-
-/**
- * Render the current visual state (called by animation loop)
- */
-function renderCurrentStep() {
-  if (!pixelLoaderPixelsContainer || columnCount === 0) return;
+export function setPixelLoaderProgress(progress01) {
+  // Clamp to 0-1
+  const newProgress = Math.max(0, Math.min(1, progress01));
   
-  const groupSize = getGroupSize();
-  const filledColumns = currentStepIndex * groupSize;
+  // Only update if progress increased (prevent going backwards)
+  if (newProgress > currentProgress) {
+    currentProgress = newProgress;
+    renderProgress();
+  }
   
-  // Update column states
-  const columns = pixelLoaderPixelsContainer.querySelectorAll('.pixel-loader-column');
-  columns.forEach((column, index) => {
-    if (index < filledColumns) {
-      column.classList.add('pixel-loader-column--filled');
-      column.classList.remove('pixel-loader-column--empty');
-    } else {
-      column.classList.remove('pixel-loader-column--filled');
-      column.classList.add('pixel-loader-column--empty');
+  // Check for completion
+  if (newProgress >= 1 && !isComplete) {
+    isComplete = true;
+    
+    // Fill all columns
+    const columns = pixelLoaderPixelsContainer?.querySelectorAll('.pixel-loader-column');
+    if (columns) {
+      columns.forEach((column) => {
+        column.classList.add('pixel-loader-column--filled');
+        column.classList.remove('pixel-loader-column--empty');
+      });
     }
-  });
-}
-
-/**
- * Check if both animation and loading are complete, then fire callback
- */
-function checkComplete() {
-  if (animationComplete && loadingComplete) {
-    // Fill all remaining columns
-    const columns = pixelLoaderPixelsContainer.querySelectorAll('.pixel-loader-column');
-    columns.forEach((column) => {
-      column.classList.add('pixel-loader-column--filled');
-      column.classList.remove('pixel-loader-column--empty');
-    });
     
     // Add completion class for blink effect
     if (pixelLoaderRoot) {
@@ -239,74 +239,15 @@ function checkComplete() {
 }
 
 /**
- * Animation step - advance one group at fixed pace
- */
-function animationStep() {
-  const groupSize = getGroupSize();
-  const totalGroups = Math.ceil(columnCount / groupSize);
-  
-  if (currentStepIndex < totalGroups) {
-    currentStepIndex++;
-    renderCurrentStep();
-  } else {
-    // Animation reached the end
-    stopAnimation();
-    animationComplete = true;
-    checkComplete();
-  }
-}
-
-/**
- * Start the animation loop if not already running
- */
-function startAnimation() {
-  if (animationInterval) return;
-  animationInterval = setInterval(animationStep, MS_PER_STEP);
-}
-
-/**
- * Stop the animation loop
- */
-function stopAnimation() {
-  if (animationInterval) {
-    clearInterval(animationInterval);
-    animationInterval = null;
-  }
-}
-
-/**
- * Mark loading as complete.
- * The loader will hide only when BOTH animation AND loading are done.
+ * Set a callback to be called when loading completes (progress reaches 1)
  * 
- * Call this when your actual loading finishes.
- */
-export function setPixelLoaderProgress(progress01) {
-  // We ignore the actual progress value - animation runs at its own fixed pace
-  // Just check if loading is complete
-  if (progress01 >= 1) {
-    loadingComplete = true;
-    checkComplete();
-  }
-}
-
-/**
- * Start the loader animation (call this when loader becomes visible)
- */
-export function startPixelLoaderAnimation() {
-  if (!pixelLoaderPixelsContainer || columnCount === 0) return;
-  startAnimation();
-}
-
-/**
- * Set a callback to be called when BOTH animation and loading are complete
- * 
- * @param {Function} callback - Function to call when everything is done
+ * @param {Function} callback - Function to call when complete
  */
 export function onPixelLoaderComplete(callback) {
   onCompleteCallback = callback;
-  // If both conditions are already met, fire immediately (fixes race condition)
-  if (animationComplete && loadingComplete) {
-    checkComplete();
+  // If already complete, fire immediately
+  if (isComplete && callback) {
+    callback();
   }
 }
 
@@ -334,15 +275,11 @@ export function destroyPixelLoader() {
   clearTimeout(debounceTimer);
   debounceTimer = null;
   
-  // Stop animation
-  stopAnimation();
-  
   // Reset state
   pixelLoaderRoot = null;
   pixelLoaderPixelsContainer = null;
   columnCount = 0;
-  currentStepIndex = 0;
-  animationComplete = false;
-  loadingComplete = false;
+  currentProgress = 0;
+  isComplete = false;
   onCompleteCallback = null;
 }

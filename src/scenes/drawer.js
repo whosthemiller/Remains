@@ -4069,20 +4069,15 @@ export class DrawerScene {
 
   /**
    * Check if preload is complete and hide loader if ready
+   * Also updates the progress bar based on visible images loaded
    */
   checkPreloadComplete() {
     if (!this.isPreloading) return;
     
     const loadedCount = this.imageCache.size;
-    // Use photos.length if tiles not ready yet (during early preload)
-    const totalTiles = this.tiles.length > 0 ? this.tiles.length : (this.photos ? this.photos.length : 0);
     const elapsed = Date.now() - this.preloadStartTime;
-    const queueSize = this.loadQueue.length;
-    const loadingCount = this.loadingSet.size;
     
-    // Check if visible images (tiles within viewport) are loaded
-    // This ensures the user sees images immediately when loader hides
-    let visibleImagesReady = false;
+    // Count visible images (tiles within viewport)
     let visibleCount = 0;
     let visibleLoaded = 0;
     
@@ -4100,37 +4095,31 @@ export class DrawerScene {
           }
         }
       }
-      // Consider visible images ready if at least 90% are loaded, or all visible are loaded
-      visibleImagesReady = visibleCount === 0 || visibleLoaded >= visibleCount * 0.9;
-    } else {
-      // Layout not ready yet - don't hide loader
-      visibleImagesReady = false;
+      
+      // Update progress bar based on visible images loaded
+      // Progress = visible images loaded / visible images total
+      if (visibleCount > 0) {
+        const progress = visibleLoaded / visibleCount;
+        setPixelLoaderProgress(progress);
+      }
     }
     
-    // Check if loading conditions are met:
-    // 1. All images are loaded, OR
-    // 2. Visible images ready AND we have minimum ready images, OR
-    // 3. Visible images ready AND timeout reached
-    // IMPORTANT: Never hide loader if visible images aren't ready (prevents blank screen)
-    const hasMinimumReady = loadedCount >= MIN_READY;
-    const allLoaded = totalTiles > 0 && loadedCount >= totalTiles;
-    const timeoutReached = elapsed >= PRELOAD_TIMEOUT_MS;
+    // Check if ALL visible images are loaded (100%, not 90%)
+    const allVisibleLoaded = visibleCount > 0 && visibleLoaded >= visibleCount;
     
-    // Hard timeout after 10 seconds to prevent infinite loading on very slow connections
-    const hardTimeoutReached = elapsed >= 10000;
+    // Hard timeout after 15 seconds to prevent infinite loading on very slow connections
+    const hardTimeoutReached = elapsed >= 15000;
     
-    const shouldComplete = allLoaded || 
-                          (visibleImagesReady && hasMinimumReady) || 
-                          (visibleImagesReady && timeoutReached) ||
-                          hardTimeoutReached;
+    // Only complete when ALL visible images are loaded, or hard timeout
+    const shouldComplete = allVisibleLoaded || hardTimeoutReached;
     
     if (shouldComplete) {
       this.isPreloading = false;
       
-      // Mark loading as complete - loader hides when BOTH animation and loading are done
+      // Mark loading as complete
       setPixelLoaderProgress(1);
       
-      // Set up callback to hide loader (only fires when both animation + loading complete)
+      // Set up callback to hide loader
       const loaderEl = this.loaderElement;
       const canvasEl = this.canvas;
       onPixelLoaderComplete(() => {
@@ -4159,7 +4148,7 @@ export class DrawerScene {
         }
       });
       
-      console.log(`Preload complete: ${loadedCount}/${totalTiles} images loaded in ${elapsed}ms (visible: ${visibleLoaded}/${visibleCount}, ${queueSize} remaining in queue, ${loadingCount} currently loading)`);
+      console.log(`Preload complete: ${loadedCount} total images loaded in ${elapsed}ms (visible: ${visibleLoaded}/${visibleCount})`);
     }
   }
 
@@ -4628,43 +4617,49 @@ export class DrawerScene {
 
   /**
    * Start preloading initial batch (after layout is created, with viewport prioritization)
+   * Visible images get ABSOLUTE priority (loaded first before any other images)
    */
   startPreload() {
-    // Calculate distances for viewport-based prioritization
     const bounds = this.camera.getVisibleBounds();
     const viewportCenter = { x: this.camera.x, y: this.camera.y };
-    const prioritizedTargets = [];
     
-    // Add all preload targets with their distances from viewport center
-    for (const id of this.preloadTargets) {
-      if (!this.imageCache.has(id) && !this.loadingSet.has(id)) {
-        // Check if already in queue
-        if (!this.loadQueue.find(item => item.id === id)) {
-          // Calculate distance for prioritization
-          const tile = this.tiles.find(t => t.id === id);
-          let distance = 0;
-          if (tile) {
-            distance = this.tileDistanceFromCenter(tile, viewportCenter);
-          }
-          prioritizedTargets.push({ id, distance });
-        }
+    // Separate visible images from non-visible images
+    const visibleImages = [];
+    const otherImages = [];
+    
+    for (const tile of this.tiles) {
+      if (this.imageCache.has(tile.id) || this.loadingSet.has(tile.id)) {
+        continue; // Already loaded or loading
+      }
+      
+      // Check if tile is within viewport
+      const tileRight = tile.x + tile.w;
+      const tileBottom = tile.y + tile.h;
+      const isVisible = tile.x < bounds.right && tileRight > bounds.left &&
+                        tile.y < bounds.bottom && tileBottom > bounds.top;
+      
+      const distance = this.tileDistanceFromCenter(tile, viewportCenter);
+      
+      if (isVisible) {
+        visibleImages.push({ id: tile.id, distance });
+      } else {
+        otherImages.push({ id: tile.id, distance });
       }
     }
     
-    // Sort by distance (nearest first) and add to queue
-    prioritizedTargets.sort((a, b) => a.distance - b.distance);
-    for (const target of prioritizedTargets) {
-      this.loadQueue.push(target);
-    }
+    // Sort each group by distance
+    visibleImages.sort((a, b) => a.distance - b.distance);
+    otherImages.sort((a, b) => a.distance - b.distance);
     
-    // Re-sort entire queue to maintain priority
-    this.loadQueue.sort((a, b) => a.distance - b.distance);
+    // Clear and rebuild queue with visible images FIRST
+    this.loadQueue = [...visibleImages, ...otherImages];
+    
+    console.log(`Prioritized preload: ${visibleImages.length} visible images, ${otherImages.length} other images`);
     
     // Start processing the queue (respects concurrent limits)
     this.processLoadQueue();
     
     // Check if visible images are already loaded (from early preload)
-    // This ensures we don't wait unnecessarily if viewport images are ready
     this.checkPreloadComplete();
   }
 

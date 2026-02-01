@@ -1298,35 +1298,7 @@ body.nav-entering #nav-marker-overlay {
   overflow: hidden;
 }
 
-/* CSS-only shimmer that appears immediately before JS loads */
-.pixel-loader-track::before {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--pixel-loader-color) 20%,
-    var(--pixel-loader-color) 40%,
-    transparent 60%
-  );
-  background-size: 200% 100%;
-  animation: loader-shimmer 1.5s ease-in-out infinite;
-  opacity: 0.3;
-}
-
-/* Hide shimmer once JS has created the pixel columns */
-.pixel-loader-track:has(.pixel-loader-column)::before {
-  display: none;
-}
-
-@keyframes loader-shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
-}
+/* Shimmer animation removed - loader now uses actual progress */
 
 .pixel-loader-pixels {
   display: flex;

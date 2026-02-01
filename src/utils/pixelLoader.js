@@ -40,7 +40,7 @@ const PIXELS_PER_COLUMN = 3; // 3 stacked pixels per column (like filter nav)
 const DEBOUNCE_MS = 100;
 
 // Group-based progression constants
-const PIXEL_GROUP_SIZE = 20; // Number of columns per group
+const TARGET_GROUPS = 10;    // Aim for ~10 groups for smooth progression
 const MS_PER_STEP = 100;     // Milliseconds between each group step (slower for consistent pace)
 
 /**
@@ -108,9 +108,9 @@ function rebuildPixels() {
     }
   }
   
-  // Final fallback: use nav width minus padding/border
+  // Final fallback: use loader width minus padding/border (max is 700px)
   if (availableWidth <= 0) {
-    availableWidth = 1274 - 20; // nav-width minus padding/border
+    availableWidth = 700 - 20; // loader-width minus padding/border
   }
   
   const newCount = calculateColumnCount(availableWidth);
@@ -183,12 +183,23 @@ export function initPixelLoader(rootSelector = '#pixel-loader') {
 }
 
 /**
+ * Calculate group size based on column count for smooth progression
+ * @returns {number} Number of columns per group
+ */
+function getGroupSize() {
+  if (columnCount === 0) return 1;
+  // Divide columns into TARGET_GROUPS groups (at least 1 column per group)
+  return Math.max(1, Math.ceil(columnCount / TARGET_GROUPS));
+}
+
+/**
  * Render the current visual state (called by animation loop)
  */
 function renderCurrentStep() {
   if (!pixelLoaderPixelsContainer || columnCount === 0) return;
   
-  const filledColumns = currentStepIndex * PIXEL_GROUP_SIZE;
+  const groupSize = getGroupSize();
+  const filledColumns = currentStepIndex * groupSize;
   
   // Update column states
   const columns = pixelLoaderPixelsContainer.querySelectorAll('.pixel-loader-column');
@@ -231,7 +242,8 @@ function checkComplete() {
  * Animation step - advance one group at fixed pace
  */
 function animationStep() {
-  const totalGroups = Math.floor(columnCount / PIXEL_GROUP_SIZE);
+  const groupSize = getGroupSize();
+  const totalGroups = Math.ceil(columnCount / groupSize);
   
   if (currentStepIndex < totalGroups) {
     currentStepIndex++;

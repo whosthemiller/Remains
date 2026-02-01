@@ -22,6 +22,13 @@ let filtersWrapOpenAnimation = null;
 let isAboutActive = false;
 let previousViewBeforeAbout = null;
 
+// About page mouse trail state
+let trailPhotos = null; // Cached photos for trail
+let trailMouseHandler = null; // Reference to mousemove handler for cleanup
+let lastTrailX = 0;
+let lastTrailY = 0;
+const TRAIL_SPAWN_DISTANCE = 30; // Spawn image every 30px of mouse movement
+
 /**
  * Animate filters-wrap closing (mechanical shutter effect from top)
  */
@@ -72,13 +79,15 @@ function animateFiltersWrapClose() {
     filtersWrap.offsetHeight;
     
     // Calculate distance to move up to disappear under top-nav
-    // filters-wrap original position: top-nav (15px) + center-nav (48px) + gap (10px) = 73px from top
-    // We need to move it up by its original position + its height to disappear completely under top-nav
-    // Use CSS variable for consistent height calculation (same as opening animation)
+    // Use CSS variables for responsive design
     const computedStyle = window.getComputedStyle(filtersWrap);
-    const filtersHeight = parseFloat(computedStyle.getPropertyValue('--filters-nav-height')) || 35; // Use CSS variable: 35px
-    // Original top position: 15px (nav-height) + 48px (center-nav-height) + 10px (gap) = 73px
-    const originalTop = 15 + 48 + 10; // 73px
+    const rootStyles = getComputedStyle(document.documentElement);
+    const navHeight = parseFloat(rootStyles.getPropertyValue('--nav-height')) || 12;
+    const centerNavHeight = parseFloat(rootStyles.getPropertyValue('--center-nav-height')) || 36;
+    const filtersNavGap = parseFloat(rootStyles.getPropertyValue('--filters-nav-gap')) || 8;
+    const filtersHeight = parseFloat(computedStyle.getPropertyValue('--filters-nav-height')) || 24;
+    // Original top position: nav-height + center-nav-height + gap
+    const originalTop = navHeight + centerNavHeight + filtersNavGap;
     // Move up by originalTop + filtersHeight to disappear completely under top-nav
     const finalTranslateY = -(originalTop + filtersHeight);
     
@@ -164,12 +173,14 @@ function animateFiltersWrapOpen() {
   }
   
   // Calculate start position (where it was when closed - under top-nav)
-  // Use the same calculation as in animateFiltersWrapClose to ensure consistency
-  // Original position: 15px (nav-height) + 48px (center-nav-height) + 10px (gap) = 73px
-  const originalTop = 15 + 48 + 10; // 73px - original position
+  // Use CSS variables for responsive design
+  const rootStyles = getComputedStyle(document.documentElement);
+  const navHeight = parseFloat(rootStyles.getPropertyValue('--nav-height')) || 12;
+  const centerNavHeight = parseFloat(rootStyles.getPropertyValue('--center-nav-height')) || 36;
+  const filtersNavGap = parseFloat(rootStyles.getPropertyValue('--filters-nav-gap')) || 8;
+  const originalTop = navHeight + centerNavHeight + filtersNavGap;
   // Use CSS variable for consistent height calculation (same as closing animation)
-  // Reuse computedStyle from above
-  const filtersHeight = parseFloat(computedStyle.getPropertyValue('--filters-nav-height')) || 35; // Use CSS variable: 35px
+  const filtersHeight = parseFloat(computedStyle.getPropertyValue('--filters-nav-height')) || 24;
   // When closed, it's moved up by originalTop + filtersHeight (same as finalTranslateY in close)
   const startTranslateY = -(originalTop + filtersHeight);
   
@@ -252,76 +263,6 @@ const domCache = {
 };
 
 function init() {
-  // Debug: Check top-nav element
-  setTimeout(() => {
-    const topNav = document.getElementById('top-nav');
-    if (topNav) {
-      const rect = topNav.getBoundingClientRect();
-      const computed = window.getComputedStyle(topNav);
-      console.log('=== TOP-NAV DEBUG ===');
-      console.log('Element exists:', !!topNav);
-      console.log('getBoundingClientRect:', {
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
-        bottom: rect.bottom,
-        right: rect.right
-      });
-      console.log('Computed styles:', {
-        display: computed.display,
-        visibility: computed.visibility,
-        opacity: computed.opacity,
-        height: computed.height,
-        minHeight: computed.minHeight,
-        maxHeight: computed.maxHeight,
-        backgroundColor: computed.backgroundColor,
-        zIndex: computed.zIndex,
-        position: computed.position,
-        top: computed.top,
-        right: computed.right,
-        width: computed.width,
-        borderLeft: computed.borderLeft,
-        borderRight: computed.borderRight,
-        borderBottom: computed.borderBottom,
-        transform: computed.transform
-      });
-      console.log('Inline styles:', topNav.style.cssText);
-      console.log('Classes:', topNav.className);
-      console.log('Parent:', topNav.parentElement);
-      console.log('========================');
-      
-      // Force visible with correct styling
-      topNav.style.backgroundColor = '#fefefe';
-      topNav.style.height = '15px';
-      topNav.style.minHeight = '15px';
-      topNav.style.display = 'block';
-      topNav.style.visibility = 'visible';
-      topNav.style.opacity = '1';
-      topNav.style.zIndex = '200';
-      topNav.style.position = 'fixed';
-      topNav.style.top = '0';
-      topNav.style.right = '35px'; // Explicit right position
-      topNav.style.width = '1274px'; // Explicit width
-      topNav.style.left = 'auto'; // Clear left
-      topNav.style.borderLeft = '2px solid #424242';
-      topNav.style.borderRight = '2px solid #424242';
-      topNav.style.borderBottom = '2px solid #424242';
-      topNav.style.borderTop = 'none';
-      console.log('Applied forced styles - top-nav should now be RED and visible');
-      console.log('After forced styles - getBoundingClientRect:', topNav.getBoundingClientRect());
-      console.log('After forced styles - computed backgroundColor:', window.getComputedStyle(topNav).backgroundColor);
-      console.log('After forced styles - computed zIndex:', window.getComputedStyle(topNav).zIndex);
-      
-      // Check if anything is covering it
-      const elementAtPoint = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
-      console.log('Element at center of top-nav:', elementAtPoint);
-      console.log('Is top-nav at that point?', elementAtPoint === topNav || topNav.contains(elementAtPoint));
-    } else {
-      console.error('TOP-NAV ELEMENT NOT FOUND!');
-    }
-  }, 1000);
-  
   // Initialize router
   initRouter();
   
@@ -1696,6 +1637,9 @@ function enterAboutMode(aboutToggle) {
   
   // Animate filters bar closing
   animateFiltersWrapClose();
+  
+  // Start mouse trail effect
+  startAboutMouseTrail();
 }
 
 /**
@@ -1704,6 +1648,9 @@ function enterAboutMode(aboutToggle) {
 function exitAboutMode(aboutToggle) {
   // Remove active state
   isAboutActive = false;
+  
+  // Stop mouse trail effect
+  stopAboutMouseTrail();
   
   // Remove active class from toggle
   aboutToggle.classList.remove('active');
@@ -1754,6 +1701,9 @@ function closeAboutModeIfActive() {
   if (isAboutActive) {
     isAboutActive = false;
     
+    // Stop the mouse trail
+    stopAboutMouseTrail();
+    
     // Remove active class from about toggle
     const aboutToggle = document.querySelector('.about-toggle');
     if (aboutToggle) {
@@ -1763,6 +1713,109 @@ function closeAboutModeIfActive() {
     // Remove mode-about class
     document.body.classList.remove('mode-about');
   }
+}
+
+/**
+ * Start the mouse trail effect for About page
+ */
+async function startAboutMouseTrail() {
+  // Load photos if not already cached
+  if (!trailPhotos) {
+    try {
+      const response = await fetch('data/photos.index.json');
+      const data = await response.json();
+      trailPhotos = data.photos;
+    } catch (error) {
+      console.error('Failed to load photos for trail:', error);
+      return;
+    }
+  }
+  
+  // Get container
+  const container = document.getElementById('about-trail-container');
+  if (!container) return;
+  
+  // Initialize last position
+  lastTrailX = -1000;
+  lastTrailY = -1000;
+  
+  // Create mousemove handler
+  trailMouseHandler = (e) => {
+    const dx = e.clientX - lastTrailX;
+    const dy = e.clientY - lastTrailY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Only create trail image if mouse moved enough distance
+    if (distance >= TRAIL_SPAWN_DISTANCE) {
+      createTrailImage(e.clientX, e.clientY, container);
+      lastTrailX = e.clientX;
+      lastTrailY = e.clientY;
+    }
+  };
+  
+  // Add listener
+  document.addEventListener('mousemove', trailMouseHandler);
+}
+
+/**
+ * Stop the mouse trail effect
+ */
+function stopAboutMouseTrail() {
+  // Remove listener
+  if (trailMouseHandler) {
+    document.removeEventListener('mousemove', trailMouseHandler);
+    trailMouseHandler = null;
+  }
+  
+  // Clear existing trail images
+  const container = document.getElementById('about-trail-container');
+  if (container) {
+    container.innerHTML = '';
+  }
+}
+
+/**
+ * Create a single trail image at the given position
+ */
+function createTrailImage(x, y, container) {
+  if (!trailPhotos || trailPhotos.length === 0) return;
+  
+  // Pick random photo
+  const randomIndex = Math.floor(Math.random() * trailPhotos.length);
+  const photo = trailPhotos[randomIndex];
+  
+  // Create image element
+  const img = document.createElement('img');
+  img.className = 'about-trail-image';
+  img.src = photo.src;
+  img.alt = '';
+  
+  // Random size between 40-60px
+  const size = 40 + Math.random() * 20;
+  img.style.width = `${size}px`;
+  img.style.height = `${size}px`;
+  
+  // Position centered on mouse with slight random offset
+  const offsetX = (Math.random() - 0.5) * 20;
+  const offsetY = (Math.random() - 0.5) * 20;
+  img.style.left = `${x - size / 2 + offsetX}px`;
+  img.style.top = `${y - size / 2 + offsetY}px`;
+  
+  // Set random drift direction (small movement like album photos)
+  const driftX = (Math.random() - 0.5) * 12; // -6px to +6px
+  const driftY = (Math.random() - 0.5) * 12;
+  img.style.setProperty('--drift-x', `${driftX}px`);
+  img.style.setProperty('--drift-y', `${driftY}px`);
+  
+  // Add to container
+  container.appendChild(img);
+  
+  // Remove after animation completes (3.5s)
+  setTimeout(() => {
+    if (img.parentNode) {
+      img.parentNode.removeChild(img);
+    }
+  }, 3600);
 }
 
 // Position dot highlights to align with button text centers and update dots row boundaries
@@ -3565,7 +3618,13 @@ function setupSplashOverlay() {
   const canvasEl = document.getElementById('canvas');
   if (!splashEl || !canvasEl) return;
 
-  const NAV_HEIGHT = 15 + 40 + 35; // top-nav + center-nav + filters-nav
+  // Get nav heights from CSS variables for responsive design
+  const rootStyles = getComputedStyle(document.documentElement);
+  const navHeight = parseFloat(rootStyles.getPropertyValue('--nav-height')) || 12;
+  const centerNavHeight = parseFloat(rootStyles.getPropertyValue('--center-nav-height')) || 36;
+  const filtersNavHeight = parseFloat(rootStyles.getPropertyValue('--filters-nav-height')) || 24;
+  const NAV_HEIGHT = navHeight + centerNavHeight + filtersNavHeight;
+  
   const SPLASH_ZOOM_MS = 400;
   const SPLASH_SCALE = 1.12;
   const FADE_MS = 300;

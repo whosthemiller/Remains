@@ -1295,6 +1295,8 @@ export class DrawerScene {
         if (this.viewMode === 'album' || this.transition.active) {
           this.updateMainImage(photoId);
         }
+        // Re-render album meta details now that albumPhotos is populated (for date display)
+        this.renderAlbumMetaDetails(this.albumData);
       });
     }
     
@@ -1441,6 +1443,8 @@ export class DrawerScene {
         
         // Update main image once photos are loaded
         this.updateMainImage(photoId);
+        // Re-render album meta details now that albumPhotos is populated (for date display)
+        this.renderAlbumMetaDetails(this.albumData);
       });
     }
     
@@ -1618,6 +1622,8 @@ export class DrawerScene {
         
         // Update main image once photos are loaded
         this.updateMainImage(photoId);
+        // Re-render album meta details now that albumPhotos is populated (for date display)
+        this.renderAlbumMetaDetails(this.albumData);
       });
     }
     

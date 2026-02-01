@@ -33,21 +33,34 @@
 }
 
 :root {
-  --nav-height: 15px;
-  --nav-right-offset: 35px;
+  --nav-height: 12px;
+  --nav-right-offset: clamp(15px, 2.5vw, 28px);
   --nav-bg: #fefefe;
   --nav-border: 2px solid #424242;
-  --nav-width: 1274px; /* 980px × 1.3 = 1274px (130% wider) */
-  --center-nav-height: 56px;
-  --filters-nav-height: 35px;
-  --filters-nav-gap: 10px;
+  
+  /* Responsive font sizes - shrinks more aggressively on small screens */
+  --title-font-size: clamp(36px, 5.5vw, 78px);
+  
+  /* Logo reserved space: scales with title font size so nav can use extra space when logo shrinks */
+  /* Formula: left-offset + logo-width (~3.2x font size) + small gap (10px) */
+  --logo-left-offset: 30px;
+  --logo-reserved-width: calc(var(--logo-left-offset) + var(--title-font-size) * 3.2 + 10px);
+  --nav-width: min(980px, calc(100vw - var(--nav-right-offset) - var(--logo-reserved-width))); /* Never overlap with logo */
+  
+  --center-nav-height: clamp(40px, 4.5vw, 50px);
+  --filters-nav-height: clamp(24px, 3vw, 28px);
+  --filters-nav-gap: 8px;
   --ui-dark: #424242;
   --ui-light: #f5f5f5;
-  --icon-text-gap: 12px;
-  --filter-label-padding: 18px;
-  --row-gap: 10px; /* Uniform vertical rhythm for filter options */
+  --icon-text-gap: clamp(6px, 0.8vw, 10px);
+  --filter-label-padding: clamp(10px, 1.2vw, 14px);
+  --row-gap: 8px; /* Uniform vertical rhythm for filter options */
   --ink: #424242; /* Dark color for text stroke */
   --ui-layer: 20000; /* Nav + filter bars always on top of content (date, album meta, etc.) */
+  
+  /* 80kb font - only 2 sizes */
+  --80kb-small: clamp(11px, 1.1vw, 13px);  /* Nav buttons, labels, filters */
+  --80kb-body: clamp(11px, 1.1vw, 13px);   /* Body text, same as small for consistency */
 }
 
 /* Album mode - fade out navigation and remains logo */
@@ -147,8 +160,8 @@ body:not(.mode-album) #top-nav {
   opacity: 1 !important;
   visibility: visible !important;
   display: block !important;
-  height: 15px !important;
-  min-height: 15px !important;
+  height: var(--nav-height) !important;
+  min-height: var(--nav-height) !important;
 }
 
 /* Menu bar slide up/down animation */
@@ -167,7 +180,7 @@ body:not(.mode-album) #top-nav {
 /* Album close button */
 .album-close-button {
   position: fixed;
-  top: 25px; /* Aligned with album name (album-meta-ui) */
+  top: calc(var(--nav-height) + 13px); /* Aligned with album name, relative to nav bar */
   right: 30px; /* Same margin as album name from left (30px) */
   width: 40px;
   height: 40px;
@@ -194,7 +207,7 @@ body:not(.mode-album) #top-nav {
 }
 
 .album-close-button .close-x {
-  font-size: 28px;
+  font-size: clamp(18px, 2.5vw, 24px);
   line-height: 1;
   color: #424242;
   font-weight: normal;
@@ -224,7 +237,7 @@ body:not(.mode-album) .album-close-button {
     0.3px 0.3px 0 var(--ink);
   pointer-events: none;
   white-space: nowrap;
-  font-size: 20px;
+  font-size: clamp(14px, 1.5vw, 18px);
   line-height: 1;
   z-index: 10000;
   font-weight: normal;
@@ -312,22 +325,25 @@ body {
 
 .site-title {
   position: fixed;
-  top: 25px;
-  left: 30px; /* Moved 5px to the right (was 25px) */
+  /* Position relative to nav bar height - stays below top-nav and aligned with center-nav top */
+  top: calc(var(--nav-height) + 8px);
+  left: 30px;
   z-index: 100;
   pointer-events: auto;
   user-select: none;
+  /* Prevent line breaks in the logo */
+  white-space: nowrap;
 }
 
 /* Album meta UI overlay */
 .album-meta-ui {
   position: fixed;
-  top: 25px;
+  top: calc(var(--nav-height) + 13px); /* Aligned relative to nav bar like Remains title */
   left: 30px; /* Same position as "Remains" title */
   z-index: 10001; /* Above canvas and image */
   pointer-events: none; /* Display-only UI */
   user-select: none;
-  max-width: 700px; /* Constrain line width for smart wrapping */
+  max-width: min(700px, calc(100vw - var(--nav-right-offset) - var(--nav-width) - 60px)); /* Constrain to not overlap with nav */
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 300ms ease, transform 300ms ease;
@@ -352,7 +368,7 @@ body.mode-album .album-meta-ui {
 .album-meta-ui .album-name {
   font-family: 'EB Garamond', serif;
   font-style: italic;
-  font-size: 64px;
+  font-size: clamp(36px, 5vw, 52px);
   font-weight: normal;
   color: #424242;
   line-height: 1.05;
@@ -365,7 +381,7 @@ body.mode-album .album-meta-ui {
 .album-meta-ui .album-by {
   font-family: 'EB Garamond', serif;
   font-style: italic;
-  font-size: 64px;
+  font-size: clamp(36px, 5vw, 52px);
   font-weight: normal;
   color: #424242;
   line-height: 1.05;
@@ -389,7 +405,7 @@ body.mode-album .album-meta-ui {
   pointer-events: none; /* Display-only UI */
   user-select: none;
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   color: #424242;
   text-align: left;
   line-height: 1.35;
@@ -457,7 +473,7 @@ body.mode-album .album-meta-ui {
 
 .album-scroll-hint {
   font-family: '80kb', monospace;
-  font-size: 24px;
+  font-size: var(--80kb-body);
   color: #424242;
   text-align: center;
   margin-top: 1em;
@@ -489,15 +505,16 @@ body.mode-album .album-meta-ui {
 .site-title h1 {
   font-family: 'EB Garamond', serif;
   font-style: italic;
-  font-size: 96px;
+  font-size: var(--title-font-size);
   font-weight: 400;
   color: #424242;
+  white-space: nowrap; /* Never break to multiple lines */
 }
 
 /* User data display below user name */
 .site-title .user-data {
   font-family: '80kb', monospace;
-  font-size: 22px;
+  font-size: clamp(13px, 1.5vw, 16px);
   color: #424242;
   text-align: left;
   margin-top: 2.5em;
@@ -518,9 +535,9 @@ body.mode-album .album-meta-ui {
   text-decoration: underline;
 }
 
-/* Username in nav title on user-albums page - 96px */
+/* Username in nav title on user-albums page - responsive */
 body.view-user-albums .site-title h1 {
-  font-size: 96px;
+  font-size: var(--title-font-size);
   line-height: 0.9;
   max-width: calc(100vw - var(--nav-right-offset) - var(--nav-width) - 30px - 50px); /* Break to next line before nav bar with gap */
   word-wrap: break-word;
@@ -532,9 +549,9 @@ body.view-user-albums .site-title h1 {
   top: 0 !important;
   right: var(--nav-right-offset);
   width: var(--nav-width);
-  height: 15px !important;
-  min-height: 15px !important;
-  max-height: 15px !important;
+  height: var(--nav-height) !important;
+  min-height: var(--nav-height) !important;
+  max-height: var(--nav-height) !important;
   background-color: #fefefe !important; /* Use explicit color instead of variable */
   border-left: 2px solid #424242 !important;
   border-right: 2px solid #424242 !important;
@@ -558,10 +575,10 @@ body.view-user-albums .site-title h1 {
 #top-nav::before {
   content: '\00a0'; /* Non-breaking space to give content */
   display: block;
-  height: 15px !important;
-  min-height: 15px !important;
+  height: var(--nav-height) !important;
+  min-height: var(--nav-height) !important;
   width: 100%;
-  line-height: 15px;
+  line-height: var(--nav-height);
   box-sizing: border-box;
 }
 
@@ -581,6 +598,7 @@ body.view-user-albums .site-title h1 {
   pointer-events: auto;
   display: flex;
   align-items: center;
+  overflow: hidden; /* Prevent content from overflowing */
 
   /* Mechanical closing animation setup */
   will-change: transform, filter;
@@ -607,8 +625,8 @@ body.view-user-albums .site-title h1 {
 
 #radio-marker-arrow {
   position: fixed;
-  width: 20px; /* Top rectangle: 20x3 */
-  height: 3px;
+  width: 14px; /* Top rectangle: 14x2 (scaled down) */
+  height: 2px;
   background-color: var(--ui-dark);
   pointer-events: none;
   transform: translateX(-50%);
@@ -622,11 +640,11 @@ body.view-user-albums .site-title h1 {
 #radio-marker-arrow::before {
   content: '';
   position: absolute;
-  top: 3px; /* Directly under main rectangle (20x3), no gap */
+  top: 2px; /* Directly under main rectangle (14x2), no gap */
   left: 50%;
   transform: translateX(-50%);
-  width: 14px; /* Second rectangle: 14x3 */
-  height: 3px;
+  width: 10px; /* Second rectangle: 10x2 (scaled down) */
+  height: 2px;
   background-color: var(--ui-dark);
   display: block;
   margin: 0;
@@ -635,11 +653,11 @@ body.view-user-albums .site-title h1 {
 #radio-marker-arrow::after {
   content: '';
   position: absolute;
-  top: 6px; /* Directly under ::before (14x3), no gap */
+  top: 4px; /* Directly under ::before (10x2), no gap */
   left: 50%;
   transform: translateX(-50%);
-  width: 8px; /* Third rectangle: 8x3 */
-  height: 3px;
+  width: 6px; /* Third rectangle: 6x2 (scaled down) */
+  height: 2px;
   background-color: var(--ui-dark);
   display: block;
   margin: 0;
@@ -647,11 +665,11 @@ body.view-user-albums .site-title h1 {
 
 .arrow-rect-4 {
   position: absolute;
-  top: 9px; /* Directly under ::after (8x3), no gap */
+  top: 6px; /* Directly under ::after (6x2), no gap */
   left: 50%;
   transform: translateX(-50%);
-  width: 3px; /* Fourth rectangle: 3x3 */
-  height: 3px;
+  width: 2px; /* Fourth rectangle: 2x2 (scaled down) */
+  height: 2px;
   background-color: var(--ui-dark);
   display: block;
   margin: 0;
@@ -659,7 +677,9 @@ body.view-user-albums .site-title h1 {
 
 .center-nav-left {
   position: relative;
-  left: 22px;
+  left: clamp(10px, 2vw, 22px); /* Responsive left padding */
+  flex-shrink: 0; /* Don't shrink the About section */
+  white-space: nowrap;
 }
 
 .about-toggle {
@@ -706,7 +726,7 @@ body.view-user-albums .site-title h1 {
   margin-top: 2px;
   cursor: pointer;
   font-family: '80kb', sans-serif;
-  font-size: 18px;
+  font-size: var(--80kb-small);
   color: var(--ui-dark);
   text-decoration: none;
   line-height: 1;
@@ -714,12 +734,14 @@ body.view-user-albums .site-title h1 {
 
 .main-radio-nav {
   position: absolute;
-  left: calc(22px + 39px + 12px + 60px + 115px); /* left offset + icon width + gap + approximate "About" text width + 115px gap */
-  right: 115px;
+  left: clamp(120px, 20%, 250px); /* More compact left offset */
+  right: clamp(20px, 5%, 80px); /* Reduced right margin */
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 100%;
+  gap: clamp(6px, 1.5vw, 16px); /* Minimum gap between nav items */
+  overflow: hidden; /* Prevent overflow */
 }
 
 .nav-radio-button {
@@ -729,11 +751,13 @@ body.view-user-albums .site-title h1 {
   margin: 0;
   cursor: pointer;
   font-family: '80kb', sans-serif;
-  font-size: 18px;
+  font-size: var(--80kb-small);
   color: var(--ui-dark);
   line-height: 1;
   margin-top: 2px; /* Match About button vertical alignment */
   position: relative; /* For positioning taller dots */
+  white-space: nowrap; /* Never wrap button text */
+  flex-shrink: 0; /* Don't shrink buttons */
 }
 
 /* Selected state - bold font weight */
@@ -839,12 +863,13 @@ body.view-albums .nav-radio-button[data-radio="albums"] {
   height: 100%;
   padding-left: var(--filter-label-padding);
   padding-right: 14px; /* Right padding from column edge */
+  overflow: hidden; /* Prevent any content from overflowing */
 }
 
 /* Filter label styling */
 #filters-nav .filter-label {
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-small);
   color: var(--ui-dark);
   white-space: nowrap; /* Prevent label from wrapping */
 }
@@ -858,6 +883,7 @@ body.view-albums .nav-radio-button[data-radio="albums"] {
   flex: 1;
   margin-left: 14px;
   min-width: 0;
+  overflow: hidden; /* Hide pixels that don't fit - never overflow outside */
 }
 
 /* Pixel column - contains 3 squares stacked vertically */
@@ -966,7 +992,7 @@ body.filters-hover-disabled #filters-panel:hover {
 /* Filter panel label */
 #filters-panel .filter-panel-label {
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   color: var(--ui-dark);
   margin-bottom: 12px; /* Space between label and options */
 }
@@ -996,7 +1022,7 @@ body.filters-hover-disabled #filters-panel:hover {
 /* Filter option button - transparent, no background */
 #filters-panel .filter-option {
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   margin: 0;
   padding: 0;
   line-height: 1;
@@ -1055,7 +1081,7 @@ body.filters-hover-disabled #filters-panel:hover {
   margin-right: 6px;
   padding: 0 4px;
   font-family: '80kb', monospace;
-  font-size: 24px;
+  font-size: var(--80kb-body);
   line-height: 1;
   color: var(--ui-dark);
   background: transparent;
@@ -1220,10 +1246,10 @@ body.nav-entering #nav-marker-overlay {
 }
 
 .splash-paragraph {
-  max-width: 900px;
+  max-width: min(850px, 90vw);
   text-align: center;
   font-family: '80kb', monospace;
-  font-size: 52px;
+  font-size: clamp(20px, 4vw, 36px);
   color: var(--ink, #424242);
   margin: 0 0 1.5rem;
   line-height: 1.3;
@@ -1232,13 +1258,13 @@ body.nav-entering #nav-marker-overlay {
 .splash-title {
   font-family: 'EB Garamond', serif;
   font-style: italic;
-  font-size: 72px;
+  font-size: clamp(28px, 5vw, 48px);
 }
 
 .splash-cta {
   font-family: '80kb', monospace;
   font-style: italic;
-  font-size: 32px;
+  font-size: clamp(14px, 2.5vw, 22px);
   color: var(--ink, #424242);
   margin: 0;
 }
@@ -1257,7 +1283,7 @@ body.nav-entering #nav-marker-overlay {
   --pixel-loader-bg: var(--ui-light, #f5f5f5);
   --pixel-loader-border: var(--ui-dark, #424242);
   
-  width: var(--nav-width, 1274px);
+  width: min(700px, 80vw);
   margin: 0 auto 16px;
 }
 
@@ -1357,7 +1383,7 @@ body.nav-entering #nav-marker-overlay {
 
 .loader-text {
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   color: var(--ui-dark, #424242);
   margin-top: 24px;
 }
@@ -1366,7 +1392,7 @@ body.nav-entering #nav-marker-overlay {
 .loader-remains {
   font-family: 'EB Garamond', serif;
   font-style: italic;
-  font-size: 24px;
+  font-size: clamp(14px, 1.4vw, 18px);
 }
 
 /* Page container */
@@ -1731,7 +1757,7 @@ body.title-transitioning.title-fading-in .site-title h1 {
 /* Username Label */
 .user-name {
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   color: var(--ui-dark);
   text-align: left;
   margin: 30px 0 0 0; /* Increased top margin for better separation from photo pile */
@@ -1752,7 +1778,7 @@ body.title-transitioning.title-fading-in .site-title h1 {
 .user-albums-header h2 {
   font-family: 'EB Garamond', serif;
   font-style: italic;
-  font-size: 48px;
+  font-size: clamp(32px, 4vw, 48px);
   font-weight: 400;
   color: var(--ui-dark);
   margin: 0;
@@ -1762,7 +1788,7 @@ body.title-transitioning.title-fading-in .site-title h1 {
   padding: 40px 20px;
   text-align: center;
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   color: var(--ui-dark);
   opacity: 0.6;
 }
@@ -1786,6 +1812,31 @@ body.title-transitioning.title-fading-in .site-title h1 {
   #page-container {
     padding-left: 15px;
     padding-right: 15px;
+  }
+  
+  /* Adjust logo offset so nav-width calculation stays accurate */
+  :root {
+    --logo-left-offset: 12px;
+    --title-font-size: clamp(28px, 6vw, 52px);
+  }
+  
+  /* Ensure Remains title stays below nav bar and doesn't overlap */
+  .site-title {
+    top: calc(var(--nav-height) + 8px);
+    left: 12px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  :root {
+    --logo-left-offset: 10px;
+    --title-font-size: clamp(24px, 7vw, 36px);
+  }
+  
+  .site-title {
+    top: calc(var(--nav-height) + 6px);
+    left: 10px;
   }
 }
 
@@ -1824,7 +1875,7 @@ body.title-transitioning.title-fading-in .site-title h1 {
 
 .index-table-header th {
   font-family: '80kb', monospace;
-  font-size: 24px;
+  font-size: clamp(13px, 1.5vw, 16px); /* Same size as user-data on user page */
   font-weight: bold;
   color: var(--ui-dark);
   text-align: left;
@@ -1834,7 +1885,7 @@ body.title-transitioning.title-fading-in .site-title h1 {
   border: none;
   border-bottom: 2px solid var(--ui-dark);
   background-color: transparent;
-  height: 90px;
+  height: 60px;
   box-sizing: border-box;
 }
 
@@ -1847,7 +1898,7 @@ body.title-transitioning.title-fading-in .site-title h1 {
   display: block;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100vh - calc(var(--nav-height) + var(--center-nav-height) + var(--filters-nav-height) + var(--filters-nav-gap) + 100px + 90px));
+  height: calc(100vh - calc(var(--nav-height) + var(--center-nav-height) + var(--filters-nav-height) + var(--filters-nav-gap) + 100px + 60px));
   width: 100%;
 }
 
@@ -1927,14 +1978,15 @@ body.view-index:not(.page-transitioning) .index-table-row:nth-child(n+7) {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90px;
-  padding: 10px;
+  height: 60px;
+  padding: 0;
   box-sizing: border-box;
 }
 
 .index-table-thumbnail {
-  max-width: calc(100% - 20px);
-  max-height: calc(100% - 20px);
+  width: auto;
+  height: 42px; /* 70% of 60px row height */
+  max-width: 100%;
   object-fit: contain;
   opacity: 0.7;
   margin: auto;
@@ -1975,7 +2027,7 @@ body.view-index:not(.index-images-fade-in):not(.page-transitioning) .index-table
 /* Data cells */
 .index-table-data-cell {
   font-family: '80kb', monospace;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   color: var(--ui-dark);
   text-align: left;
   padding-right: 20px;
@@ -2013,14 +2065,16 @@ body.view-index .center-date {
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.4s ease, visibility 0.4s ease;
+  /* Ensure about content doesn't overlap with Remains title */
+  max-width: var(--nav-width);
 }
 
 /* About paragraph styling */
 .about-paragraph {
   font-family: '80kb', monospace;
-  font-size: 22px;
+  font-size: clamp(13px, 1.5vw, 16px);
   color: #424242;
-  width: 480px;
+  width: min(380px, 85vw);
   line-height: 1.5;
   margin: 0 0 1em 0;
 }
@@ -2029,14 +2083,14 @@ body.view-index .center-date {
 .about-remains {
   font-family: 'EB Garamond', serif;
   font-style: italic;
-  font-size: 28px;
+  font-size: clamp(16px, 2vw, 20px);
 }
 
 /* Source line - italic */
 .about-source {
   font-family: '80kb', monospace;
   font-style: italic;
-  font-size: 18px;
+  font-size: var(--80kb-body);
   color: #424242;
   line-height: 1.5;
   margin-top: 1.5em;
@@ -2098,4 +2152,118 @@ body.mode-about #radio-marker-arrow {
 body:not(.mode-about) #radio-marker-line,
 body:not(.mode-about) #radio-marker-arrow {
   transition: opacity 0.3s ease, visibility 0.3s ease, left 250ms linear;
+}
+
+/* ============================================
+   About Page Mouse Trail
+   ============================================ */
+
+/* Trail container - covers entire viewport */
+#about-trail-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99; /* Below about content (z-index: 100) */
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Show trail container in about mode */
+body.mode-about #about-trail-container {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Individual trail images */
+.about-trail-image {
+  position: absolute;
+  pointer-events: none;
+  object-fit: cover;
+  opacity: 0;
+  animation: trailFadeInOut 3.5s ease-out forwards;
+}
+
+/* Combined fade and drift animation */
+@keyframes trailFadeInOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translate(0, 0);
+  }
+  4% {
+    opacity: 0.5;
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) translate(var(--drift-x), var(--drift-y));
+  }
+}
+
+/* ============================================
+   Index Page Responsive - Reduce column gaps
+   ============================================ */
+
+@media (max-width: 1200px) {
+  .index-table-header th {
+    padding-right: 14px;
+  }
+  
+  .index-table-data-cell {
+    padding-right: 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  .index-table-header th {
+    padding-right: 10px;
+  }
+  
+  .index-table-data-cell {
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .index-table-header th {
+    padding-right: 8px;
+    font-size: clamp(11px, 1.3vw, 14px);
+  }
+  
+  .index-table-data-cell {
+    padding-right: 8px;
+    font-size: clamp(10px, 1.2vw, 12px);
+  }
+  
+  .index-table-row {
+    height: 70px;
+  }
+  
+  .index-table-thumbnail {
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .index-table-header th {
+    padding-right: 6px;
+    font-size: clamp(10px, 1.2vw, 12px);
+  }
+  
+  .index-table-data-cell {
+    padding-right: 6px;
+    font-size: clamp(9px, 1.1vw, 11px);
+  }
+  
+  .index-table-row {
+    height: 60px;
+  }
+  
+  .index-table-thumbnail {
+    height: 30px;
+  }
 }

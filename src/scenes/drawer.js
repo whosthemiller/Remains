@@ -5413,8 +5413,8 @@ export class DrawerScene {
       this.imageCache.set(id, { img, aspect, lastUsed: Date.now() });
       this.loadingSet.delete(id);
       
-      // Check if preload is complete (throttle to avoid too many checks)
-      if (this.isPreloading && this.imageCache.size % 10 === 0) {
+      // Update progress bar on every image load for real-time feedback
+      if (this.isPreloading) {
         this.checkPreloadComplete();
       }
       

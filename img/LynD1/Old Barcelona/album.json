@@ -7,7 +7,10 @@
     "title": "Old Barcelona",
     "description": "",
     "owner": "95545622@N00",
-    "photoCount": 13
+    "photoCount": 13,
+    "sizeMB": 3.19,
+    "lastUploadedUnix": 1155777061,
+    "lastUploadedDate": "2006-08-17T01:11:01.000Z"
   },
   "photos": [
     {
@@ -22,7 +25,8 @@
         "cathedral",
         "cloister",
         "gotic",
-        "barri"
+        "barri",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217291556",
       "urls": {
@@ -44,7 +48,8 @@
         "columbus",
         "statue",
         "christopher",
-        "column"
+        "column",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217291551",
       "urls": {
@@ -65,7 +70,8 @@
         "barcelona",
         "park",
         "gaudi",
-        "guell"
+        "guell",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217291550",
       "urls": {
@@ -85,7 +91,8 @@
       "tags": [
         "barcelona",
         "apartment",
-        "montjuic"
+        "montjuic",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217281560",
       "urls": {
@@ -106,7 +113,8 @@
         "barcelona",
         "music",
         "theatre",
-        "catalana"
+        "catalana",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217281558",
       "urls": {
@@ -127,7 +135,8 @@
         "umbrella",
         "dragon",
         "modernist",
-        "rambla"
+        "rambla",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217281556",
       "urls": {
@@ -149,7 +158,8 @@
         "youth",
         "hostel",
         "gotic",
-        "barri"
+        "barri",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217281553",
       "urls": {
@@ -171,7 +181,8 @@
         "old",
         "alley",
         "gotic",
-        "barri"
+        "barri",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217281552",
       "urls": {
@@ -196,7 +207,8 @@
         "harbour",
         "stained",
         "gaudi",
-        "sagrada"
+        "sagrada",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217267985",
       "urls": {
@@ -219,7 +231,8 @@
         "port",
         "boats",
         "harbour",
-        "stained"
+        "stained",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217267983",
       "urls": {
@@ -242,7 +255,8 @@
         "fountain",
         "buildings",
         "august",
-        "monuments"
+        "monuments",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217254062",
       "urls": {
@@ -267,7 +281,8 @@
         "august",
         "bull",
         "ring",
-        "monuments"
+        "monuments",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217254061",
       "urls": {
@@ -290,7 +305,8 @@
         "fountain",
         "buildings",
         "august",
-        "monuments"
+        "monuments",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217254058",
       "urls": {

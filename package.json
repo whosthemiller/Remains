@@ -2,6 +2,12 @@
   "name": "remains",
   "version": "1.0.0",
   "scripts": {
-    "build:index": "node scripts/buildIndex.js"
+    "build:index": "node scripts/buildIndex.js",
+    "build:landscape": "node scripts/buildLandscapeIndex.js",
+    "build:location-audit": "node scripts/buildLocationAudit.js",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "image-size": "^1.1.1"
   }
 }

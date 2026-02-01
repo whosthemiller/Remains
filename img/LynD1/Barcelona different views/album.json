@@ -7,7 +7,10 @@
     "title": "Barcelona different views",
     "description": "",
     "owner": "95545622@N00",
-    "photoCount": 9
+    "photoCount": 9,
+    "sizeMB": 1.55,
+    "lastUploadedUnix": 1155777061,
+    "lastUploadedDate": "2006-08-17T01:11:01.000Z"
   },
   "photos": [
     {
@@ -22,7 +25,8 @@
         "lounge",
         "clean",
         "cosy",
-        "pulitzer"
+        "pulitzer",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217291554",
       "urls": {
@@ -47,7 +51,8 @@
         "restaurants",
         "discos",
         "maremagnum",
-        "rambla"
+        "rambla",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217291552",
       "urls": {
@@ -69,7 +74,8 @@
         "football",
         "european",
         "arsenal",
-        "champions"
+        "champions",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217291548",
       "urls": {
@@ -90,7 +96,8 @@
         "barcelona",
         "camp",
         "football",
-        "nou"
+        "nou",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217281559",
       "urls": {
@@ -113,7 +120,8 @@
         "fountain",
         "buildings",
         "august",
-        "monuments"
+        "monuments",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217254063",
       "urls": {
@@ -137,7 +145,8 @@
         "boats",
         "harbour",
         "stained",
-        "rambla"
+        "rambla",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217267979",
       "urls": {
@@ -160,7 +169,8 @@
         "fountain",
         "buildings",
         "august",
-        "monuments"
+        "monuments",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217254065",
       "urls": {
@@ -185,7 +195,8 @@
         "restaurant",
         "harbour",
         "stained",
-        "salamanca"
+        "salamanca",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217267976",
       "urls": {
@@ -209,7 +220,8 @@
         "boats",
         "market",
         "harbour",
-        "stained"
+        "stained",
+        "vacation"
       ],
       "flickrPage": "https://www.flickr.com/photos/undefined/217267984",
       "urls": {

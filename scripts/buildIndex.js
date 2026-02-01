@@ -1,6 +1,46 @@
 const fs = require('fs');
 const path = require('path');
 
+// Try to use sharp if available, otherwise use image-size
+let getImageMetadata;
+try {
+  const sharp = require('sharp');
+  getImageMetadata = async (filePath) => {
+    try {
+      const stats = fs.statSync(filePath);
+      const metadata = await sharp(filePath).metadata();
+      return {
+        width: metadata.width || null,
+        height: metadata.height || null,
+        fileSize: stats.size,
+      };
+    } catch (error) {
+      return { width: null, height: null, fileSize: null };
+    }
+  };
+} catch (e) {
+  // Fallback to image-size if sharp is not available
+  try {
+    const sizeOf = require('image-size');
+    getImageMetadata = async (filePath) => {
+      try {
+        const stats = fs.statSync(filePath);
+        const dimensions = sizeOf(filePath);
+        return {
+          width: dimensions.width || null,
+          height: dimensions.height || null,
+          fileSize: stats.size,
+        };
+      } catch (error) {
+        return { width: null, height: null, fileSize: null };
+      }
+    };
+  } catch (e2) {
+    // No image library available - return null
+    getImageMetadata = async () => ({ width: null, height: null, fileSize: null });
+  }
+}
+
 const IMG_SMALL_WEBP_DIR = path.join(__dirname, '..', 'imgSmallWebp');
 const IMG_DIR = path.join(__dirname, '..', 'img');
 const OUTPUT_DIR = path.join(__dirname, '..', 'public', 'data');
@@ -89,16 +129,67 @@ function extractAlbumMeta(albumJson) {
 }
 
 /**
+ * Extract photo ID from filename using regex
+ * Pattern: filename contains photo ID (7+ digits) between underscores
+ * Example: "05-002_6519466095_l.webp" -> "6519466095"
+ */
+function extractPhotoIdFromFileName(fileName) {
+  const match = fileName.match(/(\d{7,})/);
+  return match ? match[1] : null;
+}
+
+/**
+ * Find photo metadata from album.json by matching photo ID
+ */
+function findPhotoMeta(albumJson, photoId) {
+  if (!albumJson || !albumJson.photos || !Array.isArray(albumJson.photos) || !photoId) {
+    return null;
+  }
+
+  const photo = albumJson.photos.find(p => String(p.id) === String(photoId));
+  return photo || null;
+}
+
+/**
+ * Extract per-photo metadata (tags, taken, uploadedUnix, title)
+ */
+function extractPhotoMeta(photoData) {
+  if (!photoData) {
+    return {
+      photoId: null,
+      tags: null,
+      taken: null,
+      uploadedUnix: null,
+      title: null,
+    };
+  }
+
+  return {
+    photoId: photoData.id ? String(photoData.id) : null,
+    tags: Array.isArray(photoData.tags) ? photoData.tags : null,
+    taken: photoData.taken || null,
+    uploadedUnix: typeof photoData.uploadedUnix === 'number' ? photoData.uploadedUnix : null,
+    title: photoData.title || null,
+  };
+}
+
+/**
  * Main function to build the index
  */
-function buildIndex() {
+async function buildIndex() {
   console.log('Scanning for WebP files...');
   const webpFiles = findWebpFiles(IMG_SMALL_WEBP_DIR);
   console.log(`Found ${webpFiles.length} WebP files`);
 
   const photos = [];
 
-  for (const filePath of webpFiles) {
+  for (let i = 0; i < webpFiles.length; i++) {
+    const filePath = webpFiles[i];
+    
+    // Progress indicator
+    if (i % 100 === 0) {
+      console.log(`Processing ${i + 1}/${webpFiles.length}...`);
+    }
     // Get relative path from imgSmallWebp directory
     const relativePath = path.relative(IMG_SMALL_WEBP_DIR, filePath);
     const parts = relativePath.split(path.sep);
@@ -126,16 +217,58 @@ function buildIndex() {
     const albumJson = readJsonSafe(albumJsonPath);
     const albumMeta = extractAlbumMeta(albumJson);
 
+    // Extract photo ID from filename and find matching photo in album.json
+    const photoId = extractPhotoIdFromFileName(fileName);
+    const photoData = findPhotoMeta(albumJson, photoId);
+    const photoMeta = extractPhotoMeta(photoData);
+
+    // Get original image file path and metadata
+    let imageMetadata = { width: null, height: null, fileSize: null };
+    if (photoData && photoData.localFile) {
+      const originalImagePath = path.join(IMG_DIR, userKey, albumKey, photoData.localFile);
+      if (fs.existsSync(originalImagePath)) {
+        try {
+          imageMetadata = await getImageMetadata(originalImagePath);
+        } catch (error) {
+          // Try alternative extensions if original fails
+          const baseName = originalImagePath.replace(/\.[^.]+$/, '');
+          const extensions = ['.jpg', '.jpeg', '.png', '.gif'];
+          for (const ext of extensions) {
+            const altPath = baseName + ext;
+            if (fs.existsSync(altPath)) {
+              try {
+                imageMetadata = await getImageMetadata(altPath);
+                break;
+              } catch (e) {
+                // Continue to next extension
+              }
+            }
+          }
+        }
+      }
+    }
+
     // Generate stable ID
     const id = generateId(userKey, albumKey, fileName);
 
-    // Create photo entry
+    // Create photo entry with per-photo metadata
     photos.push({
       id,
       src: webPath,
       userKey,
       albumKey,
       fileName,
+      photoId: photoMeta.photoId,
+      tags: photoMeta.tags,
+      taken: photoMeta.taken,
+      uploadedUnix: photoMeta.uploadedUnix,
+      title: photoMeta.title,
+      resolution: imageMetadata.width && imageMetadata.height 
+        ? `${imageMetadata.width} × ${imageMetadata.height}` 
+        : null,
+      fileSize: imageMetadata.fileSize 
+        ? Math.round(imageMetadata.fileSize / 1024) + ' KB' 
+        : null,
       meta: {
         user: userMeta,
         album: albumMeta,
@@ -174,4 +307,7 @@ function buildIndex() {
 }
 
 // Run the script
-buildIndex();
+buildIndex().catch(error => {
+  console.error('Error building index:', error);
+  process.exit(1);
+});

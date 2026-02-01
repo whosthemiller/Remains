@@ -1,0 +1,96 @@
+Git Commands Reference - Basic Drawer Checkpoint
+=================================================
+
+BASIC COMMANDS
+--------------
+
+1. View all tags:
+   git tag
+   
+   Shows all saved checkpoints/tags in your repository.
+
+
+2. Return to the "basic-drawer" checkpoint:
+   git checkout basic-drawer
+   
+   This will restore your code to the exact state when you saved the checkpoint.
+   WARNING: This will discard any uncommitted changes!
+
+
+3. Create a new checkpoint/tag:
+   git add -A
+   git commit -m "Description of what this checkpoint is"
+   git tag -a "tag-name" -m "Description"
+   
+   Example:
+   git add -A
+   git commit -m "Added new feature X"
+   git tag -a "feature-x" -m "Checkpoint after adding feature X"
+
+
+4. Delete a tag:
+   git tag -d tag-name
+   
+   Example:
+   git tag -d basic-drawer
+
+
+5. See what checkpoint you're currently on:
+   git describe --tags
+   
+   Shows the nearest tag/checkpoint to your current code state.
+
+
+6. Go back to latest code (after checking out a tag):
+   git checkout main
+   
+   Or if you're on a different branch:
+   git checkout master
+   
+   Note: If you haven't created a branch yet, you may need to create one first.
+
+
+SAFE WORKFLOW
+-------------
+
+To work on new features while keeping your checkpoint safe:
+
+1. Make sure you're on the latest code:
+   git checkout main
+   (or create a branch: git checkout -b my-feature-branch)
+
+2. Make your changes to the code
+
+3. Test your changes
+
+4. If you want to save a new checkpoint:
+   git add -A
+   git commit -m "Description"
+   git tag -a "new-checkpoint-name" -m "Description"
+
+5. If something goes wrong and you want to go back:
+   git checkout basic-drawer
+
+
+IMPORTANT NOTES
+---------------
+
+- Tags are like bookmarks - they point to a specific commit
+- Checking out a tag puts you in "detached HEAD" state
+- To continue working after checking out a tag, create a branch:
+  git checkout -b new-branch-name basic-drawer
+
+- Uncommitted changes will be lost when checking out a tag
+- Always commit or stash your work before switching:
+  git stash        (saves changes temporarily)
+  git stash pop    (restores saved changes)
+
+
+CURRENT CHECKPOINT
+------------------
+
+Tag name: basic-drawer
+Description: Basic drawer with Poisson-disk layout, smooth zoom, viewport hysteresis, no flicker
+
+To return to this checkpoint:
+  git checkout basic-drawer

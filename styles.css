@@ -1,3 +1,262 @@
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('EBGaramond-Italic-VariableFont_wght.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '80kb';
+  src: url('80-kb-Sharp.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '80kb';
+  src: url('80-kb-SharpBold.otf') format('opentype');
+  font-weight: bold;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '80kb';
+  src: url('80-kb-SharpItalic.otf') format('opentype');
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bebas';
+  src: url('Bebas-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+:root {
+  --nav-height: 15px;
+  --nav-right-offset: 35px;
+  --nav-bg: #fefefe;
+  --nav-border: 2px solid #424242;
+  --nav-width: 1274px; /* 980px × 1.3 = 1274px (130% wider) */
+  --center-nav-height: 56px;
+  --filters-nav-height: 35px;
+  --filters-nav-gap: 10px;
+  --ui-dark: #424242;
+  --ui-light: #f5f5f5;
+  --icon-text-gap: 12px;
+  --filter-label-padding: 18px;
+  --row-gap: 10px; /* Uniform vertical rhythm for filter options */
+  --ink: #424242; /* Dark color for text stroke */
+  --ui-layer: 20000; /* Nav + filter bars always on top of content (date, album meta, etc.) */
+}
+
+/* Album mode - fade out navigation and remains logo */
+body.mode-album {
+  background-color: #f5f5f5; /* Ensure light background in album mode */
+}
+
+body.mode-album #top-nav {
+  /* Nav closing animation is handled via Web Animations API */
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  border: none !important; /* Remove all borders to prevent visible lines */
+  display: none !important; /* Completely hide to prevent any visible artifacts */
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  transform: translateY(-100%) !important; /* Move completely off-screen */
+  margin: 0 !important;
+  padding: 0 !important;
+  top: -100px !important; /* Move far off-screen */
+}
+
+body.mode-album #top-nav::before {
+  display: none !important; /* Hide pseudo-element that might create a line */
+  height: 0 !important;
+  content: none !important;
+}
+
+body.mode-album #filters-wrap {
+  /* Nav closing animation is handled via Web Animations API */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  display: none !important; /* Completely hide to prevent any visible artifacts */
+  transform: translateY(-100%) !important; /* Move completely off-screen */
+  top: -100px !important; /* Move far off-screen */
+}
+
+body.mode-album #filters-nav {
+  border: none !important; /* Remove all borders to prevent visible lines */
+}
+
+body.mode-album #filters-panel {
+  border: none !important; /* Remove all borders to prevent visible lines */
+}
+
+body.mode-album #center-nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  border: none !important; /* Remove all borders to prevent visible lines */
+  display: none !important; /* Completely hide to prevent any visible artifacts */
+  transform: translateY(-100%) !important; /* Move completely off-screen */
+  top: -100px !important; /* Move far off-screen */
+  transition: opacity 350ms ease;
+}
+
+body.mode-album .site-title,
+body.mode-album .site-title h1,
+body.mode-album #radio-marker-line,
+body.mode-album #radio-marker-arrow {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 350ms ease, left 250ms linear;
+}
+
+/* Hide canvas in album mode to show clean background */
+body.mode-album #canvas {
+  opacity: 0;
+  visibility: hidden;
+  /* No transition - canvas visibility is handled by overlay fade */
+}
+
+/* Transition fade using CSS variable */
+#top-nav,
+#filters-wrap {
+  opacity: var(--uiAlpha, 1);
+  transition: none; /* We'll use Web Animations API for mechanical feel */
+}
+
+#center-nav,
+.site-title {
+  opacity: var(--uiAlpha, 1);
+  transition: opacity 50ms linear, transform 450ms ease-in-out; /* Smooth updates during transition */
+}
+
+#radio-marker-line,
+#radio-marker-arrow {
+  opacity: var(--uiAlpha, 1);
+  transition: opacity 50ms linear, left 250ms linear; /* Mechanical dial movement for left position */
+}
+
+/* Ensure top-nav is visible by default (unless in album mode) */
+body:not(.mode-album) #top-nav {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  height: 15px !important;
+  min-height: 15px !important;
+}
+
+/* Menu bar slide up/down animation */
+#top-nav,
+#center-nav,
+#filters-wrap {
+  transform: translateY(var(--navTranslateY, 0px));
+  /* Transform transitions are handled by Web Animations API for top-nav and filters-wrap */
+}
+
+/* Remains title fade - opacity is already set above, just ensure smooth transition */
+.site-title {
+  transition: opacity 50ms linear;
+}
+
+/* Album close button */
+.album-close-button {
+  position: fixed;
+  top: 25px; /* Aligned with album name (album-meta-ui) */
+  right: 30px; /* Same margin as album name from left (30px) */
+  width: 40px;
+  height: 40px;
+  background-color: #f5f5f5;
+  border: 2px solid #424242;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10002; /* Above album image wrapper (9999) */
+  padding: 0;
+  margin: 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  pointer-events: auto;
+}
+
+.album-close-button:hover {
+  background-color: #424242;
+  border-color: #424242;
+}
+
+.album-close-button:hover .close-x {
+  color: #f5f5f5;
+}
+
+.album-close-button .close-x {
+  font-size: 28px;
+  line-height: 1;
+  color: #424242;
+  font-weight: normal;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+/* Hide close button when not in album mode */
+body:not(.mode-album) .album-close-button {
+  display: none !important;
+}
+
+
+/* Center photo date label */
+.center-date {
+  position: fixed;
+  font-family: 'Bebas', 'Bebas Neue', sans-serif;
+  color: #CF773C;
+  -webkit-text-stroke: 0.3px var(--ink);
+  text-stroke: 0.3px var(--ink);
+  /* Fallback text-shadow for browsers that don't support text-stroke */
+  text-shadow: 
+    -0.3px -0.3px 0 var(--ink),
+    0.3px -0.3px 0 var(--ink),
+    -0.3px 0.3px 0 var(--ink),
+    0.3px 0.3px 0 var(--ink);
+  pointer-events: none;
+  white-space: nowrap;
+  font-size: 20px;
+  line-height: 1;
+  z-index: 10000;
+  font-weight: normal;
+}
+
+/* Hide center date label when not in drawer view */
+body.view-users .center-date,
+body.view-user-albums .center-date {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Hide filter bar on users, user-albums, and in album view (אלבומי משתמשים ואלבומים בכללי) */
+body.view-users #filters-wrap,
+body.view-user-albums #filters-wrap,
+body.mode-album #filters-wrap {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Ensure filter bar is visible on drawer and index only when not in album mode */
+body.view-drawer:not(.mode-album) #filters-wrap,
+body.view-index:not(.mode-album) #filters-wrap {
+  visibility: visible !important;
+}
+
+/* Allow center date label to show in drawer view */
+body.view-drawer .center-date {
+  /* Let JavaScript control visibility based on zoom and center tile */
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +276,842 @@ body {
   width: 100%;
   height: 100%;
   cursor: default;
+  opacity: 0;
+  visibility: visible;
+  /* Fade in after loader completes */
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Below nav bars (z-index 200) */
 }
+
+/* Canvas visible after loading complete */
+#canvas.canvas-loaded {
+  opacity: 1;
+}
+
+#canvas.fade-out {
+  opacity: 0 !important;
+  visibility: hidden;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#canvas.fade-in {
+  opacity: 1 !important;
+  visibility: visible;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Splash exit zoom-in: GPU-accelerated, runs alongside fade without blocking main thread */
+#canvas.splash-zoom-in {
+  transform: scale(1.12);
+  transform-origin: center center;
+  transition: transform 0.4s ease-out;
+}
+
+.site-title {
+  position: fixed;
+  top: 25px;
+  left: 30px; /* Moved 5px to the right (was 25px) */
+  z-index: 100;
+  pointer-events: auto;
+  user-select: none;
+}
+
+/* Album meta UI overlay */
+.album-meta-ui {
+  position: fixed;
+  top: 25px;
+  left: 30px; /* Same position as "Remains" title */
+  z-index: 10001; /* Above canvas and image */
+  pointer-events: none; /* Display-only UI */
+  user-select: none;
+  max-width: 700px; /* Constrain line width for smart wrapping */
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 300ms ease, transform 300ms ease;
+  display: none; /* Hidden by default */
+}
+
+/* Show only in album view */
+body.mode-album .album-meta-ui {
+  display: block;
+}
+
+.album-meta-ui.album-meta-enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.album-meta-ui.album-meta-exit {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.album-meta-ui .album-name {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 64px;
+  font-weight: normal;
+  color: #424242;
+  line-height: 1.05;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+.album-meta-ui .album-by {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 64px;
+  font-weight: normal;
+  color: #424242;
+  line-height: 1.05;
+  margin: 0;
+  padding: 0;
+  margin-top: 0.05em; /* Small vertical gap between lines */
+  pointer-events: none;
+  cursor: default;
+}
+
+.album-meta-ui .album-username {
+  text-decoration: underline;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* Album metadata details (bottom-left) */
+.album-meta-details {
+  position: fixed;
+  z-index: 10001; /* Above canvas and image, same as album-meta-ui */
+  pointer-events: none; /* Display-only UI */
+  user-select: none;
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  color: #424242;
+  text-align: left;
+  line-height: 1.35;
+  padding-left: 4px; /* Align with user-data text below username */
+}
+
+.album-meta-details .meta-detail-item {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.album-meta-details .meta-detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.album-meta-details .meta-label {
+  font-weight: normal;
+}
+
+.album-meta-details .meta-value {
+  font-weight: normal;
+}
+
+/* Album image wrapper (main image + stack layer) */
+.album-image-wrapper {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  max-height: 90vh;
+  z-index: 9999; /* Below UI (10000+), above canvas */
+  pointer-events: none;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px; /* Small margin on all sides to prevent cutoff */
+  box-sizing: border-box;
+}
+
+.album-image-wrapper .album-image-inner {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.album-image-wrapper .album-main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transition: filter 250ms ease, opacity 250ms ease;
+}
+
+.album-image-wrapper .album-main-image.is-upgrading {
+  filter: blur(2px);
+}
+
+.album-image-wrapper .album-stack-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.album-scroll-hint {
+  font-family: '80kb', monospace;
+  font-size: 24px;
+  color: #424242;
+  text-align: center;
+  margin-top: 1em;
+  flex-shrink: 0;
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+
+.album-scroll-hint.is-faded {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.album-image-wrapper .album-stack-layer .album-stack-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  /* Opacity transitions controlled by JS, but filter/opacity for HQ upgrade */
+  transition: filter 250ms ease, opacity 250ms ease;
+}
+
+.album-image-wrapper .album-stack-layer .album-stack-image.is-upgrading {
+  filter: blur(2px);
+}
+
+.site-title h1 {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 96px;
+  font-weight: 400;
+  color: #424242;
+}
+
+/* User data display below user name */
+.site-title .user-data {
+  font-family: '80kb', monospace;
+  font-size: 22px;
+  color: #424242;
+  text-align: left;
+  margin-top: 2.5em;
+  line-height: 1.5;
+  display: none; /* Hidden by default, shown only on user page */
+}
+
+.site-title .user-data .user-data-bold {
+  font-weight: bold;
+}
+
+.site-title .user-data a.user-data-link {
+  color: #424242;
+  text-decoration: underline;
+}
+.site-title .user-data a.user-data-link:hover {
+  color: #424242;
+  text-decoration: underline;
+}
+
+/* Username in nav title on user-albums page - 96px */
+body.view-user-albums .site-title h1 {
+  font-size: 96px;
+  line-height: 0.9;
+  max-width: calc(100vw - var(--nav-right-offset) - var(--nav-width) - 30px - 50px); /* Break to next line before nav bar with gap */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+#top-nav {
+  position: fixed !important;
+  top: 0 !important;
+  right: var(--nav-right-offset);
+  width: var(--nav-width);
+  height: 15px !important;
+  min-height: 15px !important;
+  max-height: 15px !important;
+  background-color: #fefefe !important; /* Use explicit color instead of variable */
+  border-left: 2px solid #424242 !important;
+  border-right: 2px solid #424242 !important;
+  border-bottom: 2px solid #424242 !important;
+  border-top: none;
+  box-sizing: border-box;
+  z-index: var(--ui-layer) !important;
+  pointer-events: auto;
+  display: block !important;
+  overflow: visible;
+  visibility: visible !important;
+
+  /* Mechanical closing animation setup */
+  will-change: transform, filter;
+  transform-origin: top center;
+  transform: translateY(0) scaleY(1);
+  transition: none; /* We'll use Web Animations API for mechanical feel */
+}
+
+/* Add pseudo-element to ensure height is maintained even when empty */
+#top-nav::before {
+  content: '\00a0'; /* Non-breaking space to give content */
+  display: block;
+  height: 15px !important;
+  min-height: 15px !important;
+  width: 100%;
+  line-height: 15px;
+  box-sizing: border-box;
+}
+
+#center-nav {
+  position: fixed;
+  top: var(--nav-height);
+  right: var(--nav-right-offset);
+  width: var(--nav-width);
+  height: var(--center-nav-height);
+  background-color: var(--nav-bg);
+  border-left: var(--nav-border);
+  border-right: var(--nav-border);
+  border-bottom: var(--nav-border);
+  border-top: none;
+  box-sizing: border-box;
+  z-index: var(--ui-layer);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+
+  /* Mechanical closing animation setup */
+  will-change: transform, filter;
+  transform-origin: top center;
+  transform: translateY(0) scaleY(1);
+  transition: none; /* We'll use Web Animations API for mechanical feel */
+}
+
+#nav-marker-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: calc(var(--ui-layer) + 1); /* Above nav bars, same UI layer */
+}
+
+#radio-marker-line {
+  position: fixed;
+  width: 4px;
+  background-color: var(--ui-dark);
+  pointer-events: none;
+  transform: translateX(-2px); /* Pixel-perfect centering for 4px line */
+  transition: opacity 50ms linear, left 250ms linear; /* Mechanical dial movement */
+}
+
+#radio-marker-arrow {
+  position: fixed;
+  width: 20px; /* Top rectangle: 20x3 */
+  height: 3px;
+  background-color: var(--ui-dark);
+  pointer-events: none;
+  transform: translateX(-50%);
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  transition: opacity 50ms linear, left 250ms linear; /* Mechanical dial movement */
+}
+
+#radio-marker-arrow::before {
+  content: '';
+  position: absolute;
+  top: 3px; /* Directly under main rectangle (20x3), no gap */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px; /* Second rectangle: 14x3 */
+  height: 3px;
+  background-color: var(--ui-dark);
+  display: block;
+  margin: 0;
+}
+
+#radio-marker-arrow::after {
+  content: '';
+  position: absolute;
+  top: 6px; /* Directly under ::before (14x3), no gap */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px; /* Third rectangle: 8x3 */
+  height: 3px;
+  background-color: var(--ui-dark);
+  display: block;
+  margin: 0;
+}
+
+.arrow-rect-4 {
+  position: absolute;
+  top: 9px; /* Directly under ::after (8x3), no gap */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px; /* Fourth rectangle: 3x3 */
+  height: 3px;
+  background-color: var(--ui-dark);
+  display: block;
+  margin: 0;
+}
+
+.center-nav-left {
+  position: relative;
+  left: 22px;
+}
+
+.about-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--icon-text-gap);
+  cursor: pointer;
+}
+
+.about-icon {
+  position: relative;
+  width: 39px;
+  height: 14px;
+  background-color: var(--ui-light);
+  box-shadow: inset 0 0 0 2px var(--ui-dark);
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.about-toggle.active .about-icon {
+  background-color: #454545;
+  box-shadow: none;
+}
+
+.about-icon-inner {
+  position: absolute;
+  top: 50%;
+  left: 4px; /* 2px inner border + 2px padding */
+  width: 15px;
+  height: 5px;
+  transform: translateY(-50%);
+  background-color: var(--ui-dark);
+  transition: background-color 0.2s, left 120ms steps(2, end); /* Mechanical stepped slide */
+}
+
+.about-toggle.active .about-icon-inner {
+  background-color: #fefefe;
+  left: 19px; /* 4px original + 15px right movement */
+}
+
+.about-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-top: 2px;
+  cursor: pointer;
+  font-family: '80kb', sans-serif;
+  font-size: 18px;
+  color: var(--ui-dark);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.main-radio-nav {
+  position: absolute;
+  left: calc(22px + 39px + 12px + 60px + 115px); /* left offset + icon width + gap + approximate "About" text width + 115px gap */
+  right: 115px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-radio-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font-family: '80kb', sans-serif;
+  font-size: 18px;
+  color: var(--ui-dark);
+  line-height: 1;
+  margin-top: 2px; /* Match About button vertical alignment */
+  position: relative; /* For positioning taller dots */
+}
+
+/* Selected state - bold font weight */
+body.view-users .nav-radio-button[data-radio="users"],
+body.view-drawer .nav-radio-button[data-radio="drawer"],
+body.view-index .nav-radio-button[data-radio="albums"],
+body.view-albums .nav-radio-button[data-radio="albums"] {
+  font-weight: bold;
+}
+
+.radio-dot-highlight {
+  position: absolute;
+  bottom: 7px; /* Same bottom as .radio-dots row */
+  width: 2px;
+  height: 2px; /* First square */
+  background-color: var(--ui-dark);
+  box-shadow: 
+    0 -2px 0 0 var(--ui-dark), /* Second square, 2px above */
+    0 -4px 0 0 var(--ui-dark); /* Third square, 4px above */
+  pointer-events: none;
+  z-index: 1; /* Above the dots row */
+}
+
+.radio-dots {
+  position: absolute;
+  bottom: 7px; /* Proportionally adjusted for taller nav (was 6px at 40px, now 7px at 56px) */
+  left: 50%; /* Start from center of container */
+  transform: translateX(-50%); /* Center the dots */
+  width: calc(100% - 30px); /* Approximate width: full width minus half button widths on each side */
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--ui-dark) 0,
+    var(--ui-dark) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  background-size: 4px 2px; /* 2px square + 2px gap */
+  background-repeat: repeat-x;
+  pointer-events: none;
+}
+
+
+
+/* Filters wrapper container */
+#filters-wrap {
+  position: fixed;
+  top: calc(var(--nav-height) + var(--center-nav-height) + var(--filters-nav-gap));
+  right: var(--nav-right-offset);
+  z-index: calc(var(--ui-layer) - 1); /* Slightly below nav bars so it goes behind them when animating up */
+  pointer-events: none; /* Allow clicks to pass through when panel is closed */
+  
+  /* Mechanical closing animation setup */
+  will-change: transform, filter;
+  transform-origin: top center;
+  transform: translateY(0) scaleY(1);
+  transition: none; /* We'll use Web Animations API for mechanical feel */
+}
+
+/* Filters Navigation (will contain filters later) */
+#filters-nav {
+  position: relative;
+  width: var(--nav-width);
+  height: var(--filters-nav-height);
+  background-color: var(--nav-bg);
+  border: var(--nav-border);
+  box-sizing: border-box;
+  pointer-events: auto; /* Enable clicks on the nav bar itself */
+  
+  /* Grid layout for 3 equal columns */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Vertical divider lines - positioned absolutely to not affect grid */
+#filters-nav::before,
+#filters-nav::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--ui-dark);
+  pointer-events: none;
+}
+
+/* First divider at 1/3 */
+#filters-nav::before {
+  left: 33.333%;
+  transform: translateX(-1px); /* Pixel-perfect centering for 2px line */
+}
+
+/* Second divider at 2/3 */
+#filters-nav::after {
+  left: 66.666%;
+  transform: translateX(-1px); /* Pixel-perfect centering for 2px line */
+}
+
+/* Filter cell container */
+#filters-nav .filter-cell {
+  display: flex;
+  align-items: center; /* Center vertically in the bar */
+  height: 100%;
+  padding-left: var(--filter-label-padding);
+  padding-right: 14px; /* Right padding from column edge */
+}
+
+/* Filter label styling */
+#filters-nav .filter-label {
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  color: var(--ui-dark);
+  white-space: nowrap; /* Prevent label from wrapping */
+}
+
+/* Pixel fill decorative pattern - JS-generated */
+#filters-nav .pixel-fill {
+  display: flex;
+  align-items: center; /* Center block vertically in the bar */
+  height: 10px; /* 3*(2px) + 2*(2px gap) = 10px */
+  gap: 2px; /* Horizontal gap between columns */
+  flex: 1;
+  margin-left: 14px;
+  min-width: 0;
+}
+
+/* Pixel column - contains 3 squares stacked vertically */
+#filters-nav .pixel-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* Vertical gap between squares */
+}
+
+/* Individual pixel square */
+#filters-nav .pixel {
+  width: 2px;
+  height: 2px;
+  background-color: var(--ui-dark);
+  flex-shrink: 0;
+}
+
+/* Collapsed filter cell (panel closed, selection active): hide pixel-fill */
+#filters-nav .filter-cell.filter-cell--collapsed .pixel-fill {
+  display: none;
+}
+
+/* Marked = selected filter shown in bar (same style as .filter-option.is-selected) */
+#filters-nav .filter-cell.filter-cell--marked .filter-label {
+  display: inline-block;
+  background: var(--ui-dark);
+  color: var(--nav-bg);
+  padding: 2px 6px 2px 0;
+}
+
+/* Filters panel dropdown */
+#filters-panel {
+  position: absolute;
+  top: calc(100% + 10px); /* 10px gap below nav */
+  right: 0;
+  width: var(--nav-width);
+  height: auto; /* Auto height based on content */
+  min-height: 0; /* Allow grid to shrink below content size if needed */
+  background-color: var(--nav-bg);
+  border-left: var(--nav-border);
+  border-right: var(--nav-border);
+  border-bottom: var(--nav-border);
+  border-top: none; /* No top border to connect with nav bar */
+  box-sizing: border-box;
+  
+  /* Grid layout for 3 equal columns */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  position: relative;
+  
+  /* Closed state: collapsed with scaleY */
+  transform: scaleY(0);
+  transform-origin: top;
+  opacity: 1; /* Keep visible but collapsed */
+  pointer-events: none;
+  transition: transform 180ms steps(4, end) 40ms; /* Mechanical stepped opening with delay */
+}
+
+/* Show panel on hover */
+/* Show panel when hovering the nav bar, or when hovering the panel itself (to keep it open when moving mouse to panel) */
+#filters-nav:hover ~ #filters-panel,
+#filters-panel:hover {
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+/* Disable filters hover when exiting album view - user must move mouse away first */
+body.filters-hover-disabled #filters-nav:hover ~ #filters-panel,
+body.filters-hover-disabled #filters-panel:hover {
+  transform: scaleY(0);
+  pointer-events: none;
+}
+
+/* Vertical divider lines for panel - positioned absolutely */
+#filters-panel::before,
+#filters-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--ui-dark);
+  pointer-events: none;
+}
+
+/* First divider at 1/3 */
+#filters-panel::before {
+  left: 33.333%;
+  transform: translateX(-1px); /* Pixel-perfect centering for 2px line */
+}
+
+/* Second divider at 2/3 */
+#filters-panel::after {
+  left: 66.666%;
+  transform: translateX(-1px); /* Pixel-perfect centering for 2px line */
+}
+
+/* Filter panel column */
+#filters-panel .filter-panel-column {
+  padding-left: var(--filter-label-padding);
+  padding-top: 18px; /* Top padding for label */
+  padding-bottom: 18px; /* Equal bottom padding for symmetry */
+  min-height: 0; /* Allow column to shrink */
+}
+
+/* Filter panel label */
+#filters-panel .filter-panel-label {
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  color: var(--ui-dark);
+  margin-bottom: 12px; /* Space between label and options */
+}
+
+/* Options wrapper - auto-fits content height, no clipping */
+#filters-panel .options-wrap {
+  display: block; /* Block display for proper height flow */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0; /* No padding - parent column already has padding-left */
+  background: transparent;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  position: static; /* NOT absolute/fixed */
+}
+
+/* Filter options container */
+#filters-panel .filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Smaller gap between rows */
+  padding: 3px 0 3px 0; /* Very small top and bottom padding */
+  /* Removed max-height and overflow to allow full content display */
+}
+
+/* Filter option button - transparent, no background */
+#filters-panel .filter-option {
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+/* Scale mark for date filter options only - aligned with divider between Tags and Date */
+#filters-panel #date-filter-options .filter-option {
+  position: relative; /* Already set, but ensure it's there */
+}
+
+#filters-panel #date-filter-options .filter-option .scale-mark {
+  position: absolute;
+  left: calc(-1 * var(--filter-label-padding) - 1px); /* Move left to align with divider: negative padding to go back to column start, then -1px to match divider offset */
+  top: calc(2px + (1em / 2) - 1px); /* Vertically centered: top padding (2px) + half text height (9px) - half mark height (1px) = 10px */
+  width: 8px;
+  height: 2px;
+  background-color: var(--ui-dark);
+  pointer-events: none;
+}
+
+/* Word span - tight wrap around text */
+#filters-panel .filter-option .word {
+  display: inline-block;
+  background: transparent;
+  color: var(--ui-dark);
+  padding: 2px 6px 2px 0; /* Tight wrap, no left padding to align with label text */
+  line-height: 1; /* Avoids extra vertical space */
+  transition: none;
+}
+
+/* Hover state: preview selection with black background (only when not selected) */
+#filters-panel .filter-option:not(.is-selected):hover .word {
+  background: var(--ui-dark);
+  color: var(--nav-bg);
+}
+
+/* Selected state: same as hover but persistent */
+#filters-panel .filter-option.is-selected .word {
+  background: var(--ui-dark);
+  color: var(--nav-bg);
+}
+
+/* × clear on selected row – right-aligned, same right margin as .word (6px) */
+#filters-panel .filter-option-clear {
+  display: none;
+  margin-left: auto;
+  margin-right: 6px;
+  padding: 0 4px;
+  font-family: '80kb', monospace;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ui-dark);
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: none;
+}
+#filters-panel .filter-option.is-selected .filter-option-clear {
+  display: inline-block;
+}
+
+/* Hide non-selected items when selection is active (keeps layout space) */
+#filters-panel .filter-options.has-selection .filter-option {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Show selected item */
+#filters-panel .filter-options.has-selection .filter-option.is-selected {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Unavailable filter - no overlap with current selection in other categories */
+#filters-panel .filter-option.filter-unavailable {
+  opacity: 0.25 !important;
+  pointer-events: none;
+}
+
+#filters-panel .filter-option.filter-unavailable .word {
+  color: var(--ui-dark);
+  background: transparent;
+}
+
+/* Blink twice animation: mechanical double blink with opacity */
+@keyframes blinkTwice {
+  0%, 100% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0;
+  }
+}
+
+/* Apply blink-twice class to word span (the selection highlight) */
+#filters-panel .filter-option .word.blink-twice {
+  animation: blinkTwice 0.5s steps(1, end) 1;
+}
+
+/* Grayscale effect removed */
 
 .loader-overlay {
   position: fixed;
@@ -29,8 +1123,30 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 30000; /* Above nav bars (20000) during loading */
   transition: opacity 0.3s ease-out;
+}
+
+/* Hide navigation during loading */
+body:has(.loader-overlay:not(.hidden)) #top-nav,
+body:has(.loader-overlay:not(.hidden)) #center-nav,
+body:has(.loader-overlay:not(.hidden)) #filters-wrap,
+body:has(.loader-overlay:not(.hidden)) .site-title,
+body:has(.loader-overlay:not(.hidden)) #nav-marker-overlay {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Hide navigation during loader fade-out (loader has .hidden but still in DOM) */
+body:has(.loader-overlay.hidden) #top-nav,
+body:has(.loader-overlay.hidden) #center-nav,
+body:has(.loader-overlay.hidden) #filters-wrap,
+body:has(.loader-overlay.hidden) .site-title,
+body:has(.loader-overlay.hidden) #nav-marker-overlay {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .loader-overlay.hidden {
@@ -38,28 +1154,948 @@ body {
   pointer-events: none;
 }
 
+/* Hide navigation during splash screen (before user scrolls past it) */
+body:has(.splash-overlay.splash-visible:not(.splash-hiding)) #top-nav,
+body:has(.splash-overlay.splash-visible:not(.splash-hiding)) #center-nav,
+body:has(.splash-overlay.splash-visible:not(.splash-hiding)) #filters-wrap,
+body:has(.splash-overlay.splash-visible:not(.splash-hiding)) .site-title,
+body:has(.splash-overlay.splash-visible:not(.splash-hiding)) #nav-marker-overlay {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* During splash screen: pan is allowed, clicks are blocked by JS in drawer.js */
+/* pointer-events remain enabled to allow edge-pan movement */
+
+/* Keep nav hidden during splash fade transition (until animation starts) */
+body.nav-entering #top-nav,
+body.nav-entering #center-nav,
+body.nav-entering #filters-wrap,
+body.nav-entering .site-title,
+body.nav-entering #nav-marker-overlay {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Splash overlay – full-screen intro after loader, hidden until .splash-visible */
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 25000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transition: opacity 0.3s ease-out;
+}
+
+.splash-overlay.splash-visible {
+  display: flex;
+  pointer-events: none; /* let wheel pass through to canvas so drawer zooms */
+}
+
+.splash-overlay.splash-hiding {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+}
+
+.splash-overlay.splash-visible .splash-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.splash-paragraph {
+  max-width: 900px;
+  text-align: center;
+  font-family: '80kb', monospace;
+  font-size: 52px;
+  color: var(--ink, #424242);
+  margin: 0 0 1.5rem;
+  line-height: 1.3;
+}
+
+.splash-title {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 72px;
+}
+
+.splash-cta {
+  font-family: '80kb', monospace;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--ink, #424242);
+  margin: 0;
+}
+
 .loader-content {
   text-align: center;
 }
 
-.loader-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid #e0e0e0;
-  border-top-color: #333;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+/* ============================================
+   Pixel Loader - Determinate Progress Bar
+   Same structure as #filters-nav .pixel-fill
+   ============================================ */
+
+.pixel-loader {
+  --pixel-loader-color: var(--ui-dark, #424242);
+  --pixel-loader-bg: var(--ui-light, #f5f5f5);
+  --pixel-loader-border: var(--ui-dark, #424242);
+  
+  width: var(--nav-width, 1274px);
   margin: 0 auto 16px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+.pixel-loader-track {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--pixel-loader-border);
+  padding: 4px;
+  background-color: var(--pixel-loader-bg);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* CSS-only shimmer that appears immediately before JS loads */
+.pixel-loader-track::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--pixel-loader-color) 20%,
+    var(--pixel-loader-color) 40%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: loader-shimmer 1.5s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+/* Hide shimmer once JS has created the pixel columns */
+.pixel-loader-track:has(.pixel-loader-column)::before {
+  display: none;
+}
+
+@keyframes loader-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.pixel-loader-pixels {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  height: 10px; /* 3×2px + 2×2px gaps = 10px */
+  width: 100%;
+}
+
+/* Pixel column - contains 3 squares stacked vertically (same as filter nav) */
+.pixel-loader-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* Individual pixel square - 2x2 */
+.pixel-loader-pixel {
+  width: 2px;
+  height: 2px;
+  flex-shrink: 0;
+  background-color: var(--pixel-loader-color);
+  /* No transitions - discrete, instant changes */
+}
+
+/* Filled state - visible */
+.pixel-loader-column.pixel-loader-column--filled .pixel-loader-pixel {
+  opacity: 1;
+}
+
+/* Empty state - invisible */
+.pixel-loader-column.pixel-loader-column--empty .pixel-loader-pixel {
+  opacity: 0;
+}
+
+/* Completion blink - single flash on the entire bar */
+@keyframes pixel-loader-complete-blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.pixel-loader.pixel-loader--complete .pixel-loader-pixels {
+  animation: pixel-loader-complete-blink 0.2s steps(2, end) 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-loader.pixel-loader--complete .pixel-loader-pixels {
+    animation: none;
   }
 }
 
 .loader-text {
-  color: #666;
-  font-size: 14px;
-  font-weight: 500;
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  color: var(--ui-dark, #424242);
+  margin-top: 24px;
+}
+
+/* "Remains" word in loader - EB Garamond italic */
+.loader-remains {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 24px;
+}
+
+/* Page container */
+#page-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #f5f5f5;
+  z-index: 1;
+  padding-top: 380px; /* Space for nav bars (120px) + 260px additional spacing */
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 40px; /* Add bottom padding for better scrolling */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#page-container.fade-in {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Faster fade-in for index page - content visible quickly */
+body.view-index #page-container.fade-in {
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#page-container.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 1, 1), visibility 0.5s cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Users Page */
+.users-page {
+  width: var(--nav-width); /* Same width as navigation bar */
+  margin-left: auto;
+  margin-right: var(--nav-right-offset); /* Align with nav (35px from right) */
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0; /* No padding/margins outside grid */
+  min-height: calc(100vh - 380px); /* Extend to bottom of viewport */
+  padding-bottom: 40px; /* Add bottom padding for better scrolling */
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px; /* Gap between columns and rows */
+  padding: 0; /* No padding/margins outside grid */
+  min-height: 100%; /* Extend to fill parent container */
+  padding-bottom: 20px; /* Add bottom padding for better scrolling */
+}
+
+/* User Card */
+.user-card {
+  position: relative; /* For absolute positioning of hover info */
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 14px; /* Internal padding to ensure offsets stay within column bounds */
+}
+
+
+/* Photo Pile Container */
+.user-photo-pile {
+  position: relative;
+  width: 100%;
+  /* No fixed aspect ratio - height adapts to first image's natural ratio */
+  overflow: visible; /* Allow images to show fully without clipping */
+  margin-bottom: 0; /* Spacing handled by username margin-top */
+}
+
+/* Hidden sizer image - determines pile height based on first image's aspect ratio */
+.user-photo-pile-sizer {
+  visibility: hidden;
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Not absolutely positioned - takes up space in normal flow */
+}
+
+.user-photo-pile-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Show full image without cropping */
+  object-position: center; /* Center the image */
+  opacity: 0.7; /* 70% opacity (rest state) */
+  pointer-events: none; /* Don't interfere with card click */
+  transition: transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Fade-in animation for user photos when entering users view */
+.users-page:not(.page-transitioning) .user-photo-pile-img {
+  opacity: 0.7;
+  transform: translateY(0);
+  transition: opacity 2.5s cubic-bezier(0.16, 1, 0.3, 1), transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Stagger delays for photo fade-in - match card delays */
+.users-page:not(.page-transitioning) .user-card:nth-child(1) .user-photo-pile-img {
+  transition-delay: 0.2s;
+}
+
+.users-page:not(.page-transitioning) .user-card:nth-child(2) .user-photo-pile-img {
+  transition-delay: 0.3s;
+}
+
+.users-page:not(.page-transitioning) .user-card:nth-child(3) .user-photo-pile-img {
+  transition-delay: 0.4s;
+}
+
+.users-page:not(.page-transitioning) .user-card:nth-child(4) .user-photo-pile-img {
+  transition-delay: 0.5s;
+}
+
+.users-page:not(.page-transitioning) .user-card:nth-child(5) .user-photo-pile-img {
+  transition-delay: 0.6s;
+}
+
+.users-page:not(.page-transitioning) .user-card:nth-child(6) .user-photo-pile-img {
+  transition-delay: 0.7s;
+}
+
+.users-page:not(.page-transitioning) .user-card:nth-child(n+7) .user-photo-pile-img {
+  transition-delay: 0.8s;
+}
+
+/* Cascade delays for fan animation (hover effect) - override fade-in delays on hover */
+.user-photo-pile-img-1 {
+  transition-delay: 0ms;
+}
+
+.user-card:hover .user-photo-pile-img-1,
+.user-card:focus-within .user-photo-pile-img-1 {
+  transition-delay: 0ms !important;
+}
+
+.user-photo-pile-img-2 {
+  transition-delay: 40ms;
+}
+
+.user-card:hover .user-photo-pile-img-2,
+.user-card:focus-within .user-photo-pile-img-2 {
+  transition-delay: 40ms !important;
+}
+
+.user-photo-pile-img-3 {
+  transition-delay: 80ms;
+}
+
+.user-card:hover .user-photo-pile-img-3,
+.user-card:focus-within .user-photo-pile-img-3 {
+  transition-delay: 80ms !important;
+}
+
+/* Fan out on hover - increased spread with subtle rotation */
+.user-card:hover .user-photo-pile-img-1,
+.user-card:focus-within .user-photo-pile-img-1 {
+  transform: translate(-18px, 0px) rotate(-3deg) !important;
+  opacity: 0.85;
+}
+
+.user-card:hover .user-photo-pile-img-2,
+.user-card:focus-within .user-photo-pile-img-2 {
+  transform: translate(0px, 6px) rotate(0deg) !important;
+  opacity: 0.85;
+}
+
+.user-card:hover .user-photo-pile-img-3,
+.user-card:focus-within .user-photo-pile-img-3 {
+  transform: translate(18px, 12px) rotate(3deg) !important;
+  opacity: 0.85;
+}
+
+/* User Hover Info - fixed to viewport bottom-left, aligned with Remains logo */
+#userHoverInfo {
+  position: fixed;
+  left: var(--remains-left, 30px); /* Default to 30px if variable not set */
+  bottom: 24px;
+  z-index: 9999;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+#userHoverInfo.isVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hide user hover info on user-albums page - only show album hover info */
+body.view-user-albums #userHoverInfo {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Album Hover Info - fixed to viewport bottom-left, aligned with Remains logo */
+#albumHoverInfo {
+  position: fixed;
+  left: var(--remains-left, 30px); /* Default to 30px if variable not set */
+  bottom: 24px;
+  z-index: 9999;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 200ms ease, transform 200ms ease;
+  display: none;
+}
+
+#albumHoverInfo.isVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Soft transition animations for page content - hidden state before fade-in */
+.users-page.page-transitioning .user-card,
+.users-page.page-transitioning .album-card,
+.users-page.page-transitioning .user-name,
+.users-page.page-transitioning .user-photo-pile-img {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* Smooth exit animation when transitioning between users and user-albums pages */
+.users-page.page-exiting {
+  pointer-events: none;
+}
+
+/* Exit animation - !important to override entrance animation rules that come later in CSS */
+.users-page.page-exiting .user-card,
+.users-page.page-exiting .album-card,
+.users-page.page-exiting .user-name,
+.users-page.page-exiting .user-photo-pile-img {
+  opacity: 0 !important;
+  transform: translateY(-12px) !important;
+  transition: opacity 450ms cubic-bezier(0.4, 0, 0.2, 1), transform 450ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-delay: 0s !important;
+}
+
+/* "Remains" logo should always stay visible - no fade out/in */
+/* BUT allow hiding in album mode (mode-album class) or during title transition */
+body:not(.page-transitioning):not(.mode-album):not(.title-transitioning) .site-title h1 {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* Smooth title transition when navigating between users and user-albums */
+body.title-transitioning .site-title h1 {
+  transition: opacity 350ms ease-out, transform 350ms ease-out;
+}
+
+body.title-transitioning.title-fading-out .site-title h1 {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+body.title-transitioning.title-fading-in .site-title h1 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.users-page:not(.page-transitioning) .user-card {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2.5s cubic-bezier(0.16, 1, 0.3, 1), transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.users-page:not(.page-transitioning) .user-name {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2.5s cubic-bezier(0.16, 1, 0.3, 1), transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0.5s;
+}
+
+/* Stagger animation for cards - longer delays for smoother entrance */
+.users-grid .user-card:nth-child(1) {
+  transition-delay: 0.2s;
+}
+
+.users-grid .user-card:nth-child(2) {
+  transition-delay: 0.3s;
+}
+
+.users-grid .user-card:nth-child(3) {
+  transition-delay: 0.4s;
+}
+
+.users-grid .user-card:nth-child(4) {
+  transition-delay: 0.5s;
+}
+
+.users-grid .user-card:nth-child(5) {
+  transition-delay: 0.6s;
+}
+
+.users-grid .user-card:nth-child(6) {
+  transition-delay: 0.7s;
+}
+
+.users-grid .user-card:nth-child(n+7) {
+  transition-delay: 0.8s;
+}
+
+/* Same for album cards - already covered above */
+
+.users-page:not(.page-transitioning) .album-card {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1.3s cubic-bezier(0.2, 0.4, 0.3, 0.98), transform 1.3s cubic-bezier(0.2, 0.4, 0.3, 0.98);
+}
+
+.users-grid .album-card:nth-child(1) {
+  transition-delay: 0.15s;
+}
+
+.users-grid .album-card:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.users-grid .album-card:nth-child(3) {
+  transition-delay: 0.25s;
+}
+
+.users-grid .album-card:nth-child(4) {
+  transition-delay: 0.3s;
+}
+
+.users-grid .album-card:nth-child(5) {
+  transition-delay: 0.35s;
+}
+
+.users-grid .album-card:nth-child(6) {
+  transition-delay: 0.4s;
+}
+
+.users-grid .album-card:nth-child(n+7) {
+  transition-delay: 0.45s;
+}
+
+/* Hover info transitions */
+#userHoverInfo,
+#albumHoverInfo {
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Username Label */
+.user-name {
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  color: var(--ui-dark);
+  text-align: left;
+  margin: 30px 0 0 0; /* Increased top margin for better separation from photo pile */
+  padding: 0;
+  line-height: 1.2;
+}
+
+/* User Albums Page */
+.user-albums-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.user-albums-header {
+  margin-bottom: 40px;
+}
+
+.user-albums-header h2 {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 48px;
+  font-weight: 400;
+  color: var(--ui-dark);
+  margin: 0;
+}
+
+.user-albums-content {
+  padding: 40px 20px;
+  text-align: center;
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  color: var(--ui-dark);
+  opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .users-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  
+  .users-controls {
+    flex-direction: column;
+  }
+  
+  .users-search,
+  .users-sort {
+    width: 100%;
+  }
+  
+  #page-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* Index Page */
+.index-page {
+  width: 100%;
+  position: fixed;
+  top: calc(var(--nav-height) + var(--center-nav-height) + var(--filters-nav-height) + var(--filters-nav-gap) + 100px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background-color: var(--ui-light);
+}
+
+.index-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: transparent;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Table header - fixed/sticky */
+.index-table-header {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: transparent;
+}
+
+.index-table-header th {
+  font-family: '80kb', monospace;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--ui-dark);
+  text-align: left;
+  padding: 0;
+  padding-right: 20px;
+  margin: 0;
+  border: none;
+  border-bottom: 2px solid var(--ui-dark);
+  background-color: transparent;
+  height: 90px;
+  box-sizing: border-box;
+}
+
+.index-table-header th:first-child {
+  padding-right: 0;
+}
+
+/* Table body - scrollable */
+.index-table-body {
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - calc(var(--nav-height) + var(--center-nav-height) + var(--filters-nav-height) + var(--filters-nav-gap) + 100px + 90px));
+  width: 100%;
+}
+
+/* Table rows */
+.index-table-row {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  height: 90px;
+  border-bottom: 2px solid var(--ui-dark);
+  background-color: transparent;
+}
+
+.index-row-clickable {
+  cursor: pointer;
+}
+
+/* Hide index rows during transition */
+body.page-transitioning.view-index .index-table-row {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 300ms cubic-bezier(0.4, 0, 1, 1), transform 300ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Fade-in animation for index rows - faster for better UX */
+body.view-index:not(.page-transitioning) .index-table-row {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Stagger animation for index rows - shorter delays for faster content appearance */
+body.view-index:not(.page-transitioning) .index-table-row:nth-child(1) {
+  transition-delay: 0s;
+}
+
+body.view-index:not(.page-transitioning) .index-table-row:nth-child(2) {
+  transition-delay: 0.03s;
+}
+
+body.view-index:not(.page-transitioning) .index-table-row:nth-child(3) {
+  transition-delay: 0.06s;
+}
+
+body.view-index:not(.page-transitioning) .index-table-row:nth-child(4) {
+  transition-delay: 0.09s;
+}
+
+body.view-index:not(.page-transitioning) .index-table-row:nth-child(5) {
+  transition-delay: 0.12s;
+}
+
+body.view-index:not(.page-transitioning) .index-table-row:nth-child(6) {
+  transition-delay: 0.15s;
+}
+
+body.view-index:not(.page-transitioning) .index-table-row:nth-child(n+7) {
+  transition-delay: 0.18s;
+}
+
+.index-table-row td {
+  padding: 0;
+  margin: 0;
+  border: none;
+  vertical-align: middle;
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+/* Thumbnail cell */
+.index-table-thumbnail-cell {
+  position: relative;
+  padding-left: 0 !important;
+}
+
+.index-table-thumbnail-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.index-table-thumbnail {
+  max-width: calc(100% - 20px);
+  max-height: calc(100% - 20px);
+  object-fit: contain;
+  opacity: 0.7;
+  margin: auto;
+}
+
+/* Hide index images during transition */
+body.page-transitioning.view-index .index-table-thumbnail {
+  opacity: 0 !important;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Fade-in animation for index page images - appear quickly for better UX */
+/* Only trigger when index-images-fade-in class is present */
+body.view-index.index-images-fade-in .index-table-thumbnail {
+  opacity: 0;
+  animation: indexImageFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Images appear immediately (no stagger) so scrolling is possible right away */
+body.view-index.index-images-fade-in .index-table-row:nth-child(n) .index-table-thumbnail {
+  animation-delay: 0s;
+}
+
+/* If not using fade-in animation, images should be visible immediately */
+body.view-index:not(.index-images-fade-in):not(.page-transitioning) .index-table-thumbnail {
+  opacity: 0.7;
+}
+
+@keyframes indexImageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.7;
+  }
+}
+
+/* Data cells */
+.index-table-data-cell {
+  font-family: '80kb', monospace;
+  font-size: 18px;
+  color: var(--ui-dark);
+  text-align: left;
+  padding-right: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hide column borders - no visible separators */
+.index-table th,
+.index-table td {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+/* View class for index page */
+body.view-index .center-date {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* ============================================
+   About Page Styles
+   ============================================ */
+
+/* About content container - positioned relative to nav bar */
+.about-content {
+  position: fixed;
+  left: calc(100vw - var(--nav-right-offset) - var(--nav-width));
+  top: calc(var(--nav-height) + var(--center-nav-height) + 120px);
+  z-index: 100; /* Below UI layer but above canvas */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* About paragraph styling */
+.about-paragraph {
+  font-family: '80kb', monospace;
+  font-size: 22px;
+  color: #424242;
+  width: 480px;
+  line-height: 1.5;
+  margin: 0 0 1em 0;
+}
+
+/* "Remains" word in EB Garamond italic */
+.about-remains {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 28px;
+}
+
+/* Source line - italic */
+.about-source {
+  font-family: '80kb', monospace;
+  font-style: italic;
+  font-size: 18px;
+  color: #424242;
+  line-height: 1.5;
+  margin-top: 1.5em;
+}
+
+/* About mode - show about content */
+body.mode-about .about-content {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* About mode - make About button bold */
+body.mode-about .about-button {
+  font-weight: bold;
+}
+
+/* About mode - remove bold from nav radio buttons */
+body.mode-about .nav-radio-button {
+  font-weight: normal !important;
+}
+
+/* About mode - hide canvas */
+body.mode-about #canvas {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* About mode - hide page container */
+body.mode-about #page-container {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* About mode - hide center date label */
+body.mode-about .center-date {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* About mode - hide filter bar */
+body.mode-about #filters-wrap {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* About mode - hide radio marker arrow and line */
+body.mode-about #radio-marker-line,
+body.mode-about #radio-marker-arrow {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.3s ease, visibility 0.3s ease, left 250ms linear;
+}
+
+/* Restore arrow visibility when exiting about mode */
+body:not(.mode-about) #radio-marker-line,
+body:not(.mode-about) #radio-marker-arrow {
+  transition: opacity 0.3s ease, visibility 0.3s ease, left 250ms linear;
 }

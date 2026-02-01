@@ -4,10 +4,13 @@
   "album": {
     "id": "72157632069309604",
     "url": "https://www.flickr.com/photos/chang_fegal_family/albums/72157632069309604",
-    "title": "March 2012 China Taiwan Trip",
+    "title": "March 2012 China\u00A0Taiwan\u00A0Trip",
     "description": "",
     "owner": "51195102@N07",
-    "photoCount": 10
+    "photoCount": 10,
+    "sizeMB": 1.74,
+    "lastUploadedUnix": 1332287650,
+    "lastUploadedDate": "2012-03-20T23:54:10.000Z"
   },
   "photos": [
     {

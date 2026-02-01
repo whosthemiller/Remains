@@ -7,7 +7,10 @@
     "title": "flowers",
     "description": "",
     "owner": "95545622@N00",
-    "photoCount": 3
+    "photoCount": 3,
+    "sizeMB": 0.57,
+    "lastUploadedUnix": 1154184440,
+    "lastUploadedDate": "2006-07-29T14:47:20.000Z"
   },
   "photos": [
     {

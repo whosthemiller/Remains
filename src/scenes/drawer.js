@@ -4080,15 +4080,51 @@ export class DrawerScene {
     const queueSize = this.loadQueue.length;
     const loadingCount = this.loadingSet.size;
     
+    // Check if visible images (tiles within viewport) are loaded
+    // This ensures the user sees images immediately when loader hides
+    let visibleImagesReady = false;
+    let visibleCount = 0;
+    let visibleLoaded = 0;
+    
+    if (this.tiles.length > 0) {
+      const bounds = this.camera.getVisibleBounds();
+      for (const tile of this.tiles) {
+        // Check if tile is within viewport bounds
+        const tileRight = tile.x + tile.w;
+        const tileBottom = tile.y + tile.h;
+        if (tile.x < bounds.right && tileRight > bounds.left &&
+            tile.y < bounds.bottom && tileBottom > bounds.top) {
+          visibleCount++;
+          if (this.imageCache.has(tile.id)) {
+            visibleLoaded++;
+          }
+        }
+      }
+      // Consider visible images ready if at least 90% are loaded, or all visible are loaded
+      visibleImagesReady = visibleCount === 0 || visibleLoaded >= visibleCount * 0.9;
+    } else {
+      // Layout not ready yet - don't hide loader
+      visibleImagesReady = false;
+    }
+    
     // Check if loading conditions are met:
     // 1. All images are loaded, OR
-    // 2. We have minimum ready images AND timeout reached, OR
-    // 3. Timeout reached (even if not all loaded, show what we have)
+    // 2. Visible images ready AND we have minimum ready images, OR
+    // 3. Visible images ready AND timeout reached
+    // IMPORTANT: Never hide loader if visible images aren't ready (prevents blank screen)
     const hasMinimumReady = loadedCount >= MIN_READY;
     const allLoaded = totalTiles > 0 && loadedCount >= totalTiles;
     const timeoutReached = elapsed >= PRELOAD_TIMEOUT_MS;
     
-    if (allLoaded || (hasMinimumReady && timeoutReached) || timeoutReached) {
+    // Hard timeout after 10 seconds to prevent infinite loading on very slow connections
+    const hardTimeoutReached = elapsed >= 10000;
+    
+    const shouldComplete = allLoaded || 
+                          (visibleImagesReady && hasMinimumReady) || 
+                          (visibleImagesReady && timeoutReached) ||
+                          hardTimeoutReached;
+    
+    if (shouldComplete) {
       this.isPreloading = false;
       
       // Mark loading as complete - loader hides when BOTH animation and loading are done
@@ -4123,7 +4159,7 @@ export class DrawerScene {
         }
       });
       
-      console.log(`Preload complete: ${loadedCount}/${totalTiles} images loaded in ${elapsed}ms (${queueSize} remaining in queue, ${loadingCount} currently loading)`);
+      console.log(`Preload complete: ${loadedCount}/${totalTiles} images loaded in ${elapsed}ms (visible: ${visibleLoaded}/${visibleCount}, ${queueSize} remaining in queue, ${loadingCount} currently loading)`);
     }
   }
 
@@ -4626,6 +4662,10 @@ export class DrawerScene {
     
     // Start processing the queue (respects concurrent limits)
     this.processLoadQueue();
+    
+    // Check if visible images are already loaded (from early preload)
+    // This ensures we don't wait unnecessarily if viewport images are ready
+    this.checkPreloadComplete();
   }
 
   /**

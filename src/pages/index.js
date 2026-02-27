@@ -37,24 +37,22 @@ function calculateStorageDuration(uploadedUnix) {
 
 /**
  * Calculate navigation bar position and column widths
+ * Uses computed CSS variables so index aligns with actual nav (e.g. on XL viewports).
  */
 function calculateColumnWidths() {
-  const navRightOffset = 35; // --nav-right-offset
-  const navWidth = 1274; // --nav-width
+  const root = document.documentElement;
+  const computed = root && typeof getComputedStyle === 'function' ? getComputedStyle(root) : null;
+  const navRightOffsetPx = computed ? computed.getPropertyValue('--nav-right-offset')?.trim() : '';
+  const navWidthPx = computed ? computed.getPropertyValue('--nav-width')?.trim() : '';
+  const navRightOffset = navRightOffsetPx ? parseFloat(navRightOffsetPx) || 35 : 35;
+  const navWidth = navWidthPx ? parseFloat(navWidthPx) || 1274 : 1274;
   const windowWidth = window.innerWidth;
-  
-  // Navigation bar left edge
+
   const navLeftEdge = windowWidth - navRightOffset - navWidth;
-  
-  // Left column width (from 0 to nav bar left edge)
   const leftColumnWidth = navLeftEdge;
-  
-  // Data columns total width (nav bar width)
   const dataColumnsWidth = navWidth;
-  
-  // Each data column width (5 equal columns)
   const dataColumnWidth = dataColumnsWidth / 5;
-  
+
   return {
     leftColumnWidth,
     dataColumnWidth,

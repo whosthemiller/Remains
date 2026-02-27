@@ -221,6 +221,11 @@ body:not(.mode-album) #top-nav {
 }
 
 .album-close-button .close-x {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
   font-size: clamp(18px, calc(2.5 * var(--scale-w) / 100), 24px);
   line-height: 1;
   color: #424242;
@@ -1897,6 +1902,7 @@ body:not(.page-transitioning):not(.mode-album) .site-title h1 {
   display: block;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-gutter: stable;
   height: calc(100vh - calc(var(--nav-height) + var(--center-nav-height) + var(--filters-nav-height) + var(--filters-nav-gap) + 100px + 60px));
   width: 100%;
 }
@@ -2069,6 +2075,13 @@ body.view-index .center-date {
   max-width: var(--nav-width);
   max-height: calc(100vh - var(--nav-height) - var(--center-nav-height) - 114px); /* 90px top + 24px bottom */
   overflow-y: auto;
+  padding-bottom: 2.5rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.about-content::-webkit-scrollbar {
+  display: none;
 }
 
 /* About paragraph styling */
@@ -2293,15 +2306,18 @@ body.mode-about #about-trail-container {
   :root {
     /* Scale down nav and text so they don’t dominate on very wide screens */
     --scale-w: 1200px;
+    /* More space between logo and nav; nav stays narrower */
+    --logo-reserved-width: calc(var(--logo-left-offset) + var(--title-font-size) * 3.2 + 80px);
+    --nav-width: min(700px, calc(100vw - var(--nav-right-offset) - var(--logo-reserved-width)));
   }
 
   /* Collections: less gap between top and user cards */
   #page-container {
-    padding-top: 260px;
+    padding-top: 200px;
   }
 
   .users-page {
-    min-height: calc(100vh - 260px);
+    min-height: calc(100vh - 200px);
   }
 
   /* Index: keep table within width and allow horizontal scroll if needed */

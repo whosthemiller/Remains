@@ -2299,19 +2299,13 @@ body.mode-about #about-trail-container {
 /* ============================================
    Extra-large viewports only (e.g. 3794×1647)
    Does not change layout on Mac or normal viewports.
-   Only applies when viewport width ≥ 2560px.
+   Applies when viewport width ≥ 1920px (so it still applies with display scaling).
    ============================================ */
 
-@media (min-width: 2560px) {
+@media (min-width: 1920px) {
   :root {
-    /* Scale down nav and text so they don’t dominate on very wide screens */
-    --scale-w: 1200px;
-    /* More space between logo and nav; nav stays narrower */
-    --logo-reserved-width: calc(var(--logo-left-offset) + var(--title-font-size) * 3.2 + 80px);
-    --nav-width: min(700px, calc(100vw - var(--nav-right-offset) - var(--logo-reserved-width)));
+    /* Same proportions as Mac: no overrides; logo and nav use global formula. */
   }
-
-  /* Collections: less gap between top and user cards */
   #page-container {
     padding-top: 200px;
   }

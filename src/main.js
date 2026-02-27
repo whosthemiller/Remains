@@ -1631,6 +1631,12 @@ function exitAboutMode(aboutToggle) {
   // Remove mode-about class (this triggers CSS fade out of about content and fade in of current view)
   document.body.classList.remove('mode-about');
   
+  // When staying on the same view (no navigation), restore the filter bar if we're on Gallery (drawer)
+  // or Index — we closed it when entering about, so we need to open it again when exiting.
+  if (!needsNavigation && (viewToRestore === 'drawer' || viewToRestore === 'index')) {
+    animateFiltersWrapOpen();
+  }
+  
   // Only navigate if we need to switch to a different view
   if (needsNavigation) {
     // Small delay to allow about content to fade out before navigating

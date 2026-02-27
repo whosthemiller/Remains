@@ -703,10 +703,17 @@ function updateNavTitle({ view, username, albumTitle, userData }) {
   if (!h1) return;
   
   // Decode username if it's URL-encoded (e.g. from hash) so the title never shows % in the UI
+  // Decode repeatedly in case of double-encoding (e.g. #/users/Alaine%2520%2526...)
   let displayUsername = username;
   if (view === 'user' && typeof username === 'string' && username.includes('%')) {
     try {
-      displayUsername = decodeURIComponent(username);
+      let decoded = username;
+      for (let i = 0; i < 3; i++) {
+        const next = decodeURIComponent(decoded);
+        if (next === decoded) break;
+        decoded = next;
+      }
+      displayUsername = decoded;
     } catch (e) {
       displayUsername = username;
     }
@@ -839,7 +846,11 @@ export async function restoreUserNav(username) {
   let decoded = username;
   if (typeof username === 'string' && username.includes('%')) {
     try {
-      decoded = decodeURIComponent(username);
+      for (let i = 0; i < 3; i++) {
+        const next = decodeURIComponent(decoded);
+        if (next === decoded) break;
+        decoded = next;
+      }
     } catch (e) {
       decoded = username;
     }

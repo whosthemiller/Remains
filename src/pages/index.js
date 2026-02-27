@@ -38,8 +38,9 @@ function calculateStorageDuration(uploadedUnix) {
 /**
  * Calculate navigation bar position and column widths
  * Uses computed CSS variables so index aligns with actual nav (e.g. on XL viewports).
+ * Clamps to container width so the table always fits inside the viewport.
  */
-function calculateColumnWidths() {
+function calculateColumnWidths(container) {
   const root = document.documentElement;
   const computed = root && typeof getComputedStyle === 'function' ? getComputedStyle(root) : null;
   const navRightOffsetPx = computed ? computed.getPropertyValue('--nav-right-offset')?.trim() : '';
@@ -47,16 +48,29 @@ function calculateColumnWidths() {
   const navRightOffset = navRightOffsetPx ? parseFloat(navRightOffsetPx) || 35 : 35;
   const navWidth = navWidthPx ? parseFloat(navWidthPx) || 1274 : 1274;
   const windowWidth = window.innerWidth;
+  // Use container width when available so table fits inside viewport (avoids overflow on different screens/zoom)
+  // When container is hidden (e.g. display:none), clientWidth is 0; use doc clientWidth to avoid scrollbar overflow
+  const availableWidth = (container && container.clientWidth > 0)
+    ? container.clientWidth
+    : (document.documentElement.clientWidth || windowWidth);
 
-  const navLeftEdge = windowWidth - navRightOffset - navWidth;
-  const leftColumnWidth = navLeftEdge;
-  const dataColumnsWidth = navWidth;
-  const dataColumnWidth = dataColumnsWidth / 5;
+  let navLeftEdge = windowWidth - navRightOffset - navWidth;
+  let leftColumnWidth = navLeftEdge;
+  let dataColumnsWidth = navWidth;
+  let dataColumnWidth = dataColumnsWidth / 5;
+
+  const totalDesired = leftColumnWidth + dataColumnsWidth;
+  if (availableWidth < totalDesired && totalDesired > 0) {
+    const scale = availableWidth / totalDesired;
+    leftColumnWidth = Math.floor(leftColumnWidth * scale);
+    dataColumnsWidth = Math.floor(dataColumnsWidth * scale);
+    dataColumnWidth = Math.floor(dataColumnsWidth / 5);
+  }
 
   return {
     leftColumnWidth,
     dataColumnWidth,
-    navLeftEdge
+    navLeftEdge: leftColumnWidth
   };
 }
 
@@ -252,8 +266,8 @@ export async function renderIndexPage() {
   lastRenderedContentHash = contentHash;
   lastRenderedPhotoCount = currentPhotoCount;
   
-  // Calculate column widths
-  const columnWidths = calculateColumnWidths();
+  // Calculate column widths (pass container so table fits viewport width)
+  const columnWidths = calculateColumnWidths(container);
   
   // Create table HTML
   const tableRows = filteredPhotos.map(photo => createPhotoRow(photo, columnWidths)).join('');
@@ -303,7 +317,7 @@ export async function renderIndexPage() {
   
   // Handle window resize to recalculate column widths
   const handleResize = () => {
-    const newColumnWidths = calculateColumnWidths();
+    const newColumnWidths = calculateColumnWidths(container);
     const table = container.querySelector('.index-table');
     if (table) {
       // Update header widths

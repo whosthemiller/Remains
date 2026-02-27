@@ -143,6 +143,16 @@ body.mode-album #canvas {
   transition: none; /* We'll use Web Animations API for mechanical feel */
 }
 
+/* Smooth nav fade when exiting album to user page (username click) */
+body.album-exit-fade #top-nav,
+body.album-exit-fade #filters-wrap {
+  transition: opacity 650ms cubic-bezier(0.4, 0, 0.2, 1), transform 650ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+body.album-exit-fade #center-nav,
+body.album-exit-fade .site-title {
+  transition: opacity 650ms cubic-bezier(0.4, 0, 0.2, 1), transform 650ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 #center-nav,
 .site-title {
   opacity: var(--uiAlpha, 1);
@@ -335,11 +345,20 @@ body {
   white-space: nowrap;
 }
 
-/* Album meta UI overlay */
+.site-title.remains-nav-link,
+.site-title.remains-nav-link h1 {
+  cursor: pointer;
+}
+
+#remainsLogo h1 {
+  cursor: pointer !important;
+}
+
+/* Album meta UI overlay - same position as .site-title (page title) */
 .album-meta-ui {
   position: fixed;
-  top: calc(var(--nav-height) + 13px); /* Aligned relative to nav bar like Remains title */
-  left: 30px; /* Same position as "Remains" title */
+  top: calc(var(--nav-height) + 8px); /* Same as .site-title */
+  left: 30px; /* Same as .site-title */
   z-index: 10001; /* Above canvas and image */
   pointer-events: none; /* Display-only UI */
   user-select: none;
@@ -376,6 +395,7 @@ body.mode-album .album-meta-ui {
   padding: 0;
   pointer-events: none;
   cursor: default;
+  text-wrap: balance; /* Prefer balanced lines to avoid orphan words */
 }
 
 .album-meta-ui .album-by {
@@ -473,7 +493,7 @@ body.mode-album .album-meta-ui {
 
 .album-scroll-hint {
   font-family: '80kb', monospace;
-  font-size: var(--80kb-body);
+  font-size: clamp(13px, 1.5vw, 16px); /* Same as .site-title .user-data (מידע בעמוד משתמש) */
   color: #424242;
   text-align: center;
   margin-top: 1em;
@@ -507,6 +527,7 @@ body.mode-album .album-meta-ui {
   font-style: italic;
   font-size: var(--title-font-size);
   font-weight: 400;
+  line-height: 1.05; /* Same across all views so title position doesn't jump */
   color: #424242;
   white-space: nowrap; /* Never break to multiple lines */
 }
@@ -535,13 +556,18 @@ body.mode-album .album-meta-ui {
   text-decoration: underline;
 }
 
-/* Username in nav title on user-albums page - responsive */
+/* Username in nav title on user-albums page - same line-height as base so title stays in same position */
 body.view-user-albums .site-title h1 {
   font-size: var(--title-font-size);
-  line-height: 0.9;
+  line-height: 1.05; /* Match .site-title h1 so position is identical to users/drawer */
   max-width: calc(100vw - var(--nav-right-offset) - var(--nav-width) - 30px - 50px); /* Break to next line before nav bar with gap */
   word-wrap: break-word;
   overflow-wrap: break-word;
+  white-space: normal; /* Allow wrap for long names */
+}
+/* Allow orphan word for specific long names (e.g. Alaine & Joe Chang) */
+body.view-user-albums .site-title h1.title-allow-orphan {
+  text-wrap: normal;
 }
 
 #top-nav {
@@ -1394,6 +1420,11 @@ body.nav-entering #nav-marker-overlay {
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Softer, longer fade-in when coming from album view (username click) */
+body.view-user-albums.from-album #page-container.fade-in {
+  transition: opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1), visibility 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Faster fade-in for index page - content visible quickly */
 body.view-index #page-container.fade-in {
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1619,27 +1650,11 @@ body.view-user-albums #userHoverInfo {
   transition-delay: 0s !important;
 }
 
-/* "Remains" logo should always stay visible - no fade out/in */
-/* BUT allow hiding in album mode (mode-album class) or during title transition */
-body:not(.page-transitioning):not(.mode-album):not(.title-transitioning) .site-title h1 {
+/* "Remains" / page title - always visible (except in album mode or during page transition) */
+body:not(.page-transitioning):not(.mode-album) .site-title h1 {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
-}
-
-/* Smooth title transition when navigating between users and user-albums */
-body.title-transitioning .site-title h1 {
-  transition: opacity 350ms ease-out, transform 350ms ease-out;
-}
-
-body.title-transitioning.title-fading-out .site-title h1 {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-
-body.title-transitioning.title-fading-in .site-title h1 {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .users-page:not(.page-transitioning) .user-card {
@@ -1797,6 +1812,10 @@ body.title-transitioning.title-fading-in .site-title h1 {
     top: calc(var(--nav-height) + 8px);
     left: 12px;
   }
+  
+  .album-meta-ui {
+    left: 12px;
+  }
 }
 
 /* Very small screens */
@@ -1808,6 +1827,10 @@ body.title-transitioning.title-fading-in .site-title h1 {
   
   .site-title {
     top: calc(var(--nav-height) + 6px);
+    left: 10px;
+  }
+  
+  .album-meta-ui {
     left: 10px;
   }
 }
@@ -1891,44 +1914,44 @@ body.title-transitioning.title-fading-in .site-title h1 {
 /* Hide index rows during transition */
 body.page-transitioning.view-index .index-table-row {
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 300ms cubic-bezier(0.4, 0, 1, 1), transform 300ms cubic-bezier(0.4, 0, 1, 1);
+  transform: translateY(6px);
+  transition: opacity 350ms cubic-bezier(0.4, 0, 0.2, 1), transform 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Fade-in animation for index rows - faster for better UX */
+/* Fade-in animation for index rows - slower, softer with fade */
 body.view-index:not(.page-transitioning) .index-table-row {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Stagger animation for index rows - shorter delays for faster content appearance */
+/* Stagger animation for index rows - longer delays for softer cascade */
 body.view-index:not(.page-transitioning) .index-table-row:nth-child(1) {
   transition-delay: 0s;
 }
 
 body.view-index:not(.page-transitioning) .index-table-row:nth-child(2) {
-  transition-delay: 0.03s;
+  transition-delay: 0.08s;
 }
 
 body.view-index:not(.page-transitioning) .index-table-row:nth-child(3) {
-  transition-delay: 0.06s;
+  transition-delay: 0.16s;
 }
 
 body.view-index:not(.page-transitioning) .index-table-row:nth-child(4) {
-  transition-delay: 0.09s;
+  transition-delay: 0.24s;
 }
 
 body.view-index:not(.page-transitioning) .index-table-row:nth-child(5) {
-  transition-delay: 0.12s;
+  transition-delay: 0.32s;
 }
 
 body.view-index:not(.page-transitioning) .index-table-row:nth-child(6) {
-  transition-delay: 0.15s;
+  transition-delay: 0.4s;
 }
 
 body.view-index:not(.page-transitioning) .index-table-row:nth-child(n+7) {
-  transition-delay: 0.18s;
+  transition-delay: 0.48s;
 }
 
 .index-table-row td {
@@ -2031,7 +2054,7 @@ body.view-index .center-date {
 .about-content {
   position: fixed;
   left: calc(100vw - var(--nav-right-offset) - var(--nav-width));
-  top: calc(var(--nav-height) + var(--center-nav-height) + 120px);
+  top: calc(var(--nav-height) + var(--center-nav-height) + 100px);
   z-index: 100; /* Below UI layer but above canvas */
   opacity: 0;
   visibility: hidden;
@@ -2056,6 +2079,16 @@ body.view-index .center-date {
   font-family: 'EB Garamond', serif;
   font-style: italic;
   font-size: clamp(16px, 2vw, 20px);
+}
+
+/* Design and Development credit link - underline, pointer on hover */
+.about-credit-link {
+  text-decoration: underline;
+  color: #424242;
+  cursor: pointer;
+}
+.about-credit-link:hover {
+  cursor: pointer;
 }
 
 /* Source line - italic */

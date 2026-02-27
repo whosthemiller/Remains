@@ -292,14 +292,22 @@ export async function renderUserAlbumsPage(params) {
     }
   }
   
-  // Ensure nav title is visible (it might have been hidden during transition)
+  // Ensure nav block (title + user data) is visible (might have been hidden during transition)
   const remainsLogo = document.getElementById('remainsLogo');
   if (remainsLogo) {
+    remainsLogo.style.opacity = '';
+    remainsLogo.style.visibility = '';
+    remainsLogo.style.transition = '';
     const h1 = remainsLogo.querySelector('h1');
     if (h1) {
-      h1.style.opacity = '1';
-      h1.style.visibility = 'visible';
-      h1.style.transition = ''; // Reset transition to use CSS defaults
+      h1.style.opacity = '';
+      h1.style.visibility = '';
+      h1.style.transition = '';
+    }
+    const userData = remainsLogo.querySelector('.user-data');
+    if (userData) {
+      userData.style.opacity = '';
+      userData.style.visibility = '';
     }
   }
   
@@ -440,44 +448,57 @@ function setupAlbumCardHandlers() {
             // Set flag to prevent drawer from showing
             window.isTransitioningToAlbum = true;
             
-            // Hide nav title immediately to prevent it from showing during transition
-            const remainsLogo = document.getElementById('remainsLogo');
-            if (remainsLogo) {
-              const h1 = remainsLogo.querySelector('h1');
-              if (h1) {
-                h1.style.opacity = '0';
-                h1.style.visibility = 'hidden';
-              }
+            // Same duration for all exit transitions so everything fades out together
+            const fadeOutDuration = '0.55s';
+            const fadeOutEasing = 'ease-in-out';
+            const fadeOutTransition = `opacity ${fadeOutDuration} ${fadeOutEasing}, visibility ${fadeOutDuration} ${fadeOutEasing}`;
+            
+            // Fade out the small info text at bottom (same timing as everything else)
+            const albumHoverInfo = document.getElementById('albumHoverInfo');
+            if (albumHoverInfo) {
+              albumHoverInfo.style.transition = `opacity ${fadeOutDuration} ${fadeOutEasing}, transform ${fadeOutDuration} ${fadeOutEasing}`;
+              albumHoverInfo.classList.remove('isVisible');
             }
             
-            // Fade out user albums page first (faster)
+            // Fade out the entire nav block (title + user data) as one unit so nothing "leads"
+            const remainsLogo = document.getElementById('remainsLogo');
+            if (remainsLogo) {
+              remainsLogo.style.transition = fadeOutTransition;
+              remainsLogo.style.opacity = '0';
+              remainsLogo.style.visibility = 'hidden';
+            }
+            
+            // Fade out page container (same timing – all exit together)
             const pageContainer = document.getElementById('page-container');
             if (pageContainer) {
-              // Use faster transition for fade out
-              pageContainer.style.transition = 'opacity 0.3s ease-out, visibility 0.3s ease-out';
+              pageContainer.style.transition = fadeOutTransition;
               pageContainer.classList.remove('fade-in');
               pageContainer.style.opacity = '0';
               pageContainer.style.visibility = 'hidden';
             }
             
-            // Hide canvas immediately to prevent drawer placeholders from showing
+            // Hide canvas after fade-out (no transition needed)
             const canvas = document.getElementById('canvas');
             if (canvas) {
               canvas.style.display = 'none';
             }
             
-            // Navigate to drawer and trigger album view after fade out
             navigate('drawer');
             
-            // Wait for fade out and drawer to be ready, then open album with transition
             setTimeout(() => {
               if (window.drawerSceneInstance) {
-                // Pass username so we can navigate back on exit
                 window.drawerSceneInstance.enterAlbumModeWithTransition(photo.id, currentUser?.userKey || userKey);
-                // Clear flag after album mode is entered
                 window.isTransitioningToAlbum = false;
               }
-            }, 300); // Wait for fade out to complete (300ms - faster)
+              if (albumHoverInfo) {
+                albumHoverInfo.style.transition = '';
+              }
+              if (remainsLogo) {
+                remainsLogo.style.transition = '';
+                remainsLogo.style.opacity = '';
+                remainsLogo.style.visibility = '';
+              }
+            }, 550);
           }
         } catch (error) {
           console.error('Error opening album:', error);
@@ -681,31 +702,32 @@ function updateNavTitle({ view, username, albumTitle, userData }) {
   const h1 = remainsLogo.querySelector('h1');
   if (!h1) return;
   
-  // Log current state before update
-  const currentText = h1.textContent;
-  const stackTrace = new Error().stack;
-  console.log('[updateNavTitle]', {
-    view,
-    username,
-    albumTitle,
-    currentText,
-    newText: view === 'user' && username ? username : (view === 'album' && albumTitle ? albumTitle : 'Remains'),
-    hasModeAlbum: document.body.classList.contains('mode-album'),
-    timestamp: Date.now(),
-    stack: stackTrace?.split('\n').slice(1, 4).join(' | ')
-  });
+  // Decode username if it's URL-encoded (e.g. from hash) so the title never shows % in the UI
+  let displayUsername = username;
+  if (view === 'user' && typeof username === 'string' && username.includes('%')) {
+    try {
+      displayUsername = decodeURIComponent(username);
+    } catch (e) {
+      displayUsername = username;
+    }
+  }
   
   // Update text content FIRST, synchronously, to prevent any flash of wrong text
-  // Use a temporary variable to ensure atomic update
   let newText = 'Remains';
-  if (view === 'user' && username) {
-    newText = username;
+  if (view === 'user' && displayUsername) {
+    newText = displayUsername;
   } else if (view === 'album' && albumTitle) {
     newText = albumTitle;
   }
   
   // Set text content synchronously
-  h1.textContent = newText;
+  if (view === 'user' && displayUsername === 'Alaine & Joe Chang') {
+    h1.classList.add('title-allow-orphan');
+    h1.innerHTML = 'Alaine &amp;<br>Joe Chang';
+  } else {
+    h1.classList.remove('title-allow-orphan');
+    h1.textContent = newText;
+  }
   
   // Force a synchronous reflow to ensure the text is updated before any visibility changes
   void h1.offsetHeight;
@@ -787,12 +809,6 @@ function updateNavTitle({ view, username, albumTitle, userData }) {
     }
   }
   
-  // Log after update
-  console.log('[updateNavTitle] After update:', {
-    textContent: h1.textContent,
-    hasModeAlbum: document.body.classList.contains('mode-album')
-  });
-  
   // Remove existing click listener if any
   const existingHandler = h1._navTitleClickHandler;
   if (existingHandler) {
@@ -811,6 +827,28 @@ function updateNavTitle({ view, username, albumTitle, userData }) {
     h1._navTitleClickHandler = clickHandler;
   } else {
     h1.style.cursor = 'default';
+  }
+}
+
+/**
+ * Restore nav title and user data when returning from about mode to user-albums view
+ * (no full re-render, just update the header)
+ */
+export async function restoreUserNav(username) {
+  if (!username) return;
+  let decoded = username;
+  if (typeof username === 'string' && username.includes('%')) {
+    try {
+      decoded = decodeURIComponent(username);
+    } catch (e) {
+      decoded = username;
+    }
+  }
+  const userData = await getUserData(decoded);
+  if (userData) {
+    updateNavTitle({ view: 'user', username: decoded, userData });
+  } else {
+    updateNavTitle({ view: 'user', username: decoded });
   }
 }
 

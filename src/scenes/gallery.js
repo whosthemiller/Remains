@@ -686,7 +686,7 @@ export class GalleryScene {
     this.initialMainPhotoIndex = -1; // Index of the photo that was clicked (the zero point when entering album)
     this.stackOffsets = new Map(); // Map<photoId, {dx, dy, rot}> - deterministic offsets
     this.albumScrollDelta = 0; // Direct scroll value (no lerp, no velocity, no inertia) - maps 1:1 to wheel delta
-    this.ALBUM_SCROLL_STEP = 120; // Scroll delta per image (pixels)
+    this.ALBUM_SCROLL_STEP = 80; // Scroll delta per image (pixels) — lower = more responsive to wheel
     this.currentImageDisplayWidth = 0; // Current displayed image width (for offset calculations)
     this.currentImageDisplayHeight = 0; // Current displayed image height (for offset calculations)
     this.albumStackImages = new Map(); // Map<photoId, HTMLElement> - all pre-rendered stack images
@@ -1950,7 +1950,11 @@ export class GalleryScene {
         }
       } else {
         usernameSpan.style.display = '';
-        usernameSpan.textContent = userDisplayName;
+        if (userDisplayName === 'Alaine & Joe Chang') {
+          usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
+        } else {
+          usernameSpan.textContent = userDisplayName;
+        }
         // Show the "by" line for regular albums
         const byLineEl = this.albumMetaEl.querySelector('.album-by');
         if (byLineEl) {
@@ -2237,7 +2241,11 @@ export class GalleryScene {
       usernameEl.className = 'meta-detail-item';
       const usernameSpan = document.createElement('span');
       usernameSpan.className = 'meta-value';
-      usernameSpan.textContent = userDisplayName;
+      if (userDisplayName === 'Alaine & Joe Chang') {
+        usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
+      } else {
+        usernameSpan.textContent = userDisplayName;
+      }
       usernameSpan.style.cursor = 'pointer';
       usernameSpan.style.textDecoration = 'underline';
       usernameSpan.style.pointerEvents = 'auto'; // Enable clicks (parent has pointer-events: none)
@@ -3707,13 +3715,6 @@ export class GalleryScene {
       // This prevents showGalleryView from updating nav title to "Remains"
       window.returningFromAlbum = true;
       
-      console.log('[exitAlbumModeImmediate] Before updateNavTitle:', {
-        username,
-        hasModeAlbum: document.body.classList.contains('mode-album'),
-        currentNavText: document.getElementById('remainsLogo')?.querySelector('h1')?.textContent,
-        returningFromAlbum: window.returningFromAlbum
-      });
-      
       // Update nav title IMMEDIATELY, BEFORE removing mode-album class
       // This ensures the correct text is set before the title becomes visible
       updateNavTitle({ view: 'user', username });
@@ -3728,16 +3729,8 @@ export class GalleryScene {
           h1.style.visibility = 'visible';
           h1.style.transition = ''; // Reset transition to use CSS defaults
           void h1.offsetHeight;
-          console.log('[exitAlbumModeImmediate] After reflow:', {
-            textContent: h1.textContent,
-            hasModeAlbum: document.body.classList.contains('mode-album'),
-            opacity: h1.style.opacity,
-            visibility: h1.style.visibility
-          });
         }
       }
-      
-      console.log('[exitAlbumModeImmediate] About to remove mode-album class');
       
       // Restore nav bars to open state immediately (before navigating)
       if (!this.topNavEl) {
@@ -3779,8 +3772,6 @@ export class GalleryScene {
       this.userAlbumsUsername = null;
       
       // Remove album mode class and restore UI AFTER nav title is updated
-      console.log('[exitAlbumModeImmediate] Removing mode-album class, current nav text:', 
-        document.getElementById('remainsLogo')?.querySelector('h1')?.textContent);      
       // Hide album-meta-ui IMMEDIATELY before removing mode-album class to prevent overlap
       if (this.albumMetaEl) {
         this.albumMetaEl.style.display = 'none';
@@ -3795,12 +3786,10 @@ export class GalleryScene {
         if (h1After) {
           h1After.style.opacity = '1';
           h1After.style.visibility = 'visible';
-          console.log('[exitAlbumModeImmediate] After removing mode-album, nav text:', 
-            h1After.textContent, 'opacity:', h1After.style.opacity, 'visibility:', h1After.style.visibility);
         }
       }
       
-      // Now navigate - the flag is already set so showGalleryView won't update nav title
+      // Now navigate
       navigate('user-albums', { username });
     } else if (this.fromIndex) {
       // Came from index: restore UI and navigate back to index
@@ -3933,7 +3922,6 @@ export class GalleryScene {
           }
         }, 300);
       }
-      console.log(`Preload complete: ${loadedCount}/${totalTiles} images loaded in ${elapsed}ms (${queueSize} remaining in queue, ${loadingCount} currently loading)`);
     }
   }
 
@@ -3960,7 +3948,6 @@ export class GalleryScene {
         hq: hqSrc || thumbSrc, // Fallback to thumb if no HQ available
       });
     }
-    console.log(`Built photo sources map: ${this.photoSourcesById.size} photos`);
   }
   
   /**
@@ -4169,14 +4156,12 @@ export class GalleryScene {
       }
       
       // Fetch photo data
-      console.log('Loading photo index...');
       const response = await fetch('data/photos.index.json');
       if (!response.ok) {
         throw new Error(`Failed to load photo index: ${response.statusText}`);
       }
       
       const data = await response.json();
-      console.log(`Loaded ${data.count} photos`);
       
       // Store photos for filtering
       this.photos = data.photos;
@@ -4223,8 +4208,6 @@ export class GalleryScene {
         }
       }
       
-      console.log(`Built year index: ${this.yearToPhotoIds.size} years, ${this.unknownYearIds.size} unknown`);
-      
       // Load keywords filter data
       const keywordsResponse = await fetch('data/keywords.filters.json');
       if (!keywordsResponse.ok) {
@@ -4266,8 +4249,6 @@ export class GalleryScene {
           this.unknownKeywordIds.add(photoId);
         }
       }
-      
-      console.log(`Loaded keywords index: ${this.keywordToPhotoIds.size} keywords, ${this.unknownKeywordIds.size} unknown`);
       
       // Generate proper layout (replaces temporary layout)
       this.tiles = generateLayout(data.photos);
@@ -4316,7 +4297,6 @@ export class GalleryScene {
       // Select preload targets (prioritized by distance from viewport center)
       // Note: Early preload already started, but now we prioritize by viewport
       this.preloadTargets = this.selectPreloadTargets();
-      console.log(`Selected ${this.preloadTargets.length} images for prioritized preload`);
       
       // Continue preloading with viewport-based prioritization
       // Early preload already started, so we just ensure it continues
@@ -4346,7 +4326,6 @@ export class GalleryScene {
       // Start render loop after layout is ready
       this.startRenderLoop();
       
-      console.log('Gallery view initialized');
     } catch (error) {
       console.error('Error initializing gallery view:', error);
       // Hide loader on error
@@ -4373,8 +4352,6 @@ export class GalleryScene {
     // Prioritize first N photos (they're likely to be visible)
     const earlyBatchSize = Math.min(PRELOAD_TARGET, photos.length);
     const earlyPhotos = photos.slice(0, earlyBatchSize);
-    
-    console.log(`Starting early preload for ${earlyPhotos.length} images...`);
     
     // Mark as preloading
     this.isPreloading = true;
@@ -6342,9 +6319,13 @@ export class GalleryScene {
         // Set viewMode to gallery immediately (camera is now restored)
         if (shouldSetViewModeToDrawer) {
           this.viewMode = 'gallery';
+          // Force one full render so the returned-to tile is drawn even when camera
+          // matches lastCameraState (e.g. after 2nd+ exit to same view), preventing
+          // early-exit from leaving canvas stale until mouse move.
+          this.forceRenderOnce = true;
         }
         
-        // Navigate back to user albums page if we came from there
+        // Navigate back to user albums page if we came from there if we came from there
         if (this.fromUserAlbums && this.userAlbumsUsername) {
           // Store username before clearing flags
           const username = this.userAlbumsUsername;

@@ -689,14 +689,17 @@ export class DrawerScene {
     this.albumStackLayer = null; // Container for stacked images
     this.stackIndex = 0; // Current number of stacked images (0 = only main visible)
     this.albumPhotos = []; // Array of photo objects from album.json (ordered)
+    this.albumPhotoIdToMapKey = null; // Map<flickrIdString, photosMap key> built when loading album — O(1) lookup instead of O(photosMap.size) per wheel
+    this.albumMapKeyToIndex = null;   // Map<photosMap key, albumIndex> — O(1) in updateStackWhenMainChanges instead of 275×277×photosMap
     this.mainPhotoIndex = -1; // Index of main photo in albumPhotos array
     this.initialMainPhotoIndex = -1; // Index of the photo that was clicked (the zero point when entering album)
     this.stackOffsets = new Map(); // Map<photoId, {dx, dy, rot}> - deterministic offsets
     this.albumScrollDelta = 0; // Direct scroll value (no lerp, no velocity, no inertia) - maps 1:1 to wheel delta
-    this.ALBUM_SCROLL_STEP = 120; // Scroll delta per image (pixels)
+    this.ALBUM_SCROLL_STEP = 80; // Scroll delta per image (pixels) — lower = more responsive to wheel
     this.currentImageDisplayWidth = 0; // Current displayed image width (for offset calculations)
     this.currentImageDisplayHeight = 0; // Current displayed image height (for offset calculations)
     this.albumStackImages = new Map(); // Map<photoId, HTMLElement> - all pre-rendered stack images
+    this.albumStackByIndex = new Map(); // Map<stackIndex, HTMLElement> - for fast opacity updates (only iterate active window)
     this.albumScrollHintEl = null;
     this.albumScrollHintFaded = false;
     
@@ -1981,7 +1984,11 @@ export class DrawerScene {
         }
       } else {
         usernameSpan.style.display = '';
-        usernameSpan.textContent = userDisplayName;
+        if (userDisplayName === 'Alaine & Joe Chang') {
+          usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
+        } else {
+          usernameSpan.textContent = userDisplayName;
+        }
         // Show the "by" line for regular albums
         const byLineEl = this.albumMetaEl.querySelector('.album-by');
         if (byLineEl) {
@@ -2271,7 +2278,11 @@ export class DrawerScene {
       usernameEl.className = 'meta-detail-item';
       const usernameSpan = document.createElement('span');
       usernameSpan.className = 'meta-value';
-      usernameSpan.textContent = userDisplayName;
+      if (userDisplayName === 'Alaine & Joe Chang') {
+        usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
+      } else {
+        usernameSpan.textContent = userDisplayName;
+      }
       usernameSpan.style.cursor = 'pointer';
       usernameSpan.style.textDecoration = 'underline';
       usernameSpan.style.pointerEvents = 'auto'; // Enable clicks (parent has pointer-events: none)
@@ -2492,7 +2503,7 @@ export class DrawerScene {
     this.albumMainImage.style.display = 'block';
     this.albumMainImage.style.objectFit = 'contain';
     this.albumMainImage.style.position = 'relative';
-    this.albumMainImage.style.zIndex = '1';
+    this.albumMainImage.style.zIndex = '0'; // Bottom of stack – rest of album images appear on top when scrolling
     inner.appendChild(this.albumMainImage);
     
     // HQ crossfade overlay (no refocus when upgrading: new image appears instantly on top)
@@ -2508,6 +2519,7 @@ export class DrawerScene {
     this.albumStackLayer.style.position = 'absolute';
     this.albumStackLayer.style.inset = '0';
     this.albumStackLayer.style.pointerEvents = 'none';
+    this.albumStackLayer.style.zIndex = '1'; // Above center image (0) so stack images appear on top when scrolling
     inner.appendChild(this.albumStackLayer);
     
     this.albumImageWrapper.appendChild(inner);
@@ -2568,6 +2580,158 @@ export class DrawerScene {
   }
   
   /**
+   * Get full photoId (photosMap key) for the photo at album index i
+   */
+  getPhotoIdForAlbumIndex(i) {
+    if (i < 0 || i >= this.albumPhotos.length) return null;
+    const albumPhoto = this.albumPhotos[i];
+    if (this.isFilteredAlbum && albumPhoto._originalPhoto) {
+      return albumPhoto._originalPhoto.id;
+    }
+    const flickrId = String(albumPhoto.id || albumPhoto.photoId || '');
+    if (!flickrId) return null;
+    for (const [id, p] of this.photosMap.entries()) {
+      if (p.photoId && String(p.photoId) === flickrId) return id;
+    }
+    return null;
+  }
+  
+  /**
+   * When main photo changes by scroll: update stack in place (remove new main from stack,
+   * add previous main to stack, update indices). Avoids re-creating all elements so the first
+   * image etc. don't jump.
+   */
+  updateStackWhenMainChanges(newMainPhotoId, scrollingBack = false) {
+    if (!this.albumStackLayer || !this.albumStackImages.size) return;
+    
+    const step = this.ALBUM_SCROLL_STEP;
+    const dimFallback = this.albumImageInner || this.albumImageWrapper;
+    const imageW = this.currentImageDisplayWidth || (dimFallback ? dimFallback.offsetWidth : 0);
+    const imageH = this.currentImageDisplayHeight || (dimFallback ? dimFallback.offsetHeight : 0);
+    
+    // 1. Remove the element that is now main (no longer in stack)
+    // Prefer DOM lookup by data-photo-id so we remove the actual visible element (map key can differ from attribute)
+    const newIdStr = String(newMainPhotoId);
+    let elToRemove = this.albumStackLayer && Array.from(this.albumStackLayer.querySelectorAll('[data-photo-id]')).find(
+      el => (el.getAttribute('data-photo-id') || '') === newIdStr
+    );
+    const foundByDom = !!elToRemove;
+    if (!elToRemove) elToRemove = this.albumStackImages.get(newMainPhotoId);
+    const foundByMap = !!elToRemove && !foundByDom;
+    if (elToRemove && foundByDom) {
+      for (const [key, el] of this.albumStackImages.entries()) {
+        if (el === elToRemove) {
+          this.albumStackImages.delete(key);
+          break;
+        }
+      }
+    }
+    if (elToRemove && elToRemove.parentNode) {
+      elToRemove.parentNode.removeChild(elToRemove);
+      if (this.albumStackImages.get(newMainPhotoId) === elToRemove) this.albumStackImages.delete(newMainPhotoId);
+    }
+    
+    // 2. Add the photo that left the main position back to the stack
+    // Forward: mainPhotoIndex - 1 goes to "before" with stackIndex -1
+    // Backward: mainPhotoIndex + 1 goes to "after" with stackIndex 0
+    const oldMainIndex = scrollingBack ? this.mainPhotoIndex + 1 : this.mainPhotoIndex - 1;
+    const addStackIndex = scrollingBack ? 0 : -1;
+    if (scrollingBack ? oldMainIndex < this.albumPhotos.length : oldMainIndex >= 0) {
+      let oldMainPhotoId = null;
+      if (this.albumMapKeyToIndex) {
+        // Reverse lookup: we need photoId for album index oldMainIndex — use albumPhotos + albumPhotoIdToMapKey
+        const ap = this.albumPhotos[oldMainIndex];
+        if (ap) {
+          if (this.isFilteredAlbum && ap._originalPhoto) oldMainPhotoId = ap._originalPhoto.id;
+          else if (this.albumPhotoIdToMapKey) {
+            const fid = String(ap.id || ap.photoId || '');
+            oldMainPhotoId = this.albumPhotoIdToMapKey.get(fid) || null;
+          }
+        }
+      }
+      if (!oldMainPhotoId) oldMainPhotoId = this.getPhotoIdForAlbumIndex(oldMainIndex);
+      if (oldMainPhotoId && !this.albumStackImages.has(oldMainPhotoId)) {
+        const photo = this.photosMap.get(oldMainPhotoId);
+        const albumPhoto = this.albumPhotos[oldMainIndex];
+        if (photo && albumPhoto) {
+          const sources = this.photoSourcesById.get(oldMainPhotoId);
+          const cacheEntry = this.imageCache.get(oldMainPhotoId);
+          if (cacheEntry) {
+            const stackImg = document.createElement('img');
+            stackImg.setAttribute('data-photo-id', oldMainPhotoId);
+            stackImg.setAttribute('data-stack-index', addStackIndex);
+            stackImg._stackIndex = addStackIndex;
+            stackImg.className = 'album-stack-image';
+            if (sources) {
+              stackImg.dataset.thumbSrc = sources.thumb;
+              stackImg.dataset.hqSrc = sources.hq;
+              stackImg.dataset.state = 'thumb';
+              stackImg.src = sources.thumb;
+            } else {
+              stackImg.src = cacheEntry.img.src;
+            }
+            const imgAspect = cacheEntry.aspect || (cacheEntry.img.naturalWidth / cacheEntry.img.naturalHeight);
+            const fixedSize = this.calculateImageSize(imgAspect, imageW, imageH);
+            stackImg.dataset.originalWidth = String(fixedSize.width);
+            stackImg.dataset.originalHeight = String(fixedSize.height);
+            stackImg.style.position = 'absolute';
+            stackImg.style.left = '50%';
+            stackImg.style.top = '50%';
+            stackImg.style.width = `${fixedSize.width}px`;
+            stackImg.style.height = `${fixedSize.height}px`;
+            stackImg.style.marginLeft = `${-fixedSize.width / 2}px`;
+            stackImg.style.marginTop = `${-fixedSize.height / 2}px`;
+            stackImg.style.objectFit = 'contain';
+            stackImg.style.transition = 'none';
+            const offset = this.getStackOffset(oldMainPhotoId, fixedSize.width, fixedSize.height);
+            stackImg.style.transform = `translate(${offset.dx}px, ${offset.dy}px) scale(1.0)`;
+            // Insert after "before main" images, before "after main" (stable DOM order = less reflow/jump)
+            const firstAfter = Array.from(this.albumStackLayer.children).find(
+              el => parseInt(el.getAttribute('data-stack-index') || '0') >= 0
+            );
+            if (firstAfter) {
+              this.albumStackLayer.insertBefore(stackImg, firstAfter);
+            } else {
+              this.albumStackLayer.appendChild(stackImg);
+            }
+            this.albumStackImages.set(oldMainPhotoId, stackImg);
+            stackImg.style.opacity = addStackIndex === -1 ? '0.7' : '0'; // -1: visible "before"; 0: first "after" (opacity set by updateAlbumStackOpacities)
+          }
+        }
+      }
+    }
+    
+    // 3. Update data-stack-index on all stack elements (use albumMapKeyToIndex for O(1) per element)
+    this.albumStackImages.forEach((stackImg, photoId) => {
+      let albumIndex = -1;
+      if (this.albumMapKeyToIndex) {
+        albumIndex = this.albumMapKeyToIndex.get(photoId) ?? -1;
+      } else {
+        for (let k = 0; k < this.albumPhotos.length; k++) {
+          if (this.getPhotoIdForAlbumIndex(k) === photoId) {
+            albumIndex = k;
+            break;
+          }
+        }
+      }
+      if (albumIndex < 0) return;
+      const newStackIndex = albumIndex < this.mainPhotoIndex
+        ? -(this.mainPhotoIndex - albumIndex)
+        : (albumIndex - this.mainPhotoIndex - 1);
+      stackImg.setAttribute('data-stack-index', newStackIndex);
+      stackImg._stackIndex = newStackIndex;
+    });
+    
+    // Rebuild index map so updateAlbumStackOpacities only iterates active window
+    this.albumStackByIndex.clear();
+    this.albumStackImages.forEach((stackImg) => {
+      this.albumStackByIndex.set(stackImg._stackIndex, stackImg);
+    });
+    
+    this.updateAlbumStackOpacities();
+  }
+  
+  /**
    * Load album photos array and determine main photo index
    * If filters are active, uses filtered photos instead of loading album.json
    */
@@ -2587,6 +2751,17 @@ export class DrawerScene {
         // Store reference to original photo for metadata access
         _originalPhoto: p
       }));
+      
+      // O(1) lookup when scrolling: flickrId -> photosMap key (avoid 50k+ iteration per wheel)
+      this.albumPhotoIdToMapKey = new Map();
+      this.albumPhotos.forEach(ap => {
+        const fid = String(ap.id || ap.photoId || '');
+        if (ap._originalPhoto && fid) this.albumPhotoIdToMapKey.set(fid, ap._originalPhoto.id);
+      });
+      this.albumMapKeyToIndex = new Map();
+      this.albumPhotos.forEach((ap, i) => {
+        if (ap._originalPhoto && ap._originalPhoto.id) this.albumMapKeyToIndex.set(ap._originalPhoto.id, i);
+      });
       
       // Main photo is always at index 0 (already reordered in enterAlbumMode)
       this.mainPhotoIndex = 0;
@@ -2638,6 +2813,21 @@ export class DrawerScene {
         ...allPhotos.slice(0, mainIndex) // All photos before selected photo
       ];
       
+      // O(1) lookup when scrolling: flickrId -> photosMap key (avoid 50k+ iteration per wheel)
+      this.albumPhotoIdToMapKey = new Map();
+      for (const [id, p] of this.photosMap.entries()) {
+        if (p.albumKey === photo.albumKey && p.userKey === photo.userKey && p.photoId != null) {
+          this.albumPhotoIdToMapKey.set(String(p.photoId), id);
+        }
+      }
+      // Map photosMap key -> album index for O(1) in updateStackWhenMainChanges
+      this.albumMapKeyToIndex = new Map();
+      this.albumPhotos.forEach((ap, i) => {
+        const fid = String(ap.id || ap.photoId || '');
+        const mapKey = this.albumPhotoIdToMapKey.get(fid);
+        if (mapKey != null) this.albumMapKeyToIndex.set(mapKey, i);
+      });
+      
       // Main photo is always at index 0 after reordering
       this.mainPhotoIndex = 0;
       
@@ -2665,8 +2855,10 @@ export class DrawerScene {
   
   /**
    * Update main image source and size
+   * @param {string} photoId - Photo ID to show as main
+   * @param {{ skipWrapperLayout?: boolean }} [options] - If skipWrapperLayout is true, only update image source and meta; do not resize/reposition wrapper (keeps album stack fixed when scrolling)
    */
-  updateMainImage(photoId) {
+  updateMainImage(photoId, options = {}) {
     if (!this.albumMainImage || !this.albumImageWrapper) return;
     
     const cacheEntry = this.imageCache.get(photoId);
@@ -2676,6 +2868,28 @@ export class DrawerScene {
     
     const img = cacheEntry.img;
     const aspect = cacheEntry.aspect || (img.naturalWidth / img.naturalHeight);
+    
+    // When only changing which photo is main (e.g. scroll to next/prev), keep wrapper position/size fixed so images don't jump
+    if (options.skipWrapperLayout) {
+      const sources = this.photoSourcesById.get(photoId);
+      if (sources) {
+        this.albumMainImage.dataset.photoId = photoId;
+        this.albumMainImage.dataset.thumbSrc = sources.thumb;
+        this.albumMainImage.dataset.hqSrc = sources.hq;
+        this.albumMainImage.dataset.state = 'thumb';
+        this.albumMainImage.src = sources.thumb;
+      } else {
+        this.albumMainImage.src = cacheEntry.img.src;
+      }
+      this.albumMainImage.style.width = '100%';
+      this.albumMainImage.style.height = '100%';
+      this.albumMainImage.style.objectFit = 'contain';
+      if (this.isFilteredAlbum && this.selectedPhotoId === photoId) {
+        this.updateAlbumMetaUI(photoId);
+        this.renderAlbumMetaDetails(null);
+      }
+      return;
+    }
     
     // Keep consistent breathing room around the album image,
     // and reserve space for the "Scroll to see more" hint below.
@@ -2920,12 +3134,11 @@ export class DrawerScene {
     if (this.viewMode !== 'album' || this.transition.active || this.exitTransitionActive) {
       return;
     }
-    
     e.preventDefault();
     e.stopPropagation();
     
-    // Direct update: wheel delta maps 1:1 to scroll value
-    const deltaY = e.deltaY;
+    // Slight scale so scroll feels responsive without being too fast (1.35x)
+    const deltaY = e.deltaY * 1.35;
     const step = this.ALBUM_SCROLL_STEP;
     
     // Calculate scroll range
@@ -2940,7 +3153,6 @@ export class DrawerScene {
     const isAtZeroPoint = this.mainPhotoIndex === 0 && this.albumScrollDelta === 0;
     
     if (isAtZeroPoint && deltaY <= 0) {
-      // At zero point (index 0, scrollDelta = 0) - block backward scrolling
       return; // Exit early, don't process backward scroll
     }
     
@@ -2985,6 +3197,7 @@ export class DrawerScene {
     
     // Update main photo if it changed
     if (newMainPhotoIndex !== this.mainPhotoIndex) {
+      const scrollingBack = newMainPhotoIndex < this.mainPhotoIndex;
       this.mainPhotoIndex = newMainPhotoIndex;
       
       // If we're now at index 0, ensure scrollDelta is 0
@@ -3000,8 +3213,10 @@ export class DrawerScene {
         // For filtered albums, use _originalPhoto.id directly (it's the key in photosMap)
         if (this.isFilteredAlbum && newMainPhoto._originalPhoto) {
           newMainPhotoId = newMainPhoto._originalPhoto.id;
+        } else if (this.albumPhotoIdToMapKey) {
+          const flickrId = String(newMainPhoto.id || newMainPhoto.photoId || '');
+          newMainPhotoId = this.albumPhotoIdToMapKey.get(flickrId) || null;
         } else {
-          // For regular albums, find photo in photosMap by photoId
           const flickrId = String(newMainPhoto.id || newMainPhoto.photoId || '');
           for (const [id, p] of this.photosMap.entries()) {
             if (p.photoId && String(p.photoId) === flickrId) {
@@ -3012,13 +3227,9 @@ export class DrawerScene {
         }
         
         if (newMainPhotoId) {
-          // Update selected photo ID
           this.selectedPhotoId = newMainPhotoId;
+          this.updateMainImage(newMainPhotoId, { skipWrapperLayout: true });
           
-          // Update main image
-          this.updateMainImage(newMainPhotoId);
-          
-          // Update album meta details so date reflects current photo
           if (this.isFilteredAlbum) {
             this.updateAlbumMetaUI(newMainPhotoId);
             this.renderAlbumMetaDetails(null);
@@ -3026,8 +3237,7 @@ export class DrawerScene {
             this.renderAlbumMetaDetails(this.albumData);
           }
           
-          // Re-render stack with new main photo
-          this.preRenderAlbumStack();
+          this.updateStackWhenMainChanges(newMainPhotoId, scrollingBack);
         }
       }
     } else {
@@ -3046,9 +3256,16 @@ export class DrawerScene {
       return;
     }
     
-    // Clear existing stack
-    this.albumStackLayer.innerHTML = '';
-    this.albumStackImages.clear();
+    // Build new stack in a separate container, then swap in one step (no visible empty frame)
+    const newLayer = document.createElement('div');
+    newLayer.className = 'album-stack-layer';
+    newLayer.style.position = 'absolute';
+    newLayer.style.inset = '0';
+    newLayer.style.pointerEvents = 'none';
+    newLayer.style.width = '100%';
+    newLayer.style.height = '100%';
+    const newMap = new Map();
+    const newIndexMap = new Map(); // stackIndex -> element for fast opacity loop
     
     // Get image dimensions for offset calculations
     const dimFallback = this.albumImageInner || this.albumImageWrapper;
@@ -3121,6 +3338,7 @@ export class DrawerScene {
             // But mainPhotoIndex can grow as we scroll forward
             const stackIndex = i < this.mainPhotoIndex ? -(this.mainPhotoIndex - i) : (i - this.mainPhotoIndex - 1);
             stackImg.setAttribute('data-stack-index', stackIndex);
+            stackImg._stackIndex = stackIndex;
             stackImg.className = 'album-stack-image';
             
             // Set sources for HQ upgrade
@@ -3149,19 +3367,19 @@ export class DrawerScene {
             stackImg.style.objectFit = 'contain';
             stackImg.style.opacity = '0';
             stackImg.style.transition = 'none';
-            // Set z-index based on stackIndex - images closer to main (smaller absolute stackIndex) should be on top
-            // Convert stackIndex to z-index: main photo is at 0, so stackIndex 0 should be highest, then -1, 1, -2, 2, etc.
-            const zIndex = 1000 - Math.abs(stackIndex) * 10 - (stackIndex < 0 ? 5 : 0); // Negative indices slightly lower
-            stackImg.style.zIndex = String(zIndex);
+            // Match updateAlbumStackOpacities: z = album index (image 1 → 0, image 2 → 1, …)
+            const albumIdx = i;
+            stackImg.style.zIndex = String(albumIdx);
             
             // Get deterministic offset (use fixed size for offset calculation)
             const offset = this.getStackOffset(photoId, fixedSize.width, fixedSize.height);
             const transformValue = `translate(${offset.dx}px, ${offset.dy}px) scale(1.0)`;
             stackImg.style.transform = transformValue;
             
-            // Add to DOM immediately
-            this.albumStackLayer.appendChild(stackImg);
-            this.albumStackImages.set(photoId, stackImg);
+            // Add to new layer (will swap entire layer at end)
+            newLayer.appendChild(stackImg);
+            newMap.set(photoId, stackImg);
+            newIndexMap.set(stackIndex, stackImg);
             
             // Update cache and opacity when image loads
             img.onload = () => {
@@ -3208,6 +3426,7 @@ export class DrawerScene {
       const stackIndex = i < this.mainPhotoIndex ? -(this.mainPhotoIndex - i) : (i - this.mainPhotoIndex - 1);
       
       stackImg.setAttribute('data-stack-index', stackIndex);
+      stackImg._stackIndex = stackIndex;
       stackImg.className = 'album-stack-image';
       
       // Set sources for HQ upgrade (reuse sources from above)
@@ -3240,19 +3459,31 @@ export class DrawerScene {
       stackImg.style.objectFit = 'contain';
       stackImg.style.opacity = '0'; // Start invisible
       stackImg.style.transition = 'none'; // No transitions - direct opacity control
-      // Set z-index based on stackIndex - images closer to main (smaller absolute stackIndex) should be on top
-      // Convert stackIndex to z-index: main photo is at 0, so stackIndex 0 should be highest, then -1, 1, -2, 2, etc.
-      const zIndex = 1000 - Math.abs(stackIndex) * 10 - (stackIndex < 0 ? 5 : 0); // Negative indices slightly lower
-      stackImg.style.zIndex = String(zIndex);
+      // Match updateAlbumStackOpacities: z = album index (image 1 → 0, image 2 → 1, …)
+      const albumIdx = i;
+      stackImg.style.zIndex = String(albumIdx);
       
       // Get deterministic offset (use fixed size for offset calculation)
       const offset = this.getStackOffset(photoId, fixedSize.width, fixedSize.height);
       const transformValue = `translate(${offset.dx}px, ${offset.dy}px) scale(1.0)`;
       stackImg.style.transform = transformValue;
       
-      this.albumStackLayer.appendChild(stackImg);
-      this.albumStackImages.set(photoId, stackImg);
+      newLayer.appendChild(stackImg);
+      newMap.set(photoId, stackImg);
+      newIndexMap.set(stackIndex, stackImg);
     }
+    
+    // Replace entire stack layer in one step so old content stays visible until new is ready
+    const parent = this.albumStackLayer.parentNode;
+    if (parent) {
+      parent.replaceChild(newLayer, this.albumStackLayer);
+      this.albumStackLayer = newLayer;
+    } else {
+      this.albumStackLayer.innerHTML = '';
+      while (newLayer.firstChild) this.albumStackLayer.appendChild(newLayer.firstChild);
+    }
+    this.albumStackImages = newMap;
+    this.albumStackByIndex = newIndexMap;
     
     // Update opacities based on initial scroll (0)
     this.updateAlbumStackOpacities();
@@ -3306,77 +3537,75 @@ export class DrawerScene {
   
   /**
    * Update opacities of all stack images based on current scroll position
-   * Linear, deterministic fade based on scroll thresholds
+   * Linear, deterministic fade based on scroll thresholds.
+   * Only opacity updates are limited to "active" window for performance; z-index is updated for
+   * ALL stack images every time so no stale high z can let an old image show through the latest.
    */
   updateAlbumStackOpacities() {
-    if (!this.albumStackLayer) return;
+    if (!this.albumStackLayer || !this.albumStackByIndex) return;
     
     const step = this.ALBUM_SCROLL_STEP;
     const scroll = this.albumScrollDelta;
     
-    // Update each stack image's opacity based on scroll position
-    this.albumStackImages.forEach((stackImg, photoId) => {
-      const stackIndex = parseInt(stackImg.getAttribute('data-stack-index') || '0');
+    // Active window for opacity (avoids 277 style writes when not needed)
+    const scrollStepIndex = Math.floor(scroll / step);
+    const activeWindowHalf = 30;
+    const minActive = Math.max(-(this.mainPhotoIndex || 0), -activeWindowHalf);
+    const maxActive = Math.min(scrollStepIndex + activeWindowHalf, (this.albumPhotos.length || 1) - 1);
+    
+    // First pass: set opacity only for active window
+    for (let stackIndex = minActive; stackIndex <= maxActive; stackIndex++) {
+      const stackImg = this.albumStackByIndex.get(stackIndex);
+      if (!stackImg) continue;
       
-      // Calculate fade thresholds for this image
-      // For negative indices (photos before main), scroll is negative
-      // For positive indices (photos after main), scroll is positive
-      const fadeStart = stackIndex * step; // Image starts fading in here
-      // For negative stackIndex, clamp fadeEnd to 0 (images before main should fade out by scroll=0)
+      const fadeStart = stackIndex * step;
       const fadeEnd = stackIndex < 0 ? Math.max(0, (stackIndex + 1) * step) : (stackIndex + 1) * step;
       
       let opacity = 0;
       if (stackIndex < 0) {
-        // Photo before main photo - scroll is negative
-        // fadeStart is negative (e.g., -120), fadeEnd is 0
-        // When scroll is very negative (<= fadeStart), image is fully visible
-        // When scroll >= 0, image stays visible (old images don't disappear when scrolling forward)
-        // Between fadeStart and fadeEnd, image fades in
+        // "Before" (photos we scrolled past): keep visible (0.7) so they stay in the stack on top of center.
         if (scroll <= fadeStart) {
-          // Fully visible (scrolled back enough)
           opacity = 0.7;
         } else if (scroll < fadeEnd) {
-          // Fading in - linear interpolation from fadeStart to fadeEnd
-          const t = (scroll - fadeStart) / step; // goes from 0 (at fadeStart) to 1 (at fadeEnd)
-          opacity = (1 - t) * 0.7; // Linear fade from 0.7 (at fadeStart) to 0 (at fadeEnd)
+          const t = (scroll - fadeStart) / step;
+          opacity = (1 - t) * 0.7;
         } else {
-          // Keep visible when scrolling forward (scroll >= 0) - old images stay visible
-          opacity = 0.7;
+          const albumIndex = this.mainPhotoIndex + stackIndex;
+          opacity = albumIndex === 0 ? 0 : 0.7;
         }
       } else {
-        // Photo after main photo - scroll is positive
         if (scroll >= fadeEnd) {
-          // Fully visible
-          opacity = 0.7; // Stacked images at 70% opacity
+          opacity = 0.7;
         } else if (scroll > fadeStart) {
-          // Fading in - linear interpolation
-          const t = (scroll - fadeStart) / step; // 0 to 1
-          opacity = t * 0.7; // Linear fade from 0 to 0.7
+          const t = (scroll - fadeStart) / step;
+          opacity = t * 0.7;
         } else {
-          // Not visible yet
           opacity = 0;
         }
       }
       
-      // Direct opacity update (no transition for immediate response)
       stackImg.style.opacity = String(opacity);
-      
-      // Update z-index dynamically based on distance from main photo (by scroll position)
-      // Images closer to the main photo (by scroll) should be on top
-      // Calculate distance from main: the image's position relative to current scroll
-      // For stackIndex=0, position is 0; for stackIndex=1, position is step; etc.
-      const imagePosition = stackIndex * step; // Position of this image in scroll space
-      const distanceFromMain = Math.abs(scroll - imagePosition); // Distance from current scroll to image position
-      
-      // Z-index: images closer to main (smaller distance) get higher z-index
-      // Use large base (100000) and subtract distance to ensure closer images are on top
-      // Also factor in opacity: visible images (opacity > 0) should be above invisible ones
-      const baseZIndex = 100000;
-      const distancePenalty = Math.round(distanceFromMain * 10); // Scale distance to z-index penalty
-      const opacityBoost = opacity > 0 ? 50000 : 0; // Visible images get boost to be above invisible ones
-      const dynamicZIndex = baseZIndex - distancePenalty + opacityBoost;
-      stackImg.style.zIndex = String(dynamicZIndex);
-    });
+    }
+    
+    // Second pass: set z-index for ALL stack images by album order.
+    // Rule: image 1 → z 0, image 2 → z 1, image 3 → z 2, … so the latest (current) is on top.
+    for (const [stackIndex, stackImg] of this.albumStackByIndex) {
+      const albumIndex = stackIndex < 0
+        ? this.mainPhotoIndex + stackIndex
+        : this.mainPhotoIndex + 1 + stackIndex;
+      stackImg.style.zIndex = String(albumIndex);
+    }
+    // Orphans: elements in the layer that are not in albumStackByIndex (duplicate stackIndex overwrote them).
+    // Force them to bottom and hidden so they never show on top.
+    if (this.albumStackLayer) {
+      const inMap = new Set(this.albumStackByIndex.values());
+      Array.from(this.albumStackLayer.children).forEach(c => {
+        if (!inMap.has(c)) {
+          c.style.zIndex = '1';
+          c.style.opacity = '0';
+        }
+      });
+    }
   }
   
   /**
@@ -3523,6 +3752,9 @@ export class DrawerScene {
       this.albumStackLayer.innerHTML = '';
     }
     this.albumStackImages.clear();
+    if (this.albumStackByIndex) this.albumStackByIndex.clear();
+    this.albumPhotoIdToMapKey = null;
+    this.albumMapKeyToIndex = null;
     this.albumScrollDelta = 0;
   }
   
@@ -3663,10 +3895,15 @@ export class DrawerScene {
    * This fades out the album image instead of flying it back to tile position
    */
   startFadeOutTransition() {
-    const fadeDuration = 200; // ms - short fade for snappy transition
+    const fadeDuration = 650; // ms - balanced fade for transition to user page
+    const fadeEasing = 'cubic-bezier(0.4, 0, 0.2, 1)';
+    const fadeTransition = `opacity ${fadeDuration}ms ${fadeEasing}`;
     
     const pageContainer = document.getElementById('page-container');
     const canvas = document.getElementById('canvas');
+    
+    // Enable smooth transition on nav bars for this fade-out
+    document.body.classList.add('album-exit-fade');
     
     // CRITICAL: Clear page container content AND hide it to prevent index flash
     // Even if main.js shows it immediately, there's nothing to see
@@ -3686,27 +3923,26 @@ export class DrawerScene {
       canvas.style.display = 'none';
     }
     
-    // Hide album meta UI immediately (not animated) to prevent overlap with user title
-    // The normal hideAlbumMetaUI has a 300ms delay which is longer than our fadeDuration
+    // Hide album meta UI with smooth fade (same duration as album image)
     if (this.albumMetaEl) {
-      this.albumMetaEl.style.transition = `opacity ${fadeDuration}ms ease-out`;
+      this.albumMetaEl.style.transition = fadeTransition;
       this.albumMetaEl.style.opacity = '0';
     }
     
-    // Hide album metadata details immediately
+    // Hide album metadata details with same smooth fade
     if (this.albumMetaDetailsEl) {
-      this.albumMetaDetailsEl.style.transition = `opacity ${fadeDuration}ms ease-out`;
+      this.albumMetaDetailsEl.style.transition = fadeTransition;
       this.albumMetaDetailsEl.style.opacity = '0';
     }
     this.albumData = null;
     
-    // Fade out the album image wrapper
+    // Fade out the album image wrapper with same duration
     if (this.albumImageWrapper) {
-      this.albumImageWrapper.style.transition = `opacity ${fadeDuration}ms ease-out`;
+      this.albumImageWrapper.style.transition = fadeTransition;
       this.albumImageWrapper.style.opacity = '0';
     }
     
-    // Fade out UI (menu bars up)
+    // Fade out UI (menu bars) over the same duration for a unified feel
     const navHeight = 15 + 40 + 35;
     document.documentElement.style.setProperty('--uiAlpha', '0');
     document.documentElement.style.setProperty('--navTranslateY', `-${navHeight}px`);
@@ -3760,6 +3996,9 @@ export class DrawerScene {
       document.body.classList.remove('mode-album');
       document.documentElement.style.setProperty('--uiAlpha', '1');
       document.documentElement.style.setProperty('--navTranslateY', '0px');
+      
+      // Remove fade-out transition class
+      document.body.classList.remove('album-exit-fade');
       
       // Restore nav bars
       if (!this.topNavEl) this.topNavEl = document.getElementById('top-nav');
@@ -3871,13 +4110,6 @@ export class DrawerScene {
       // This prevents showDrawerView from updating nav title to "Remains"
       window.returningFromAlbum = true;
       
-      console.log('[exitAlbumModeImmediate] Before updateNavTitle:', {
-        username,
-        hasModeAlbum: document.body.classList.contains('mode-album'),
-        currentNavText: document.getElementById('remainsLogo')?.querySelector('h1')?.textContent,
-        returningFromAlbum: window.returningFromAlbum
-      });
-      
       // Update nav title IMMEDIATELY, BEFORE removing mode-album class
       // This ensures the correct text is set before the title becomes visible
       updateNavTitle({ view: 'user', username });
@@ -3892,18 +4124,10 @@ export class DrawerScene {
           h1.style.visibility = 'visible';
           h1.style.transition = ''; // Reset transition to use CSS defaults
           void h1.offsetHeight;
-          console.log('[exitAlbumModeImmediate] After reflow:', {
-            textContent: h1.textContent,
-            hasModeAlbum: document.body.classList.contains('mode-album'),
-            opacity: h1.style.opacity,
-            visibility: h1.style.visibility
-          });
         }
       }
       
-      console.log('[exitAlbumModeImmediate] About to remove mode-album class');
-      
-      // Restore nav bars to open state immediately (before navigating)
+      // Restore nav bars
       if (!this.topNavEl) {
         this.topNavEl = document.getElementById('top-nav');
       }
@@ -3943,8 +4167,6 @@ export class DrawerScene {
       this.userAlbumsUsername = null;
       
       // Remove album mode class and restore UI AFTER nav title is updated
-      console.log('[exitAlbumModeImmediate] Removing mode-album class, current nav text:', 
-        document.getElementById('remainsLogo')?.querySelector('h1')?.textContent);
       
       // Hide album-meta-ui IMMEDIATELY before removing mode-album class to prevent overlap
       if (this.albumMetaEl) {
@@ -3961,12 +4183,10 @@ export class DrawerScene {
         if (h1After) {
           h1After.style.opacity = '1';
           h1After.style.visibility = 'visible';
-          console.log('[exitAlbumModeImmediate] After removing mode-album, nav text:', 
-            h1After.textContent, 'opacity:', h1After.style.opacity, 'visibility:', h1After.style.visibility);
         }
       }
       
-      // Now navigate - the flag is already set so showDrawerView won't update nav title
+      // Now navigate
       navigate('user-albums', { username });
     } else if (this.fromIndex) {
       // Came from index: restore UI and navigate back to index
@@ -4148,7 +4368,6 @@ export class DrawerScene {
         }
       });
       
-      console.log(`Preload complete: ${loadedCount} total images loaded in ${elapsed}ms (visible: ${visibleLoaded}/${visibleCount})`);
     }
   }
 
@@ -4175,11 +4394,10 @@ export class DrawerScene {
         hq: hqSrc || thumbSrc, // Fallback to thumb if no HQ available
       });
     }
-    console.log(`Built photo sources map: ${this.photoSourcesById.size} photos`);
   }
   
   /**
-   * Upgrade image to high quality with smooth crossfade (no refocus: new image fades in on top)
+   * Upgrade image to high quality
    */
   async upgradeToHQ(img) {
     if (!img || img.dataset.state === 'hq') return;
@@ -4385,14 +4603,12 @@ export class DrawerScene {
       }
       
       // Fetch photo data
-      console.log('Loading photo index...');
       const response = await fetch('data/photos.index.json');
       if (!response.ok) {
         throw new Error(`Failed to load photo index: ${response.statusText}`);
       }
       
       const data = await response.json();
-      console.log(`Loaded ${data.count} photos`);
       
       // Store photos for filtering
       this.photos = data.photos;
@@ -4439,8 +4655,6 @@ export class DrawerScene {
         }
       }
       
-      console.log(`Built year index: ${this.yearToPhotoIds.size} years, ${this.unknownYearIds.size} unknown`);
-      
       // Load keywords filter data
       const keywordsResponse = await fetch('data/keywords.filters.json');
       if (!keywordsResponse.ok) {
@@ -4483,9 +4697,7 @@ export class DrawerScene {
         }
       }
       
-      console.log(`Loaded keywords index: ${this.keywordToPhotoIds.size} keywords, ${this.unknownKeywordIds.size} unknown`);
-      
-      // Generate proper layout (replaces temporary layout)
+      // Generate proper layout
       this.tiles = generateLayout(data.photos);
       
       // Center camera on the layout
@@ -4532,9 +4744,8 @@ export class DrawerScene {
       // Select preload targets (prioritized by distance from viewport center)
       // Note: Early preload already started, but now we prioritize by viewport
       this.preloadTargets = this.selectPreloadTargets();
-      console.log(`Selected ${this.preloadTargets.length} images for prioritized preload`);
       
-      // Continue preloading with viewport-based prioritization
+      // Continue preloading
       // Early preload already started, so we just ensure it continues
       if (!this.isPreloading) {
         this.isPreloading = true;
@@ -4562,7 +4773,6 @@ export class DrawerScene {
       // Start render loop after layout is ready
       this.startRenderLoop();
       
-      console.log('Drawer view initialized');
     } catch (error) {
       console.error('Error initializing drawer view:', error);
       // Hide loader on error and show nav
@@ -4590,8 +4800,6 @@ export class DrawerScene {
     // Prioritize first N photos (they're likely to be visible)
     const earlyBatchSize = Math.min(PRELOAD_TARGET, photos.length);
     const earlyPhotos = photos.slice(0, earlyBatchSize);
-    
-    console.log(`Starting early preload for ${earlyPhotos.length} images...`);
     
     // Mark as preloading
     this.isPreloading = true;
@@ -4654,9 +4862,7 @@ export class DrawerScene {
     // Clear and rebuild queue with visible images FIRST
     this.loadQueue = [...visibleImages, ...otherImages];
     
-    console.log(`Prioritized preload: ${visibleImages.length} visible images, ${otherImages.length} other images`);
-    
-    // Start processing the queue (respects concurrent limits)
+    // Start processing the queue
     this.processLoadQueue();
     
     // Check if visible images are already loaded (from early preload)
@@ -6578,6 +6784,10 @@ export class DrawerScene {
         // Set viewMode to drawer immediately (camera is now restored)
         if (shouldSetViewModeToDrawer) {
           this.viewMode = 'drawer';
+          // Force one full render so the returned-to tile is drawn even when camera
+          // matches lastCameraState (e.g. after 2nd+ exit to same view), preventing
+          // early-exit from leaving canvas stale until mouse move.
+          this.forceRenderOnce = true;
         }
         
         // Navigate back to user albums page if we came from there
@@ -7479,12 +7689,35 @@ export class DrawerScene {
       }
       // When filter changed: always recenter to new cluster so images are not cut off after zoom+filter change.
       // Use bounds center (not focusAnchor) on filter change: focusAnchor is tied to collapse target (= camera center when zoomed), so it would not move the camera.
-      // Otherwise recenter only when no tile is in view, using focus anchor or bounds center.
+      // When no tile is in view, recenter to the bounds of *current* final positions (not focus layout) so we center where tiles actually are this frame (they may still be lerping).
       const shouldRecenter = !anyInView || (filterChanged && isCollapseActive);
       if (shouldRecenter) {
-        const useBoundsCenter = (filterChanged && isCollapseActive) && this.filteredLayoutBounds;
-        const centerX = useBoundsCenter ? (this.filteredLayoutBounds.minX + this.filteredLayoutBounds.maxX) / 2 : (this.focusAnchorX !== null ? this.focusAnchorX : (this.filteredLayoutBounds ? (this.filteredLayoutBounds.minX + this.filteredLayoutBounds.maxX) / 2 : this.camera.x));
-        const centerY = useBoundsCenter ? (this.filteredLayoutBounds.minY + this.filteredLayoutBounds.maxY) / 2 : (this.focusAnchorY !== null ? this.focusAnchorY : (this.filteredLayoutBounds ? (this.filteredLayoutBounds.minY + this.filteredLayoutBounds.maxY) / 2 : this.camera.y));
+        let centerX, centerY;
+        if (filterChanged && isCollapseActive && this.filteredLayoutBounds) {
+          centerX = (this.filteredLayoutBounds.minX + this.filteredLayoutBounds.maxX) / 2;
+          centerY = (this.filteredLayoutBounds.minY + this.filteredLayoutBounds.maxY) / 2;
+        } else if (!anyInView && visibleTiles.length > 0) {
+          // Use AABB of current final positions so first image enters viewport immediately (works during zoom/collapse lerp)
+          let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+          for (const tile of visibleTiles) {
+            const pos = finalPositions.get(tile.id);
+            if (!pos) continue;
+            minX = Math.min(minX, pos.x);
+            maxX = Math.max(maxX, pos.x + tile.w);
+            minY = Math.min(minY, pos.y);
+            maxY = Math.max(maxY, pos.y + tile.h);
+          }
+          if (Number.isFinite(minX)) {
+            centerX = (minX + maxX) / 2;
+            centerY = (minY + maxY) / 2;
+          } else {
+            centerX = this.focusAnchorX !== null ? this.focusAnchorX : this.camera.x;
+            centerY = this.focusAnchorY !== null ? this.focusAnchorY : this.camera.y;
+          }
+        } else {
+          centerX = this.focusAnchorX !== null ? this.focusAnchorX : (this.filteredLayoutBounds ? (this.filteredLayoutBounds.minX + this.filteredLayoutBounds.maxX) / 2 : this.camera.x);
+          centerY = this.focusAnchorY !== null ? this.focusAnchorY : (this.filteredLayoutBounds ? (this.filteredLayoutBounds.minY + this.filteredLayoutBounds.maxY) / 2 : this.camera.y);
+        }
         this.camera.x = centerX;
         this.camera.y = centerY;
         // Clamp camera to bounds in same frame so viewport does not show empty space or clip tiles at edges.

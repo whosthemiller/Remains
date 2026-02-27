@@ -4,6 +4,8 @@
 
 let currentRoute = 'drawer';
 let routeHandlers = {};
+/** When true, the hash was just set by navigate() - skip handling in hashchange to avoid double run */
+let hashUpdateByNavigate = false;
 
 export function initRouter() {
   // Handle initial route
@@ -12,6 +14,10 @@ export function initRouter() {
   // Handle browser back/forward and hash changes
   window.addEventListener('hashchange', () => {
     const hash = window.location.hash;
+    if (hashUpdateByNavigate) {
+      hashUpdateByNavigate = false;
+      return;
+    }
     if (hash === '#/users') {
       navigate('users', {}, false);
     } else if (hash.startsWith('#/users/')) {
@@ -27,9 +33,9 @@ export function initRouter() {
 
 export function navigate(route, params = {}, updateHash = true) {
   currentRoute = route;
-  
   // Update URL hash (if updateHash is true)
   if (updateHash) {
+    hashUpdateByNavigate = true;
     if (route === 'users') {
       window.location.hash = '#/users';
     } else if (route === 'user-albums' && params.username) {

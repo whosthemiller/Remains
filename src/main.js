@@ -5,8 +5,9 @@
 import { DrawerScene } from './scenes/drawer.js';
 import { initRouter, navigate, registerRoute, getCurrentRoute } from './routing.js';
 import { renderUsersPage, loadUsersData, cleanupUsersPage } from './pages/users.js';
-import { renderUserAlbumsPage, updateNavTitle } from './pages/user-albums.js';
+import { renderUserAlbumsPage, updateNavTitle, restoreUserNav } from './pages/user-albums.js';
 import { renderIndexPage } from './pages/index.js';
+import { initPixelLoader, setPixelLoaderProgress, destroyPixelLoader } from './utils/pixelLoader.js';
 
 // Store drawer scene instance for filter UI access
 let drawerSceneInstance = null;
@@ -391,28 +392,22 @@ function showDrawerView() {
   // Update previous route
   previousRoute = 'drawer';
   
-  // If transitioning to album, hide nav title immediately
+  // If transitioning to album, fade the whole nav block (title + user data) together; do not hide only h1
   if (window.isTransitioningToAlbum) {
     const remainsLogo = domCache.remainsLogo;
     if (remainsLogo) {
-      const h1 = remainsLogo.querySelector('h1');
-      if (h1) {
-        h1.style.opacity = '0';
-        h1.style.visibility = 'hidden';
-        h1.style.transition = 'none'; // No transition - hide immediately
-      }
+      const fadeOutTransition = 'opacity 0.55s ease-in-out, visibility 0.55s ease-in-out';
+      remainsLogo.style.transition = fadeOutTransition;
+      remainsLogo.style.opacity = '0';
+      remainsLogo.style.visibility = 'hidden';
     }
-    console.log('[showDrawerView] Hiding nav title (transitioning to album)');
     return; // Don't update nav title or do anything else
   }
   
   // Restore nav title to "Remains" only if we're not returning from album mode
   // (when returning from album, the user albums view will update the title directly)
   if (!window.returningFromAlbum) {
-    console.log('[showDrawerView] Updating nav title to "Remains"');
     updateNavTitle({ view: 'drawer' });
-  } else {
-    console.log('[showDrawerView] Skipping nav title update (returningFromAlbum:', window.returningFromAlbum, ')');
   }
   
   // Do not re-enable center date label here: the drawer's render loop calls
@@ -744,10 +739,10 @@ function showUsersView() {
       pageContainer.style.pointerEvents = 'auto';
       pageContainer.style.zIndex = '1';
       
-      // First, fade out the title
-      document.body.classList.add('title-transitioning', 'title-fading-out');
+      // Update title immediately (no animation)
+      updateNavTitle({ view: 'drawer' });
       
-      // First, fade out the existing album cards smoothly
+      // Fade out the existing album cards smoothly
       const existingUsersPage = pageContainer.querySelector('.users-page');
       if (existingUsersPage) {
         // Add fade-out class to existing content
@@ -755,13 +750,6 @@ function showUsersView() {
         
         // Wait for fade-out animation to complete (450ms), then render new content
         setTimeout(() => {
-          // Update title text while hidden
-          updateNavTitle({ view: 'drawer' });
-          
-          // Switch to fade-in state
-          document.body.classList.remove('title-fading-out');
-          document.body.classList.add('title-fading-in');
-          
           // Add transitioning class to prepare for new content
           document.body.classList.add('page-transitioning');
           
@@ -788,21 +776,12 @@ function showUsersView() {
                 if (usersPageEl) {
                   usersPageEl.classList.remove('page-transitioning');
                 }
-                
-                // Clean up title transition classes after animation completes
-                setTimeout(() => {
-                  document.body.classList.remove('title-transitioning', 'title-fading-in');
-                }, 400);
               });
             });
           });
         }, 450);
       } else {
-        // No existing content, update title and render normally
-        updateNavTitle({ view: 'drawer' });
-        document.body.classList.remove('title-fading-out');
-        document.body.classList.add('title-fading-in');
-        
+        // No existing content, update title already done above, render normally
         document.body.classList.add('page-transitioning');
         
         // Focus container before rendering
@@ -824,10 +803,6 @@ function showUsersView() {
               if (usersPageEl) {
                 usersPageEl.classList.remove('page-transitioning');
               }
-              
-              setTimeout(() => {
-                document.body.classList.remove('title-transitioning', 'title-fading-in');
-              }, 400);
             });
           });
         });
@@ -974,11 +949,6 @@ function showUserAlbumsView(params) {
           // If decoding fails, use as-is
         }
     }
-    console.log('[showUserAlbumsView] Updating nav title (returning from album):', {
-      username,
-      hasModeAlbum: document.body.classList.contains('mode-album'),
-      currentNavText: domCache.remainsLogo?.querySelector('h1')?.textContent
-    });
     updateNavTitle({ view: 'user', username });
     
     // Ensure nav title is visible (it might have been hidden during transition)
@@ -1049,14 +1019,9 @@ function showUserAlbumsView(params) {
       albumMetaEl.style.display = 'none';
     }
     
-    console.log('[showUserAlbumsView] Removing mode-album class, current nav text:', 
-      domCache.remainsLogo?.querySelector('h1')?.textContent);
     document.body.classList.remove('mode-album');
-    
-    console.log('[showUserAlbumsView] After removing mode-album, nav text:', 
-      domCache.remainsLogo?.querySelector('h1')?.textContent);
   }
-  
+
   // Ensure navigation bars are visible and properly positioned when returning from album mode
   // This fixes the issue where nav bars stay hidden when navigating from album to user page
   // Also handle the case where mode-album was just removed (even if isReturningFromAlbum is false)
@@ -1124,10 +1089,18 @@ function showUserAlbumsView(params) {
       pageContainer.style.opacity = '1';
       pageContainer.style.visibility = 'visible';
       
-      // First, fade out the title
-      document.body.classList.add('title-transitioning', 'title-fading-out');
+      // Update title immediately (no animation) - decode username so we never show % in the title
+      let titleUsername = params?.username;
+      if (typeof titleUsername === 'string' && titleUsername.includes('%')) {
+        try {
+          titleUsername = decodeURIComponent(titleUsername);
+        } catch (e) {
+          // keep as-is
+        }
+      }
+      updateNavTitle({ view: 'user', username: titleUsername });
       
-      // First, fade out the existing users grid smoothly
+      // Fade out the existing users grid smoothly
       const existingUsersPage = pageContainer.querySelector('.users-page');
       if (existingUsersPage) {
         // Add fade-out class to existing content
@@ -1135,13 +1108,6 @@ function showUserAlbumsView(params) {
         
         // Wait for fade-out animation to complete (450ms - slightly longer for smoother effect)
         setTimeout(async () => {
-          // Update title text while hidden
-          updateNavTitle({ view: 'user', username: params?.username });
-          
-          // Switch to fade-in state
-          document.body.classList.remove('title-fading-out');
-          document.body.classList.add('title-fading-in');
-          
           // Add transitioning class to body BEFORE rendering
           document.body.classList.add('page-transitioning');
           
@@ -1167,20 +1133,11 @@ function showUserAlbumsView(params) {
               if (usersPageEl) {
                 usersPageEl.classList.remove('page-transitioning');
               }
-              
-              // Clean up title transition classes after animation completes
-              setTimeout(() => {
-                document.body.classList.remove('title-transitioning', 'title-fading-in');
-              }, 400);
             });
           });
         }, 450);
       } else {
-        // No existing content, update title and render normally
-        updateNavTitle({ view: 'user', username: params?.username });
-        document.body.classList.remove('title-fading-out');
-        document.body.classList.add('title-fading-in');
-        
+        // No existing content, title already updated above, render normally
         document.body.classList.add('page-transitioning');
         renderUserAlbumsPage(params);
         
@@ -1196,16 +1153,13 @@ function showUserAlbumsView(params) {
             if (usersPageEl) {
               usersPageEl.classList.remove('page-transitioning');
             }
-            
-            setTimeout(() => {
-              document.body.classList.remove('title-transitioning', 'title-fading-in');
-            }, 400);
           });
         });
       }
     }
   } else if (isReturningFromAlbum) {
     // Returning from album mode - start invisible, render, then fade in
+    document.body.classList.add('from-album');
     if (pageContainer) {
       // Reset any inline styles that might have been set
       pageContainer.style.transition = '';
@@ -1227,14 +1181,17 @@ function showUserAlbumsView(params) {
     
     // Render user albums page (async - wait for it to complete)
     renderUserAlbumsPage(params).then(() => {
-      // After content is rendered, trigger fade-in
-      if (pageContainer) {
-        // Clear inline opacity/visibility so CSS can take over
-        pageContainer.style.opacity = '';
-        pageContainer.style.visibility = '';
-        void pageContainer.offsetHeight; // Force reflow
-        pageContainer.classList.add('fade-in');
-      }
+      // Short delay before fade-in so the transition feels smoother (not instant cut)
+      const fadeInDelay = 180;
+      setTimeout(() => {
+        if (pageContainer) {
+          // Clear inline opacity/visibility so CSS can take over
+          pageContainer.style.opacity = '';
+          pageContainer.style.visibility = '';
+          void pageContainer.offsetHeight; // Force reflow
+          pageContainer.classList.add('fade-in');
+        }
+      }, fadeInDelay);
       
       // After albums are loaded and rendered, add transitioning class to trigger animations
       document.body.classList.add('page-transitioning');
@@ -1253,6 +1210,8 @@ function showUserAlbumsView(params) {
             if (usersPageEl) {
               usersPageEl.classList.remove('page-transitioning');
             }
+            // Remove from-album after fade-in so future transitions use default
+            setTimeout(() => document.body.classList.remove('from-album'), 1200);
           });
         });
       }, 50);
@@ -1298,7 +1257,7 @@ function showUserAlbumsView(params) {
   previousRoute = 'user-albums';
 }
 
-function showIndexView() {
+async function showIndexView() {
   if (window.returningToIndex) {
     window.returningToIndex = false;
   }
@@ -1397,12 +1356,12 @@ function showIndexView() {
       pageContainer.style.pointerEvents = 'auto';
       pageContainer.classList.add('fade-in');
     }
-    renderIndexPage();
+    await renderIndexPage();
     
     // Add class to trigger image fade-in (images appear immediately)
     document.body.classList.add('index-images-fade-in');
     
-    // Remove transitioning class to trigger row animations
+    // Remove transitioning class to trigger row animations (after rows are in DOM)
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         document.body.classList.remove('page-transitioning');
@@ -1433,8 +1392,8 @@ function showIndexView() {
       pageContainer.offsetHeight;
     }
     
-    // Render index page content first (while hidden)
-    renderIndexPage();
+    // Render index page content first (while hidden) - wait so rows exist before we remove page-transitioning
+    await renderIndexPage();
     
     // Wait for user images to fade out (300ms), then fade in index images
     setTimeout(() => {
@@ -1486,8 +1445,8 @@ function showIndexView() {
     // Add transitioning class to start rows in hidden state
     document.body.classList.add('page-transitioning');
     
-    // Render index page content first (while hidden)
-    renderIndexPage();
+    // Render index page content first (while hidden) - wait so rows exist before we remove page-transitioning
+    await renderIndexPage();
     
     // Fade in page container after a brief delay
     if (canvas && isComingFromDrawer) {
@@ -1629,6 +1588,9 @@ function enterAboutMode(aboutToggle) {
   // Set about active state
   isAboutActive = true;
   
+  // Restore nav title to "Remains" and hide user-data when entering about (e.g. from user-albums)
+  updateNavTitle({ view: 'drawer' });
+  
   // Toggle the active class on the about toggle
   aboutToggle.classList.add('active');
   
@@ -1690,8 +1652,15 @@ function exitAboutMode(aboutToggle) {
         navigate('drawer');
       }
     }, 100);
+  } else if (viewToRestore === 'user-albums') {
+    // Same view (already on user-albums): restore nav title and user data without full re-render
+    const hash = window.location.hash;
+    if (hash.startsWith('#/users/')) {
+      const username = hash.substring('#/users/'.length);
+      restoreUserNav(username);
+    }
   }
-  // If no navigation needed, CSS transitions will handle fading the content back in
+  // If no navigation needed for other views, CSS transitions will handle fading the content back in
 }
 
 /**
@@ -1969,10 +1938,18 @@ function setupRadioButtons() {
       }
     });
   });
-}
 
-// Import pixel loader module
-import { initPixelLoader, setPixelLoaderProgress, destroyPixelLoader } from './utils/pixelLoader.js';
+  // Click on "Remains" logo navigates to gallery (drawer)
+  const remainsLogo = document.getElementById('remainsLogo');
+  if (remainsLogo) {
+    remainsLogo.addEventListener('click', () => {
+      closeAboutModeIfActive();
+      positionDotHighlights();
+      positionRadioMarker('drawer');
+      navigate('drawer');
+    });
+  }
+}
 
 // Initialize pixel loader bar (called before init so bar is visible when loader shows)
 function fillLoaderPixels() {
@@ -2541,16 +2518,11 @@ function handleLocationFilterClick(optionElement, geoLabel) {
     // Single selection per category: if present → remove, if absent → clear previous and add new
     if (isCurrentlySelected) {
       drawerSceneInstance.activeLocations.delete(geoLabel);
-      // Update UI: remove selection
       optionElement.classList.remove('is-selected');
-      console.log('[FILTER TOGGLE] Removed location:', geoLabel, 'Set now:', Array.from(drawerSceneInstance.activeLocations));
     } else {
-      // Clear previous selection (only one filter per category)
       drawerSceneInstance.activeLocations.clear();
       drawerSceneInstance.activeLocations.add(geoLabel);
-      // Update UI: add selection
       optionElement.classList.add('is-selected');
-      console.log('[FILTER TOGGLE] Added location:', geoLabel, 'Set now:', Array.from(drawerSceneInstance.activeLocations));
     }
     
     // Handle focus behavior

@@ -37,24 +37,39 @@ function calculateStorageDuration(uploadedUnix) {
 
 /**
  * Calculate navigation bar position and column widths
+ * Wide viewports (Mac): keep original layout (navWidth 1274, navRightOffset 35).
+ * Narrow viewports: fit table within window (navWidth/offset derived from viewport).
  */
 function calculateColumnWidths() {
-  const navRightOffset = 35; // --nav-right-offset
-  const navWidth = 1274; // --nav-width
   const windowWidth = window.innerWidth;
-  
-  // Navigation bar left edge
+  const NARROW_THRESHOLD = 500; // below this width, fit table to viewport
+
+  let navRightOffset, navWidth, leftColumnWidth, dataColumnWidth;
+
+  if (windowWidth >= 1309) {
+    // Wide viewport (Mac): original layout so nothing changes
+    navRightOffset = 35;
+    navWidth = 1274;
+    const navLeftEdge = windowWidth - navRightOffset - navWidth;
+    leftColumnWidth = navLeftEdge;
+    dataColumnWidth = navWidth / 5;
+  } else if (windowWidth < NARROW_THRESHOLD) {
+    // Narrow viewport: table fits within window
+    navRightOffset = 15;
+    navWidth = Math.min(980, Math.max(200, windowWidth - 65));
+    leftColumnWidth = Math.max(0, windowWidth - navRightOffset - navWidth);
+    dataColumnWidth = navWidth / 5;
+  } else {
+    // Medium viewport: scale down so table fits (no negative left column)
+    navRightOffset = 15;
+    const maxNavWidth = windowWidth - navRightOffset - 50; // leave ~50px for thumbnail column
+    navWidth = Math.min(980, Math.max(200, maxNavWidth));
+    leftColumnWidth = Math.max(0, windowWidth - navRightOffset - navWidth);
+    dataColumnWidth = navWidth / 5;
+  }
+
   const navLeftEdge = windowWidth - navRightOffset - navWidth;
-  
-  // Left column width (from 0 to nav bar left edge)
-  const leftColumnWidth = navLeftEdge;
-  
-  // Data columns total width (nav bar width)
-  const dataColumnsWidth = navWidth;
-  
-  // Each data column width (5 equal columns)
-  const dataColumnWidth = dataColumnsWidth / 5;
-  
+
   return {
     leftColumnWidth,
     dataColumnWidth,

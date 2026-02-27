@@ -62,6 +62,9 @@
   --ink: #424242; /* Dark color for text stroke */
   --ui-layer: 20000; /* Nav + filter bars always on top of content (date, album meta, etc.) */
   
+  /* Page top spacing: used for #page-container padding-top and .users-page min-height. Overridden in narrow breakpoint. */
+  --page-top: 380px;
+  
   /* 80kb font - only 2 sizes */
   --80kb-small: clamp(11px, calc(1.1 * var(--scale-w) / 100), 13px);  /* Nav buttons, labels, filters */
   --80kb-body: clamp(11px, calc(1.1 * var(--scale-w) / 100), 13px);   /* Body text, same as small for consistency */
@@ -1409,7 +1412,7 @@ body.nav-entering #nav-marker-overlay {
   overflow-x: hidden;
   background-color: #f5f5f5;
   z-index: 1;
-  padding-top: 380px; /* Space for nav bars (120px) + 260px additional spacing */
+  padding-top: var(--page-top); /* Space for nav bars + gap; overridden in max-width: 400px */
   padding-left: 0;
   padding-right: 0;
   padding-bottom: 40px; /* Add bottom padding for better scrolling */
@@ -1448,7 +1451,7 @@ body.view-index #page-container.fade-in {
   margin-top: 0;
   margin-bottom: 0;
   padding: 0; /* No padding/margins outside grid */
-  min-height: calc(100vh - 380px); /* Extend to bottom of viewport */
+  min-height: calc(100vh - var(--page-top)); /* Extend to bottom of viewport */
   padding-bottom: 40px; /* Add bottom padding for better scrolling */
 }
 
@@ -1839,6 +1842,32 @@ body:not(.page-transitioning):not(.mode-album) .site-title h1 {
   }
 }
 
+/* Narrow viewport (e.g. 379px) - nav/content smaller, less top gap, index can scroll horizontally */
+@media (max-width: 400px) {
+  :root {
+    --center-nav-height: 32px;
+    --filters-nav-height: 20px;
+    --title-font-size: clamp(20px, calc(6 * var(--scale-w) / 100), 24px);
+    --logo-left-offset: 8px;
+    --icon-text-gap: clamp(4px, calc(0.6 * var(--scale-w) / 100), 8px);
+    --filter-label-padding: clamp(6px, calc(0.8 * var(--scale-w) / 100), 10px);
+    --page-top: calc(var(--nav-height) + var(--center-nav-height) + var(--filters-nav-height) + var(--filters-nav-gap) + 40px);
+  }
+  
+  .site-title {
+    left: 8px;
+  }
+  
+  .album-meta-ui {
+    left: 8px;
+  }
+  
+  /* Index table: allow horizontal scroll when table is wider than viewport */
+  .index-table-body {
+    overflow-x: auto;
+  }
+}
+
 /* Index Page */
 .index-page {
   width: 100%;
@@ -2066,6 +2095,8 @@ body.view-index .center-date {
   pointer-events: none;
   transition: opacity 0.4s ease, visibility 0.4s ease;
   max-width: var(--nav-width);
+  max-height: calc(100vh - (var(--nav-height) + var(--center-nav-height) + 90px));
+  overflow-y: auto;
 }
 
 /* About paragraph styling */

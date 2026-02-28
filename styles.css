@@ -233,8 +233,8 @@ body:not(.mode-album) #top-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1em;
-  height: 1em;
+  width: 100%;
+  height: 100%;
   font-size: clamp(18px, calc(2.5 * var(--scale-w) / 100), 24px);
   line-height: 1;
   color: #424242;
@@ -2345,27 +2345,11 @@ body.mode-about #about-trail-container {
     min-height: calc(100vh - 200px);
   }
 
-  /* Index: keep table within width and allow horizontal scroll if needed */
+  /* Index: full viewport width, no min-width constraint that could crop on ultra-wide */
   .index-page {
     width: 100%;
-    max-width: 100vw;
     left: 0;
     right: 0;
-  }
-
-  .index-table,
-  .index-table-header,
-  .index-table-body {
-    max-width: 100%;
-  }
-
-  .index-table-body {
-    overflow-x: auto;
-  }
-
-  .index-table-header,
-  .index-table-row {
-    min-width: min(100%, 1200px);
   }
 }
 

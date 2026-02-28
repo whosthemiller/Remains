@@ -1841,76 +1841,48 @@ function positionDotHighlights() {
   });
   
   // Squares are on a 4px grid (2px square + 2px gap)
-  // Square centers are at positions: 1px, 5px, 9px, 13px, etc. (relative to row start)
-  const gridPeriod = 4; // 2px square + 2px gap
+  // Snap to square centers at 1, 5, 9, 13... so the dots row gradient lines sit on the same grid
+  const gridPeriod = 4;
+  const gridPhase = 1; // square center is 1px into each 4px cell
   
-  // Use the first button's position as reference to determine grid alignment
-  const referenceX = initialPositions[0];
-  const gridOffset = (referenceX % gridPeriod);
-  
-  // Calculate aligned positions for each button (snap to nearest square center)
+  // Calculate aligned positions (snap each button center to nearest grid point 1 + n*4)
   const alignedPositions = [];
   buttons.forEach((button, index) => {
     const highlight = highlights[index];
     if (!highlight) return;
     
     const initialX = initialPositions[index];
-    
-    // Find nearest square center on the grid
-    // Square centers are at: gridOffset + n*4, where we want the center (1px into square)
-    const relativeToGrid = (initialX - gridOffset) % gridPeriod;
-    let adjustment = 0;
-    
-    if (relativeToGrid < 1) {
-      // Closer to previous square center
-      adjustment = -relativeToGrid;
-    } else if (relativeToGrid > 3) {
-      // Closer to next square center
-      adjustment = gridPeriod - relativeToGrid;
-    } else {
-      // Closer to current square center
-      adjustment = 1 - relativeToGrid;
-    }
-    
-    // Limit adjustment to ±1px
-    adjustment = Math.max(-1, Math.min(1, adjustment));
-    
-    const alignedX = initialX + adjustment;
+    const alignedX = Math.round((initialX - gridPhase) / gridPeriod) * gridPeriod + gridPhase;
     alignedPositions.push(alignedX);
     
-    // Apply button adjustment
-    if (Math.abs(adjustment) > 0.1) {
-      button.style.transform = `translateX(${adjustment}px)`;
+    const adjustment = alignedX - initialX;
+    const clampedAdjustment = Math.max(-2, Math.min(2, adjustment));
+    
+    if (Math.abs(clampedAdjustment) > 0.1) {
+      button.style.transform = `translateX(${clampedAdjustment}px)`;
     } else {
       button.style.transform = '';
     }
   });
   
-  // Position tall rectangles (highlights) directly below button centers
-  // Same offset as marker so high pixel (line/arrow) aligns with low (dots). Edge notches offset inward.
-  const highlightOffsetByIndex = { 0: 1, 1: 0, 2: -1 }; // users, drawer, albums - edges move slightly inward
+  // Position highlights on the same 4px grid so squares and gradient lines share spacing
   buttons.forEach((button, index) => {
     const highlight = highlights[index];
     if (!highlight) return;
     
-    // Get button center after transforms have been applied
-    const buttonRect = button.getBoundingClientRect();
-    const buttonCenterX = buttonRect.left + buttonRect.width / 2;
-    const offset = highlightOffsetByIndex[index] ?? 0;
-    const relativeX = buttonCenterX - navRect.left + offset;
-    
-    // Position highlight directly below button center
-    highlight.style.left = `${relativeX}px`;
+    // Center each highlight on the grid: segment centers are at alignedPosition + 1 (1px into each 4px cell)
+    const gridCenterX = alignedPositions[index] + 1;
+    highlight.style.left = `${Math.round(gridCenterX)}px`;
     highlight.style.transform = 'translateX(-50%)';
   });
   
-  // Update dots row to span from Users to Albums
+  // Update dots row to span from Users to Albums; use integer pixels so gradient lines sit on square pixels
   if (alignedPositions.length >= 2) {
     const usersPosition = alignedPositions[0];
     const albumsPosition = alignedPositions[alignedPositions.length - 1];
     
-    dotsRow.style.left = `${usersPosition}px`;
-    dotsRow.style.width = `${albumsPosition - usersPosition}px`;
+    dotsRow.style.left = `${Math.round(usersPosition)}px`;
+    dotsRow.style.width = `${Math.round(albumsPosition - usersPosition)}px`;
     dotsRow.style.transform = 'none';
   }
 }

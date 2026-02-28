@@ -1939,27 +1939,18 @@ export class GalleryScene {
       this.applyNoOrphanWrap(albumNameEl, albumName, 700);
     }
     if (usernameSpan) {
-      // For filtered albums, hide username and "by" line (it's shown in details below)
-      // For regular albums, show username as before
-      if (this.isFilteredAlbum) {
-        usernameSpan.style.display = 'none';
-        // Also hide the "by" line
-        const byLineEl = this.albumMetaEl.querySelector('.album-by');
-        if (byLineEl) {
-          byLineEl.style.display = 'none';
-        }
+      // Show username and "by" line for both filtered and regular albums (keep Alaine & Joe Chang intact)
+      usernameSpan.style.display = '';
+      if (userDisplayName === 'Alaine & Joe Chang') {
+        usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
       } else {
-        usernameSpan.style.display = '';
-        if (userDisplayName === 'Alaine & Joe Chang') {
-          usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
-        } else {
-          usernameSpan.textContent = userDisplayName;
-        }
-        // Show the "by" line for regular albums
-        const byLineEl = this.albumMetaEl.querySelector('.album-by');
-        if (byLineEl) {
-          byLineEl.style.display = '';
-        }
+        usernameSpan.textContent = userDisplayName;
+      }
+      const byLineEl = this.albumMetaEl.querySelector('.album-by');
+      if (byLineEl) {
+        byLineEl.style.display = '';
+      }
+      if (!this.isFilteredAlbum) {
         // Add click handler to navigate to user page with fade out animation
         usernameSpan.onclick = (e) => {
           e.stopPropagation();
@@ -1968,6 +1959,8 @@ export class GalleryScene {
           // Start exit transition (will navigate after animation completes)
           this.exitAlbumMode();
         };
+      } else {
+        usernameSpan.onclick = null;
       }
     }
     
@@ -2242,7 +2235,7 @@ export class GalleryScene {
       const usernameSpan = document.createElement('span');
       usernameSpan.className = 'meta-value';
       if (userDisplayName === 'Alaine & Joe Chang') {
-        usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
+        usernameSpan.textContent = 'Alaine & Joe Chang';
       } else {
         usernameSpan.textContent = userDisplayName;
       }

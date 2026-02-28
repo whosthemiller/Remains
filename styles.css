@@ -372,6 +372,38 @@ body {
   transition: opacity 50ms linear;
 }
 
+/* Long username (e.g. petersen.andrea): smaller title so full name fits, no letter cut; keep spacing proportion with bar */
+.site-title.title-long-username.site-title--user-view {
+  top: calc(var(--nav-block-height) / 2 - ((var(--title-font-size) - 6px) * 1.05) / 2);
+}
+/* Override body.view-user-albums .site-title h1 (higher specificity) so we never wrap - full word on one line */
+body.view-user-albums .site-title.title-long-username h1 {
+  font-size: calc(var(--title-font-size) - 6px);
+  white-space: nowrap !important; /* one word - never break to second line */
+  max-width: none;
+  overflow: visible;
+}
+.site-title.title-long-username h1 {
+  font-size: calc(var(--title-font-size) - 6px);
+  white-space: nowrap;
+  overflow: visible;
+}
+
+/* Keep title wrapped (broken) during transition from user-albums to album.
+   When we navigate to drawer we remove view-user-albums immediately, so without this
+   the title would flash to one line (nowrap) during the fade-out. */
+.site-title.site-title--user-view h1 {
+  font-size: var(--title-font-size);
+  line-height: 1.05;
+  max-width: calc(100vw - var(--nav-right-offset) - var(--nav-width) - 30px - 50px);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+.site-title.site-title--user-view h1.title-allow-orphan {
+  text-wrap: normal;
+}
+
 .site-title.remains-nav-link,
 .site-title.remains-nav-link h1 {
   cursor: pointer;

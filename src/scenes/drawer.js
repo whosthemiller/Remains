@@ -7105,18 +7105,19 @@ export class DrawerScene {
     // Branch: Album mode or Drawer mode
     // During exit transition, we need to render drawer tiles (with fade-in) instead of album mode
     // Also: when exit just completed (exitHideOverlayNextFrame), we must render tiles even if viewMode is still 'album'
-    // Also: skip this on the frame where transition just completed (to draw the final transition tile)
-    if (this.viewMode === 'album' && !this.transition.active && !this.exitTransitionActive && !this.exitHideOverlayNextFrame && !this.transitionJustCompleted) {
+    // Also: on the frame when enter transition just completed (transitionJustCompleted), draw only background to avoid flash of gallery tiles
+    if ((this.viewMode === 'album' && !this.transition.active && !this.exitTransitionActive && !this.exitHideOverlayNextFrame && !this.transitionJustCompleted) || this.transitionJustCompleted) {
       // Normal album mode (not exiting) - DOM wrapper handles rendering, canvas just shows background
+      // Same for transitionJustCompleted frame: only background, no tile loop
       this.ctx.fillStyle = '#f5f5f5';
       this.ctx.fillRect(0, 0, this.width, this.height);
+      if (this.transitionJustCompleted) {
+        this.transitionJustCompleted = false;
+      }
       return;
     }
     
-    // Reset transitionJustCompleted flag after it's been used
-    if (this.transitionJustCompleted) {
-      this.transitionJustCompleted = false;
-    }
+    // Reset transitionJustCompleted flag after it's been used (if not already consumed above)
     
     // First drawer frame after exit: fade out overlay (tile is drawn underneath)
     // This also handles the case where viewMode is still 'album' but exit just completed
@@ -7832,7 +7833,12 @@ export class DrawerScene {
         continue;
       }
       
-      // Check if image is loaded and in keepViewport (use collapsed position for viewport check)
+      // During enter transition: draw only uniform background + selected tile in screen space (no gallery tiles)
+      if (this.transition.active) {
+        continue;
+      }
+      
+      // Check if image is loaded and in keepViewport
       const cacheEntry = this.imageCache.get(tile.id);
       const hasImage = cacheEntry && cacheEntry.img.complete && cacheEntry.img.naturalWidth > 0;
       // Use final position for viewport intersection check
@@ -7873,7 +7879,8 @@ export class DrawerScene {
           const elapsed = now - this.transition.startTime;
           const t = clamp(elapsed / this.transition.duration, 0, 1);
           const ease = easeInOutQuad(t);
-          const fadeOut = 1 - ease;
+          // First frame: other tiles start invisible to prevent flash (then same fade-out curve)
+          const fadeOut = (elapsed < 16) ? 0 : (1 - ease);
           // Other tiles fade out
           opacityAmount *= fadeOut;
         }
@@ -7948,7 +7955,8 @@ export class DrawerScene {
           const elapsed = now - this.transition.startTime;
           const t = clamp(elapsed / this.transition.duration, 0, 1);
           const ease = easeInOutQuad(t);
-          const fadeOut = 1 - ease;
+          // First frame: other tiles start invisible to prevent flash (same as image branch)
+          const fadeOut = (elapsed < 16) ? 0 : (1 - ease);
           // Other tiles fade out
           placeholderOpacity *= fadeOut;
         }

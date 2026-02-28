@@ -291,7 +291,7 @@ export async function renderUserAlbumsPage(params) {
       // If decoding fails, use as-is
     }
   }
-  
+
   // Ensure nav block (title + user data) is visible (might have been hidden during transition)
   const remainsLogo = document.getElementById('remainsLogo');
   if (remainsLogo) {
@@ -317,13 +317,13 @@ export async function renderUserAlbumsPage(params) {
     container.innerHTML = `<div class="user-albums-page"><p>User not found</p></div>`;
     return;
   }
-  
+
   // Update nav title to show username and user data
   updateNavTitle({ view: 'user', username, userData: currentUser });
-  
+
   // Load albums
   albumsData = await loadUserAlbums(username);
-  
+
   // Render albums grid
   const albumCards = albumsData.map(album => createAlbumCard(album, currentUser.userKey)).join('');
   
@@ -424,7 +424,7 @@ function setupAlbumCardHandlers() {
           const response = await fetch(getDataPath('photos.index.json'));
           if (!response.ok) return;
           const data = await response.json();
-          
+
           // Try to use the stored first photo ID (top thumbnail) if available
           // The stored ID is the full path (photo.id), not just photoId
           const firstPhotoId = card.dataset.firstPhotoId;
@@ -438,12 +438,12 @@ function setupAlbumCardHandlers() {
           
           // Fallback: if not found or no stored photoId, find first photo from this user and album
           if (!photo) {
-            photo = data.photos.find(p => 
-              p.userKey === userKey && 
+            photo = data.photos.find(p =>
+              p.userKey === userKey &&
               p.albumKey === albumKey
             );
           }
-          
+
           if (photo && photo.id) {
             // Set flag to prevent drawer from showing
             window.isTransitioningToAlbum = true;
@@ -721,6 +721,11 @@ function updateNavTitle({ view, username, albumTitle, userData }) {
   
   // Set positioning class atomically with content to prevent body/content desync jump
   remainsLogo.classList.toggle('site-title--user-view', view === 'user' && !!displayUsername);
+  // Long single-word usernames (e.g. petersen.andrea): never truncate; use smaller title font so it fits and spacing proportion is kept
+  const longNoCutUsernames = ['petersen.andrea', 'paterson.andrea'];
+  const isLongNoCut = view === 'user' && typeof displayUsername === 'string' &&
+    longNoCutUsernames.includes(displayUsername.toLowerCase());
+  remainsLogo.classList.toggle('title-long-username', !!isLongNoCut);
   // Update text content FIRST, synchronously, to prevent any flash of wrong text
   let newText = 'Remains';
   if (view === 'user' && displayUsername) {

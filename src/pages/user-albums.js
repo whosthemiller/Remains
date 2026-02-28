@@ -719,6 +719,8 @@ function updateNavTitle({ view, username, albumTitle, userData }) {
     }
   }
   
+  // Set positioning class atomically with content to prevent body/content desync jump
+  remainsLogo.classList.toggle('site-title--user-view', view === 'user' && !!displayUsername);
   // Update text content FIRST, synchronously, to prevent any flash of wrong text
   let newText = 'Remains';
   if (view === 'user' && displayUsername) {

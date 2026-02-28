@@ -1576,6 +1576,22 @@ function setupAboutToggle() {
       }
     });
   }
+
+  // Wheel handler: when in about mode, scroll about-content from anywhere on screen
+  const aboutContent = document.getElementById('about-content');
+  if (aboutContent) {
+    document.addEventListener('wheel', function aboutWheel(e) {
+      if (!document.body.classList.contains('mode-about')) return;
+      const el = aboutContent;
+      const canScrollUp = el.scrollTop > 0;
+      const canScrollDown = el.scrollTop < el.scrollHeight - el.clientHeight;
+      const delta = e.deltaY;
+      if ((delta < 0 && canScrollUp) || (delta > 0 && canScrollDown)) {
+        e.preventDefault();
+        el.scrollTop += delta;
+      }
+    }, { passive: false, capture: true });
+  }
 }
 
 /**
@@ -1602,6 +1618,16 @@ function enterAboutMode(aboutToggle) {
   
   // Start mouse trail effect
   startAboutMouseTrail();
+  
+  // Focus about content so it receives scroll when opened from Index/Collections (page-container scroll)
+  const aboutContent = document.getElementById('about-content');
+  if (aboutContent) {
+    document.activeElement?.blur?.();
+    // Focus after transition (0.4s)—element may not accept focus until fully visible when opened from Index/Collections
+    setTimeout(() => {
+      aboutContent.focus({ preventScroll: true });
+    }, 450);
+  }
 }
 
 /**
@@ -1889,9 +1915,19 @@ function positionDotHighlights() {
   }
 }
 
+// Derive current radio from body view classes (used when no explicit radio is passed, e.g. on resize)
+function getCurrentRadioFromView() {
+  const body = document.body;
+  if (body.classList.contains('view-users') || body.classList.contains('view-user-albums')) return 'users';
+  if (body.classList.contains('view-index')) return 'albums';
+  if (body.classList.contains('view-albums')) return 'albums';
+  return 'drawer';
+}
+
 // Position radio marker to point to selected option
-function positionRadioMarker(selectedRadio = 'drawer') {
-  const selectedButton = document.querySelector(`[data-radio="${selectedRadio}"]`);
+function positionRadioMarker(selectedRadio) {
+  const radio = selectedRadio ?? getCurrentRadioFromView();
+  const selectedButton = document.querySelector(`[data-radio="${radio}"]`);
   const markerLine = document.getElementById('radio-marker-line');
   const markerArrow = document.getElementById('radio-marker-arrow');
   const topNav = domCache.topNav;
@@ -1903,7 +1939,7 @@ function positionRadioMarker(selectedRadio = 'drawer') {
   const buttonRect = selectedButton.getBoundingClientRect();
   let buttonCenterX = buttonRect.left + buttonRect.width / 2;
   // Offset: users 0 (align with text), index (albums) -2px left
-  if (selectedRadio === 'albums') buttonCenterX -= 2;
+  if (radio === 'albums') buttonCenterX -= 2;
   
   const topNavRect = topNav.getBoundingClientRect();
   const centerNavRect = centerNav.getBoundingClientRect();

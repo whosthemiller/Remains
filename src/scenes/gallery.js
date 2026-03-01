@@ -13,7 +13,7 @@
 
 import { navigate } from '../routing.js';
 import { updateNavTitle } from '../pages/user-albums.js';
-import { wheelDeltaForZoom, wheelDeltaForAlbum } from '../utils/wheelNormalize.js';
+import { normalizedWheelDelta } from '../utils/wheelDelta.js';
 
 // Helper functions
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -872,9 +872,6 @@ export class GalleryScene {
       this.zoomAnchorScreenX = x;
       this.zoomAnchorScreenY = y;
       
-      // Normalize wheel for mouse vs trackpad (mouse: natural direction + responsive)
-      const effectiveDeltaY = wheelDeltaForZoom(e);
-      
       // Check if collapse mode is active (filters active)
       const isCollapseMode = this.filtersActive();
       
@@ -889,8 +886,8 @@ export class GalleryScene {
         const distToIn = Math.abs(currentZoom - zoomIn);
         const currentState = distToOut < distToIn ? 'out' : 'in';
         
-        // Toggle to the other state based on scroll direction (natural: scroll down = zoom out on mouse)
-        if (effectiveDeltaY > 0) {
+        // Toggle to the other state based on scroll direction (inverted: scroll down = zoom in)
+        if (e.deltaY > 0) {
           // Scrolling down (zoom in) - go to zoom in state
           this.collapseZoomState = 'in';
           this.targetZoom = zoomIn;
@@ -900,8 +897,12 @@ export class GalleryScene {
           this.targetZoom = zoomOut;
         }
       } else {
-        // Normal continuous zoom when collapse mode is not active
-        const delta = effectiveDeltaY > 0 ? 1 + ZOOM_SENSITIVITY : 1 - ZOOM_SENSITIVITY;
+        // Normal continuous zoom when collapse mode is not active (inverted direction)
+        const raw = e.deltaY;
+        const norm = normalizedWheelDelta(e);
+        const sign = raw > 0 ? 1 : -1;
+        const stepMultiplier = Math.min(3, Math.max(1, Math.abs(norm) / 80));
+        const delta = sign > 0 ? 1 + ZOOM_SENSITIVITY * stepMultiplier : 1 - ZOOM_SENSITIVITY * stepMultiplier;
         this.targetZoom *= delta;
         
         // Clamp to min/max (dynamic minimum based on content bounds)
@@ -2899,8 +2900,8 @@ export class GalleryScene {
     e.preventDefault();
     e.stopPropagation();
     
-    // Normalize for mouse vs trackpad (mouse: natural direction + 1.5x speed)
-    const deltaY = wheelDeltaForAlbum(e);
+    // Direct update: wheel delta maps 1:1 to scroll value (normalized for mouse wheel)
+    const deltaY = normalizedWheelDelta(e);
     const step = this.ALBUM_SCROLL_STEP;
     
     // Calculate scroll range

@@ -8,6 +8,7 @@ import { renderUsersPage, loadUsersData, cleanupUsersPage } from './pages/users.
 import { renderUserAlbumsPage, updateNavTitle, restoreUserNav } from './pages/user-albums.js';
 import { renderIndexPage } from './pages/index.js';
 import { initPixelLoader, setPixelLoaderProgress, destroyPixelLoader } from './utils/pixelLoader.js';
+import { normalizedWheelDelta } from './utils/wheelDelta.js';
 
 // Store drawer scene instance for filter UI access
 let drawerSceneInstance = null;
@@ -634,8 +635,9 @@ function showUsersView() {
             e.preventDefault();
             e.stopPropagation();
             
-            // Manually scroll the container
-            const newScroll = pageContainer.scrollTop + e.deltaY;
+            // Manually scroll the container (normalized for mouse wheel)
+            const dy = normalizedWheelDelta(e);
+            const newScroll = pageContainer.scrollTop + dy;
             pageContainer.scrollTop = Math.max(0, Math.min(newScroll, pageContainer.scrollHeight - pageContainer.clientHeight));
           }
         }
@@ -1032,7 +1034,8 @@ function showUserAlbumsView(params) {
       if (targetIsOutside || target === pc || pc.contains(target)) {
         const prev = pc.scrollTop;
         const max = pc.scrollHeight - pc.clientHeight;
-        const next = Math.max(0, Math.min(prev + e.deltaY, max));
+        const dy = normalizedWheelDelta(e);
+        const next = Math.max(0, Math.min(prev + dy, max));
 
         if (next !== prev) {
           e.preventDefault();
@@ -1582,8 +1585,9 @@ async function showIndexView() {
           // Prevent default scrolling behavior
           e.preventDefault();
           e.stopPropagation();
-          // Manually scroll the table body
-          const newScroll = tableBody.scrollTop + e.deltaY;
+          // Manually scroll the table body (normalized for mouse wheel)
+          const dy = normalizedWheelDelta(e);
+          const newScroll = tableBody.scrollTop + dy;
           tableBody.scrollTop = Math.max(0, Math.min(newScroll, tableBody.scrollHeight - tableBody.clientHeight));
         }
       }
@@ -1628,7 +1632,7 @@ function setupAboutToggle() {
       const el = aboutContent;
       const canScrollUp = el.scrollTop > 0;
       const canScrollDown = el.scrollTop < el.scrollHeight - el.clientHeight;
-      const delta = e.deltaY;
+      const delta = normalizedWheelDelta(e);
       if ((delta < 0 && canScrollUp) || (delta > 0 && canScrollDown)) {
         e.preventDefault();
         el.scrollTop += delta;

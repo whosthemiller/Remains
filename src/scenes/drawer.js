@@ -14,7 +14,6 @@
 import { navigate, getCurrentRoute } from '../routing.js';
 import { updateNavTitle, isLongUsername } from '../pages/user-albums.js';
 import { setPixelLoaderProgress, onPixelLoaderComplete } from '../utils/pixelLoader.js';
-import { wheelDeltaForZoom, wheelDeltaForAlbum } from '../utils/wheelNormalize.js';
 
 // Helper functions
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -882,9 +881,6 @@ export class DrawerScene {
       this.zoomAnchorScreenX = x;
       this.zoomAnchorScreenY = y;
       
-      // Normalize wheel for mouse vs trackpad (mouse: natural direction + responsive)
-      const effectiveDeltaY = wheelDeltaForZoom(e);
-      
       // Check if collapse mode is active (filters active)
       const isCollapseMode = this.filtersActive();
       
@@ -899,8 +895,8 @@ export class DrawerScene {
         const distToIn = Math.abs(currentZoom - zoomIn);
         const currentState = distToOut < distToIn ? 'out' : 'in';
         
-        // Toggle to the other state based on scroll direction (natural: scroll down = zoom out on mouse)
-        if (effectiveDeltaY > 0) {
+        // Toggle to the other state based on scroll direction (inverted: scroll down = zoom in)
+        if (e.deltaY > 0) {
           // Scrolling down (zoom in) - go to zoom in state
           this.collapseZoomState = 'in';
           this.targetZoom = zoomIn;
@@ -910,8 +906,8 @@ export class DrawerScene {
           this.targetZoom = zoomOut;
         }
       } else {
-        // Normal continuous zoom when collapse mode is not active
-        const delta = effectiveDeltaY > 0 ? 1 + ZOOM_SENSITIVITY : 1 - ZOOM_SENSITIVITY;
+        // Normal continuous zoom when collapse mode is not active (inverted direction)
+        const delta = e.deltaY > 0 ? 1 + ZOOM_SENSITIVITY : 1 - ZOOM_SENSITIVITY;
         this.targetZoom *= delta;
         
         // Clamp to min/max (dynamic minimum based on content bounds)
@@ -3141,8 +3137,8 @@ export class DrawerScene {
     e.preventDefault();
     e.stopPropagation();
     
-    // Normalize for mouse vs trackpad (mouse: natural direction + 1.5x speed; trackpad 1.35x)
-    const deltaY = wheelDeltaForAlbum(e, 1.35);
+    // Slight scale so scroll feels responsive without being too fast (1.35x)
+    const deltaY = e.deltaY * 1.35;
     const step = this.ALBUM_SCROLL_STEP;
     
     // Calculate scroll range

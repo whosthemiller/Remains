@@ -400,6 +400,10 @@ body.view-user-albums .site-title.title-long-username h1 {
   overflow-wrap: break-word;
   white-space: normal;
 }
+/* When both classes present, keep reduced size even after body loses view-user-albums (during fade-out to album) to prevent header jump */
+.site-title.title-long-username.site-title--user-view h1 {
+  font-size: calc(var(--title-font-size) - 6px);
+}
 .site-title.site-title--user-view h1.title-allow-orphan {
   text-wrap: normal;
 }
@@ -455,6 +459,12 @@ body.mode-album .album-meta-ui {
   pointer-events: none;
   cursor: default;
   text-wrap: balance; /* Prefer balanced lines to avoid orphan words */
+}
+
+/* When entering album from user page with long username (e.g. paterson.andrea), use same reduced title size to avoid header jump */
+.album-meta-ui.album-meta-ui--from-long-username .album-name,
+.album-meta-ui.album-meta-ui--from-long-username .album-by {
+  font-size: calc(var(--title-font-size) - 6px);
 }
 
 .album-meta-ui .album-by {
@@ -827,6 +837,7 @@ body.view-user-albums .site-title h1.title-allow-orphan {
   height: 100%;
   gap: clamp(6px, calc(1.5 * var(--scale-w) / 100), 16px); /* Minimum gap between nav items */
   overflow: hidden; /* Prevent overflow */
+  padding-left: 3px; /* Prevent left clip of first label (e.g. "Collections" C) — layout put button ~1.6px left of container */
 }
 
 .nav-radio-button {

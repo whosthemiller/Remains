@@ -350,6 +350,10 @@ function showDrawerView() {
   if (drawerSceneInstance) {
     drawerSceneInstance.fromIndex = false;
     drawerSceneInstance.viewMode = 'drawer';
+    // Clear album→user state so opening a new album from user page doesn't get a stale fade setTimeout from a previous "click username"
+    drawerSceneInstance.navigateToUserAfterExit = null;
+    drawerSceneInstance.fromUserAlbums = false;
+    drawerSceneInstance.userAlbumsUsername = null;
   }
   
   // Remove mode-album class if present (when returning from album mode)
@@ -550,6 +554,11 @@ function showUsersView() {
   const pageContainer = domCache.pageContainer;
   const isTransitioningFromUserAlbums = previousRoute === 'user-albums';
 
+  // Cancel any pending "navigate to user" from drawer (e.g. album exit setTimeout) so Collections stays
+  if (drawerSceneInstance) {
+    drawerSceneInstance.navigateToUserAfterExit = null;
+  }
+
   // Hide canvas immediately to prevent it from blocking page container
   if (canvas) {
     canvas.style.display = 'none';
@@ -647,7 +656,8 @@ function showUsersView() {
   const isAlreadyInUsersView = document.body.classList.contains('view-users');
   
   // CRITICAL: Hide pageContainer immediately to prevent flash of old content
-  if (pageContainer) {
+  // Skip when transitioning from user-albums so the container stays visible for the fade-out then render
+  if (pageContainer && !isTransitioningFromUserAlbums) {
     // Remove any fade classes that might make it visible
     pageContainer.classList.remove('fade-in', 'fade-out');
     // Hide immediately with !important inline styles to override any CSS
@@ -661,7 +671,7 @@ function showUsersView() {
   }
   
   // Add view class to hide date label
-  document.body.classList.remove('view-drawer', 'view-user-albums', 'view-index');
+  document.body.classList.remove('view-drawer', 'view-user-albums', 'view-index', 'from-album');
   document.body.classList.add('view-users');
   
   // Animate filters-wrap closing (mechanical shutter from top)
@@ -727,10 +737,17 @@ function showUsersView() {
     
     // Soft transition: fade out title and cards, then render and fade in new content
     if (pageContainer) {
-      pageContainer.classList.remove('fade-in', 'fade-out');
-      pageContainer.style.display = 'block';
-      pageContainer.style.opacity = '1';
-      pageContainer.style.visibility = 'visible';
+      // Clear any inline styles left from user-albums fade-out (after multiple album↔user cycles)
+      pageContainer.style.transition = '';
+      pageContainer.classList.remove('fade-in', 'fade-out', 'page-exiting');
+      pageContainer.style.removeProperty('visibility');
+      pageContainer.style.removeProperty('opacity');
+      pageContainer.style.removeProperty('pointer-events');
+      pageContainer.style.removeProperty('display');
+      pageContainer.style.setProperty('display', 'block', 'important');
+      pageContainer.style.setProperty('opacity', '1', 'important');
+      pageContainer.style.setProperty('visibility', 'visible', 'important');
+      pageContainer.style.setProperty('pointer-events', 'auto', 'important');
       // Ensure scrolling styles are set
       pageContainer.style.height = '100vh';
       pageContainer.style.maxHeight = '100vh';
@@ -738,6 +755,8 @@ function showUsersView() {
       pageContainer.style.overflowX = 'hidden';
       pageContainer.style.pointerEvents = 'auto';
       pageContainer.style.zIndex = '1';
+      pageContainer.classList.add('fade-in');
+      pageContainer.classList.remove('fade-out');
       
       // Update title immediately (no animation)
       updateNavTitle({ view: 'drawer' });
@@ -763,6 +782,15 @@ function showUsersView() {
           
           // Render new content (user cards)
           renderUsersPage().then(() => {
+            // Force container visible after render (Collections must always show)
+            if (pageContainer) {
+              pageContainer.style.setProperty('display', 'block', 'important');
+              pageContainer.style.setProperty('opacity', '1', 'important');
+              pageContainer.style.setProperty('visibility', 'visible', 'important');
+              pageContainer.style.setProperty('pointer-events', 'auto', 'important');
+              pageContainer.classList.add('fade-in');
+              pageContainer.classList.remove('fade-out');
+            }
             // Focus again after rendering to ensure it persists
             if (pageContainer && typeof pageContainer.focus === 'function') {
               pageContainer.focus();
@@ -793,9 +821,18 @@ function showUsersView() {
         }
         
         renderUsersPage().then(() => {
-          if (pageContainer && typeof pageContainer.focus === 'function') {
-            pageContainer.focus();
-          }
+            // Force container visible after render (Collections must always show)
+            if (pageContainer) {
+              pageContainer.style.setProperty('display', 'block', 'important');
+              pageContainer.style.setProperty('opacity', '1', 'important');
+              pageContainer.style.setProperty('visibility', 'visible', 'important');
+              pageContainer.style.setProperty('pointer-events', 'auto', 'important');
+              pageContainer.classList.add('fade-in');
+              pageContainer.classList.remove('fade-out');
+            }
+            if (pageContainer && typeof pageContainer.focus === 'function') {
+              pageContainer.focus();
+            }
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               document.body.classList.remove('page-transitioning');
@@ -868,6 +905,14 @@ function showUsersView() {
     
     // Render users page and then trigger fade-in animations for user images
     renderUsersPage().then(() => {
+      // Force container visible (Collections must always show)
+      if (pageContainer) {
+        pageContainer.style.setProperty('display', 'block', 'important');
+        pageContainer.style.setProperty('opacity', '1', 'important');
+        pageContainer.style.setProperty('visibility', 'visible', 'important');
+        pageContainer.style.setProperty('pointer-events', 'auto', 'important');
+        pageContainer.classList.add('fade-in');
+      }
       // Focus again after rendering to ensure it persists
       if (pageContainer && typeof pageContainer.focus === 'function') {
         pageContainer.focus();
@@ -876,14 +921,8 @@ function showUsersView() {
       // Note: page-transitioning class is now added in renderUsersPage() immediately after innerHTML
       // to ensure elements start in hidden state (opacity: 0)
       
-      // NOW make visible and fade in - after content is rendered
+      // Ensure visible for fade-in animation
       if (pageContainer) {
-        // Remove !important flags and use normal styles for fade-in animation
-        pageContainer.style.removeProperty('visibility');
-        pageContainer.style.removeProperty('opacity');
-        pageContainer.style.removeProperty('display');
-        pageContainer.style.removeProperty('pointer-events');
-        // Now set normal styles for fade-in
         pageContainer.style.visibility = 'visible';
         pageContainer.style.opacity = '1';
         pageContainer.style.pointerEvents = 'auto';

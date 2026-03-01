@@ -693,6 +693,16 @@ function escapeHtml(text) {
 }
 
 /**
+ * Returns true if the display username uses the reduced title size (long single-word usernames).
+ * Used by nav title and by album meta UI to keep the same font size when transitioning user page → album.
+ */
+export function isLongUsername(displayUsername) {
+  if (typeof displayUsername !== 'string') return false;
+  const longNoCutUsernames = ['petersen.andrea', 'paterson.andrea'];
+  return longNoCutUsernames.includes(displayUsername.toLowerCase());
+}
+
+/**
  * Update nav title
  */
 function updateNavTitle({ view, username, albumTitle, userData }) {
@@ -722,9 +732,7 @@ function updateNavTitle({ view, username, albumTitle, userData }) {
   // Set positioning class atomically with content to prevent body/content desync jump
   remainsLogo.classList.toggle('site-title--user-view', view === 'user' && !!displayUsername);
   // Long single-word usernames (e.g. petersen.andrea): never truncate; use smaller title font so it fits and spacing proportion is kept
-  const longNoCutUsernames = ['petersen.andrea', 'paterson.andrea'];
-  const isLongNoCut = view === 'user' && typeof displayUsername === 'string' &&
-    longNoCutUsernames.includes(displayUsername.toLowerCase());
+  const isLongNoCut = view === 'user' && typeof displayUsername === 'string' && isLongUsername(displayUsername);
   remainsLogo.classList.toggle('title-long-username', !!isLongNoCut);
   // Update text content FIRST, synchronously, to prevent any flash of wrong text
   let newText = 'Remains';

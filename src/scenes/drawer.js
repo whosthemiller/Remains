@@ -11,8 +11,8 @@
  * Date: 2026-01-22
  */
 
-import { navigate } from '../routing.js';
-import { updateNavTitle } from '../pages/user-albums.js';
+import { navigate, getCurrentRoute } from '../routing.js';
+import { updateNavTitle, isLongUsername } from '../pages/user-albums.js';
 import { setPixelLoaderProgress, onPixelLoaderComplete } from '../utils/pixelLoader.js';
 
 // Helper functions
@@ -1997,6 +1997,9 @@ export class DrawerScene {
         usernameSpan.onclick = null;
       }
     }
+    // When entering from user page with long username (e.g. paterson.andrea), use same reduced title size so header doesn't jump
+    this.albumMetaEl.classList.toggle('album-meta-ui--from-long-username',
+      !!this.fromUserAlbums && !!this.userAlbumsUsername && isLongUsername(this.userAlbumsUsername));
     
     // Re-apply wrapping on next frame to ensure it's visible
     requestAnimationFrame(() => {
@@ -3943,7 +3946,9 @@ export class DrawerScene {
     // After fade completes, navigate to user page
     setTimeout(() => {
       const username = this.navigateToUserAfterExit;
-      
+      // If state was cleared (e.g. user opened another album from user page), do not navigate
+      if (!username) return;
+
       // Reset state
       this.navigateToUserAfterExit = null;
       this.fromIndex = false;
@@ -4014,9 +4019,10 @@ export class DrawerScene {
       window.returningFromAlbum = true;
       updateNavTitle({ view: 'user', username });
       
-      // Navigate to user page
-      // The fade-in is handled by showUserAlbumsView after content is rendered
-      navigate('user-albums', { username });
+      // Navigate to user page (unless user already went to Collections)
+      if (getCurrentRoute() !== 'users') {
+        navigate('user-albums', { username });
+      }
     }, fadeDuration);
   }
   
@@ -4179,8 +4185,10 @@ export class DrawerScene {
         }
       }
       
-      // Now navigate
-      navigate('user-albums', { username });
+      // Now navigate (unless user already went to Collections)
+      if (getCurrentRoute() !== 'users') {
+        navigate('user-albums', { username });
+      }
     } else if (this.fromIndex) {
       // Came from index: restore UI and navigate back to index
       window.returningToIndex = true;
@@ -6720,7 +6728,7 @@ export class DrawerScene {
       // Check if exit transition is complete
       if (t >= 1) {
         this.exitTransitionActive = false;
-        // Don't hide overlay here: hide on first drawer frame so the tile is drawn first (no hole)
+        // Don't hide overlay here: hide on first drawer frame so the tile is drawn first (no hole) here: hide on first drawer frame so the tile is drawn first (no hole)
         this.exitHideOverlayNextFrame = true;
         
         // Return to drawer mode first (before restoring camera to prevent edge-pan interference)
@@ -6783,10 +6791,11 @@ export class DrawerScene {
           this.forceRenderOnce = true;
         }
         
-        // Navigate back to user albums page if we came from there
-        if (this.fromUserAlbums && this.userAlbumsUsername) {
+        // Navigate back to user albums page only if user explicitly clicked username (navigateToUserAfterExit).
+        // If we came from user page but exit was via close/click-outside, return to drawer instead.
+        if (this.fromUserAlbums && this.userAlbumsUsername && this.navigateToUserAfterExit) {
           // Store username before clearing flags
-          const username = this.userAlbumsUsername;
+          const username = this.navigateToUserAfterExit;
           
           // Set flag FIRST, before any navigation or other operations
           // This prevents showDrawerView from updating nav title to "Remains"
@@ -6843,14 +6852,51 @@ export class DrawerScene {
           // Clear flags
           this.fromUserAlbums = false;
           this.userAlbumsUsername = null;
+          this.navigateToUserAfterExit = null;
           
           // Remove album mode class and restore UI AFTER nav title is updated
           document.body.classList.remove('mode-album');
           document.documentElement.style.setProperty('--uiAlpha', '1');
           document.documentElement.style.setProperty('--navTranslateY', '0px'); // Ensure menu bars are fully down
           
-          // Now navigate - the flag is already set so showDrawerView won't update nav title
-          navigate('user-albums', { username });
+          // Now navigate (unless user already went to Collections)
+          if (getCurrentRoute() !== 'users') {
+            navigate('user-albums', { username });
+          }
+        } else if (this.fromUserAlbums && this.userAlbumsUsername) {
+          // Exited via close/click-outside (not username click) - return to drawer, do not navigate to user
+          this.fromUserAlbums = false;
+          this.userAlbumsUsername = null;
+          document.body.classList.remove('mode-album');
+          document.documentElement.style.setProperty('--uiAlpha', '1');
+          document.documentElement.style.setProperty('--navTranslateY', '0px');
+          const remainsLogo = document.getElementById('remainsLogo');
+          if (remainsLogo && remainsLogo.querySelector('h1')) {
+            remainsLogo.querySelector('h1').style.opacity = '1';
+            remainsLogo.querySelector('h1').style.visibility = 'visible';
+            remainsLogo.querySelector('h1').style.transition = '';
+          }
+          if (!this.topNavEl) this.topNavEl = document.getElementById('top-nav');
+          if (!this.centerNavEl) this.centerNavEl = document.getElementById('center-nav');
+          if (!this.filtersWrapEl) this.filtersWrapEl = document.getElementById('filters-wrap');
+          this.navCloseAnimations.forEach(anim => anim.cancel());
+          this.navCloseAnimations = [];
+          this.navOpenAnimations.forEach(anim => anim.cancel());
+          this.navOpenAnimations = [];
+          [this.topNavEl, this.centerNavEl, this.filtersWrapEl].filter(Boolean).forEach((navEl) => {
+            navEl.style.transform = 'translateY(0) scaleY(1)';
+            navEl.style.filter = 'blur(0px)';
+            navEl.style.pointerEvents = '';
+          });
+          const canvas = document.getElementById('canvas');
+          if (canvas) {
+            canvas.style.display = 'block';
+            canvas.classList.remove('fade-out', 'fade-in');
+          }
+          this.viewMode = 'drawer';
+          updateNavTitle({ view: 'drawer' });
+          document.body.classList.add('filters-hover-disabled');
+          this.animateNavOpen && this.animateNavOpen();
         } else if (this.navigateToUserAfterExit) {
           // Navigate to user page after exit transition (clicked on username)
           const username = this.navigateToUserAfterExit;
@@ -6917,8 +6963,10 @@ export class DrawerScene {
           document.documentElement.style.setProperty('--uiAlpha', '1');
           document.documentElement.style.setProperty('--navTranslateY', '0px'); // Ensure menu bars are fully down
           
-          // Now navigate - the flag is already set so showDrawerView won't update nav title
-          navigate('user-albums', { username });
+          // Now navigate (unless user already went to Collections)
+          if (getCurrentRoute() !== 'users') {
+            navigate('user-albums', { username });
+          }
         } else {
           // viewMode will be set to 'drawer' inside requestAnimationFrame above,
           // AFTER camera is restored, to prevent date label appearing at wrong position

@@ -33,12 +33,17 @@ export function initRouter() {
 
 export function navigate(route, params = {}, updateHash = true) {
   currentRoute = route;
+  // For Collections (users): set hash FIRST so URL is #/users before any handler runs (prevents reading old #/users/username)
+  if (updateHash && route === 'users') {
+    hashUpdateByNavigate = true;
+    window.location.hash = '#/users';
+    handleRouteChange(route, params);
+    return;
+  }
   // Update URL hash (if updateHash is true)
   if (updateHash) {
     hashUpdateByNavigate = true;
-    if (route === 'users') {
-      window.location.hash = '#/users';
-    } else if (route === 'user-albums' && params.username) {
+    if (route === 'user-albums' && params.username) {
       window.location.hash = `#/users/${encodeURIComponent(params.username)}`;
     } else if (route === 'index') {
       window.location.hash = '#/index';

@@ -273,6 +273,8 @@ export async function renderUserAlbumsPage(params) {
   const container = document.getElementById('page-container');
   if (!container) return;
   
+  const inAboutMode = document.body.classList.contains('mode-about');
+
   // Ensure page container has proper scrolling styles
   container.style.height = '100vh';
   container.style.maxHeight = '100vh';
@@ -292,22 +294,24 @@ export async function renderUserAlbumsPage(params) {
     }
   }
 
-  // Ensure nav block (title + user data) is visible (might have been hidden during transition)
-  const remainsLogo = document.getElementById('remainsLogo');
-  if (remainsLogo) {
-    remainsLogo.style.opacity = '';
-    remainsLogo.style.visibility = '';
-    remainsLogo.style.transition = '';
-    const h1 = remainsLogo.querySelector('h1');
-    if (h1) {
-      h1.style.opacity = '';
-      h1.style.visibility = '';
-      h1.style.transition = '';
-    }
-    const userData = remainsLogo.querySelector('.user-data');
-    if (userData) {
-      userData.style.opacity = '';
-      userData.style.visibility = '';
+  // Ensure nav block (title + user data) is visible — skip when About is open so we don't overwrite "Remains"
+  if (!inAboutMode) {
+    const remainsLogo = document.getElementById('remainsLogo');
+    if (remainsLogo) {
+      remainsLogo.style.opacity = '';
+      remainsLogo.style.visibility = '';
+      remainsLogo.style.transition = '';
+      const h1 = remainsLogo.querySelector('h1');
+      if (h1) {
+        h1.style.opacity = '';
+        h1.style.visibility = '';
+        h1.style.transition = '';
+      }
+      const userData = remainsLogo.querySelector('.user-data');
+      if (userData) {
+        userData.style.opacity = '';
+        userData.style.visibility = '';
+      }
     }
   }
   
@@ -318,8 +322,10 @@ export async function renderUserAlbumsPage(params) {
     return;
   }
 
-  // Update nav title to show username and user data
-  updateNavTitle({ view: 'user', username, userData: currentUser });
+  // Update nav title to show username and user data — only when not in About mode
+  if (!inAboutMode) {
+    updateNavTitle({ view: 'user', username, userData: currentUser });
+  }
 
   // Load albums
   albumsData = await loadUserAlbums(username);
@@ -706,9 +712,13 @@ export function isLongUsername(displayUsername) {
  * Update nav title
  */
 function updateNavTitle({ view, username, albumTitle, userData }) {
+  // While About is open, never show user/album title — keep "Remains" and about content only
+  if (view === 'user' && document.body.classList.contains('mode-about')) return;
+  if (view === 'album' && document.body.classList.contains('mode-about')) return;
+
   const remainsLogo = document.getElementById('remainsLogo');
   if (!remainsLogo) return;
-  
+
   const h1 = remainsLogo.querySelector('h1');
   if (!h1) return;
   

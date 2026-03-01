@@ -963,6 +963,8 @@ function showUsersView() {
 }
 
 function showUserAlbumsView(params) {
+  // Don't re-run while About is open (e.g. hashchange after viewing several albums then opening About)
+  if (document.body.classList.contains('mode-about')) return;
   const canvas = domCache.canvas;
   const pageContainer = domCache.pageContainer;
   const isTransitioningFromUsers = previousRoute === 'users';
@@ -1147,6 +1149,8 @@ function showUserAlbumsView(params) {
         
         // Wait for fade-out animation to complete (450ms - slightly longer for smoother effect)
         setTimeout(async () => {
+          // Don't render user profile nav if user opened About in the meantime
+          if (document.body.classList.contains('mode-about') || isAboutActive) return;
           // Add transitioning class to body BEFORE rendering
           document.body.classList.add('page-transitioning');
           
@@ -1652,6 +1656,12 @@ function enterAboutMode(aboutToggle) {
   // Add mode-about class to body (this triggers CSS transitions)
   document.body.classList.add('mode-about');
   
+  // Reset about content scroll to top so it always opens at zero
+  const aboutContent = document.getElementById('about-content');
+  if (aboutContent) {
+    aboutContent.scrollTop = 0;
+  }
+  
   // Animate filters bar closing
   animateFiltersWrapClose();
   
@@ -1659,7 +1669,6 @@ function enterAboutMode(aboutToggle) {
   startAboutMouseTrail();
   
   // Focus about content so it receives scroll when opened from Index/Collections (page-container scroll)
-  const aboutContent = document.getElementById('about-content');
   if (aboutContent) {
     document.activeElement?.blur?.();
     // Focus after transition (0.4s)—element may not accept focus until fully visible when opened from Index/Collections
@@ -1675,6 +1684,12 @@ function enterAboutMode(aboutToggle) {
 function exitAboutMode(aboutToggle) {
   // Remove active state
   isAboutActive = false;
+  
+  // Reset about content scroll to top for next open
+  const aboutContentEl = document.getElementById('about-content');
+  if (aboutContentEl) {
+    aboutContentEl.scrollTop = 0;
+  }
   
   // Stop mouse trail effect
   stopAboutMouseTrail();
@@ -1740,6 +1755,12 @@ function exitAboutMode(aboutToggle) {
 function closeAboutModeIfActive() {
   if (isAboutActive) {
     isAboutActive = false;
+    
+    // Reset about content scroll to top for next open
+    const aboutContentEl = document.getElementById('about-content');
+    if (aboutContentEl) {
+      aboutContentEl.scrollTop = 0;
+    }
     
     // Stop the mouse trail
     stopAboutMouseTrail();

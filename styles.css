@@ -479,12 +479,18 @@ body.mode-album .album-meta-ui {
   margin-top: 0.05em; /* Small vertical gap between lines */
   pointer-events: none;
   cursor: default;
+  list-style: none; /* Prevent any inherited list bullet/dot on narrow viewport */
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .album-meta-ui .album-username {
   text-decoration: underline;
   cursor: pointer;
   pointer-events: auto;
+  list-style: none;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 /* Album metadata details (bottom-left) */
@@ -2264,6 +2270,28 @@ body.mode-about .center-date {
 body.mode-about #filters-wrap {
   visibility: hidden !important;
   pointer-events: none !important;
+}
+
+/* About mode - force nav to show only "Remains" and hide user info (so JS cannot revert title) */
+body.mode-about #remainsLogo .user-data {
+  display: none !important;
+  visibility: hidden !important;
+}
+body.mode-about #remainsLogo h1 {
+  position: relative;
+  color: transparent !important;
+}
+body.mode-about #remainsLogo h1::after {
+  content: 'Remains';
+  color: #424242;
+  font-size: var(--title-font-size);
+  line-height: 1.05;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
 }
 
 /* About mode - hide radio marker arrow and line */

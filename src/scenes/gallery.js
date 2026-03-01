@@ -904,7 +904,7 @@ export class GalleryScene {
         // Mouse wheel: normalized is much larger than raw (discrete ticks). Use a strong step so zoom feels snappy.
         const isMouseLike = Math.abs(norm) > Math.abs(raw) * 1.5;
         const delta = isMouseLike
-          ? (sign > 0 ? 1.14 : 0.877)  // ~14% zoom in, ~12% zoom out per mouse tick
+          ? (sign > 0 ? 1.20 : 0.833)  // ~20% zoom in, ~17% zoom out per mouse tick
           : (sign > 0 ? 1 + ZOOM_SENSITIVITY * Math.min(3, Math.max(1, Math.abs(norm) / 80)) : 1 - ZOOM_SENSITIVITY * Math.min(3, Math.max(1, Math.abs(norm) / 80)));
         this.targetZoom *= delta;
         

@@ -901,8 +901,11 @@ export class GalleryScene {
         const raw = e.deltaY;
         const norm = normalizedWheelDelta(e);
         const sign = raw > 0 ? 1 : -1;
-        const stepMultiplier = Math.min(3, Math.max(1, Math.abs(norm) / 80));
-        const delta = sign > 0 ? 1 + ZOOM_SENSITIVITY * stepMultiplier : 1 - ZOOM_SENSITIVITY * stepMultiplier;
+        // Mouse wheel: normalized is much larger than raw (discrete ticks). Use a strong step so zoom feels snappy.
+        const isMouseLike = Math.abs(norm) > Math.abs(raw) * 1.5;
+        const delta = isMouseLike
+          ? (sign > 0 ? 1.14 : 0.877)  // ~14% zoom in, ~12% zoom out per mouse tick
+          : (sign > 0 ? 1 + ZOOM_SENSITIVITY * Math.min(3, Math.max(1, Math.abs(norm) / 80)) : 1 - ZOOM_SENSITIVITY * Math.min(3, Math.max(1, Math.abs(norm) / 80)));
         this.targetZoom *= delta;
         
         // Clamp to min/max (dynamic minimum based on content bounds)

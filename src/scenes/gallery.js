@@ -13,6 +13,7 @@
 
 import { navigate } from '../routing.js';
 import { updateNavTitle } from '../pages/user-albums.js';
+import { wheelDeltaForZoom, wheelDeltaForAlbum } from '../utils/wheelNormalize.js';
 
 // Helper functions
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -871,6 +872,9 @@ export class GalleryScene {
       this.zoomAnchorScreenX = x;
       this.zoomAnchorScreenY = y;
       
+      // Normalize wheel for mouse vs trackpad (mouse: natural direction + responsive)
+      const effectiveDeltaY = wheelDeltaForZoom(e);
+      
       // Check if collapse mode is active (filters active)
       const isCollapseMode = this.filtersActive();
       
@@ -885,8 +889,8 @@ export class GalleryScene {
         const distToIn = Math.abs(currentZoom - zoomIn);
         const currentState = distToOut < distToIn ? 'out' : 'in';
         
-        // Toggle to the other state based on scroll direction (inverted: scroll down = zoom in)
-        if (e.deltaY > 0) {
+        // Toggle to the other state based on scroll direction (natural: scroll down = zoom out on mouse)
+        if (effectiveDeltaY > 0) {
           // Scrolling down (zoom in) - go to zoom in state
           this.collapseZoomState = 'in';
           this.targetZoom = zoomIn;
@@ -896,8 +900,8 @@ export class GalleryScene {
           this.targetZoom = zoomOut;
         }
       } else {
-        // Normal continuous zoom when collapse mode is not active (inverted direction)
-        const delta = e.deltaY > 0 ? 1 + ZOOM_SENSITIVITY : 1 - ZOOM_SENSITIVITY;
+        // Normal continuous zoom when collapse mode is not active
+        const delta = effectiveDeltaY > 0 ? 1 + ZOOM_SENSITIVITY : 1 - ZOOM_SENSITIVITY;
         this.targetZoom *= delta;
         
         // Clamp to min/max (dynamic minimum based on content bounds)
@@ -1944,7 +1948,11 @@ export class GalleryScene {
       if (userDisplayName === 'Alaine & Joe Chang') {
         usernameSpan.innerHTML = 'Alaine &amp;<br>Joe Chang';
       } else {
-        usernameSpan.textContent = userDisplayName;
+        // Use non-breaking space between words so name doesn't wrap mid-name (avoids visual dot/glitch after first name on narrow viewport)
+        const nameForDisplay = (typeof userDisplayName === 'string' && userDisplayName.includes(' '))
+          ? userDisplayName.replace(/\s+(\S+)\s*$/, '\u00A0$1') // last space -> nbsp
+          : userDisplayName;
+        usernameSpan.textContent = nameForDisplay;
       }
       const byLineEl = this.albumMetaEl.querySelector('.album-by');
       if (byLineEl) {
@@ -2891,8 +2899,8 @@ export class GalleryScene {
     e.preventDefault();
     e.stopPropagation();
     
-    // Direct update: wheel delta maps 1:1 to scroll value
-    const deltaY = e.deltaY;
+    // Normalize for mouse vs trackpad (mouse: natural direction + 1.5x speed)
+    const deltaY = wheelDeltaForAlbum(e);
     const step = this.ALBUM_SCROLL_STEP;
     
     // Calculate scroll range

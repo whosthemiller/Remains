@@ -9,6 +9,7 @@ import { renderUserAlbumsPage, updateNavTitle, restoreUserNav } from './pages/us
 import { renderIndexPage } from './pages/index.js';
 import { initPixelLoader, setPixelLoaderProgress, destroyPixelLoader } from './utils/pixelLoader.js';
 import { normalizedWheelDelta } from './utils/wheelDelta.js';
+import { initDynamicFavicon } from './utils/dynamicFavicon.js';
 
 // Store drawer scene instance for filter UI access
 let drawerSceneInstance = null;
@@ -3852,6 +3853,9 @@ if (document.readyState === 'loading') {
   setupRadioButtons();
   setupFiltersPanel();
   setupSplashOverlay();
+
+  // Dynamic favicon: 3 random photos stacked, new on each refresh
+  initDynamicFavicon();
 
   // Initialize pixel loader immediately
   fillLoaderPixels();

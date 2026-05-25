@@ -14,6 +14,7 @@
 import { navigate, getCurrentRoute } from '../routing.js';
 import { updateNavTitle, isLongUsername } from '../pages/user-albums.js';
 import { setPixelLoaderProgress, onPixelLoaderComplete } from '../utils/pixelLoader.js';
+import { normalizedWheelDelta } from '../utils/wheelDelta.js';
 
 // Helper functions
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -895,19 +896,18 @@ export class DrawerScene {
         const distToIn = Math.abs(currentZoom - zoomIn);
         const currentState = distToOut < distToIn ? 'out' : 'in';
         
-        // Toggle to the other state based on scroll direction (inverted: scroll down = zoom in)
-        if (e.deltaY > 0) {
-          // Scrolling down (zoom in) - go to zoom in state
+        // Toggle to the other state based on scroll direction (scroll down = zoom in, matches splash)
+        const dy = normalizedWheelDelta(e);
+        if (dy > 0) {
           this.collapseZoomState = 'in';
           this.targetZoom = zoomIn;
-        } else {
-          // Scrolling up (zoom out) - go to zoom out state
+        } else if (dy < 0) {
           this.collapseZoomState = 'out';
           this.targetZoom = zoomOut;
         }
       } else {
-        // Normal continuous zoom when collapse mode is not active (inverted direction)
-        const delta = e.deltaY > 0 ? 1 + ZOOM_SENSITIVITY : 1 - ZOOM_SENSITIVITY;
+        const dy = normalizedWheelDelta(e);
+        const delta = dy > 0 ? 1 + ZOOM_SENSITIVITY : 1 - ZOOM_SENSITIVITY;
         this.targetZoom *= delta;
         
         // Clamp to min/max (dynamic minimum based on content bounds)
@@ -3137,8 +3137,7 @@ export class DrawerScene {
     e.preventDefault();
     e.stopPropagation();
     
-    // Slight scale so scroll feels responsive without being too fast (1.35x)
-    const deltaY = e.deltaY * 1.35;
+    const deltaY = normalizedWheelDelta(e);
     const step = this.ALBUM_SCROLL_STEP;
     
     // Calculate scroll range

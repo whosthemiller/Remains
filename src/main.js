@@ -631,14 +631,14 @@ function showUsersView() {
           // Check if we can scroll in the requested direction
           const canScrollDown = pageContainer.scrollTop < (pageContainer.scrollHeight - pageContainer.clientHeight);
           const canScrollUp = pageContainer.scrollTop > 0;
-          
-          if ((e.deltaY > 0 && canScrollDown) || (e.deltaY < 0 && canScrollUp)) {
+          const dy = normalizedWheelDelta(e);
+
+          if ((dy > 0 && canScrollDown) || (dy < 0 && canScrollUp)) {
             // Prevent default scrolling behavior
             e.preventDefault();
             e.stopPropagation();
             
             // Manually scroll the container (normalized for mouse wheel)
-            const dy = normalizedWheelDelta(e);
             const newScroll = pageContainer.scrollTop + dy;
             pageContainer.scrollTop = Math.max(0, Math.min(newScroll, pageContainer.scrollHeight - pageContainer.clientHeight));
           }
@@ -1582,13 +1582,13 @@ async function showIndexView() {
       if (isBodyOrDocument || pageContainer.contains(target) || target === pageContainer || target === tableBody || tableBody.contains(target)) {
         const canScrollDown = tableBody.scrollTop < (tableBody.scrollHeight - tableBody.clientHeight);
         const canScrollUp = tableBody.scrollTop > 0;
-        
-        if ((e.deltaY > 0 && canScrollDown) || (e.deltaY < 0 && canScrollUp)) {
+        const dy = normalizedWheelDelta(e);
+
+        if ((dy > 0 && canScrollDown) || (dy < 0 && canScrollUp)) {
           // Prevent default scrolling behavior
           e.preventDefault();
           e.stopPropagation();
           // Manually scroll the table body (normalized for mouse wheel)
-          const dy = normalizedWheelDelta(e);
           const newScroll = tableBody.scrollTop + dy;
           tableBody.scrollTop = Math.max(0, Math.min(newScroll, tableBody.scrollHeight - tableBody.clientHeight));
         }
@@ -3721,6 +3721,8 @@ function setupSplashOverlay() {
       return;
     }
     if (!window.splashVisible) return;
+    // Align with trackpad/mouse: only scroll-down dismisses (same as "Scroll to explore")
+    if (normalizedWheelDelta(e) <= 0) return;
     window.splashVisible = false;
     splashExitZoomActive = true;
     e.preventDefault();

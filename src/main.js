@@ -3721,7 +3721,9 @@ function setupSplashOverlay() {
       return;
     }
     if (!window.splashVisible) return;
-    // Align with trackpad/mouse: only scroll-down dismisses (same as "Scroll to explore")
+    e.preventDefault();
+    e.stopPropagation();
+    // Same direction as drawer zoom-in ("Scroll to explore")
     if (normalizedWheelDelta(e) <= 0) return;
     window.splashVisible = false;
     splashExitZoomActive = true;

@@ -872,7 +872,8 @@ export class DrawerScene {
       }
       // Disable zoom in album mode, during transition, or during exit transition
       if (this.viewMode === 'album' || this.transition.active || this.exitTransitionActive) return;
-      
+      if (window.splashVisible) return;
+
       e.preventDefault();
       const rect = this.canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;

@@ -10,6 +10,7 @@ import { renderIndexPage } from './pages/index.js';
 import { initPixelLoader, setPixelLoaderProgress, destroyPixelLoader } from './utils/pixelLoader.js';
 import { normalizedWheelDelta } from './utils/wheelDelta.js';
 import { initDynamicFavicon } from './utils/dynamicFavicon.js';
+import { setupIdleRefresh } from './utils/idleRefresh.js';
 
 // Store drawer scene instance for filter UI access
 let drawerSceneInstance = null;
@@ -3846,6 +3847,8 @@ if (document.readyState === 'loading') {
         clearFilter();
       }
     });
+
+    setupIdleRefresh();
   });
 } else {
   init();
@@ -3876,4 +3879,6 @@ if (document.readyState === 'loading') {
   }
   
   window.addEventListener('resize', handleResize);
+
+  setupIdleRefresh();
 }
